@@ -66,13 +66,6 @@ const CareerAcceleratorSection = () => {
     },
   ];
 
-  const successMetrics = [
-    { value: "85%", label: "Job Placement Rate" },
-    { value: "2.5x", label: "Average Salary Increase" },
-    { value: "4.8/5", label: "Student Satisfaction" },
-    { value: "30 days", label: "Average Time to Offer" },
-  ];
-
   return (
     <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4">
@@ -130,37 +123,6 @@ const CareerAcceleratorSection = () => {
                 </motion.div>
               ))}
             </motion.div>
-
-            {/* Success Metrics */}
-            <motion.div variants={itemVariants} className="mb-8">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {successMetrics.map((metric) => (
-                  <div
-                    key={metric.label}
-                    className="text-center p-4 rounded-xl bg-customer-cream/50 border border-customer-purple/10"
-                  >
-                    <div className="text-2xl font-bold text-customer-purple mb-1">
-                      {metric.value}
-                    </div>
-                    <div className="text-sm text-customer-charcoal/70">
-                      {metric.label}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-
-            {/* CTA */}
-            <motion.div variants={itemVariants}>
-              <Button
-                href="/contact"
-                variant="primary"
-                size="lg"
-                icon={<FaCheckCircle />}
-              >
-                Start Your Career Acceleration
-              </Button>
-            </motion.div>
           </div>
 
           {/* Image Side */}
@@ -177,11 +139,11 @@ const CareerAcceleratorSection = () => {
               <div className="absolute inset-0 bg-linear-to-br from-customer-gold/20 to-customer-purple/10 backdrop-blur-sm border border-white/20 rounded-2xl"></div>
 
               {/* Content */}
-              <div className="relative z-10 p-8 lg:p-12">
+              <div className="relative z-10 p-4 lg:p-8  h-80 lg:h-96">
                 <img
                   src={Career}
                   alt="Career Support"
-                  className="w-full h-auto rounded-2xl shadow-lg"
+                  className="w-full h-full rounded-2xl shadow-lg"
                 />
               </div>
 
@@ -217,7 +179,17 @@ const CareerAcceleratorSection = () => {
                 Job Ready
               </motion.div>
             </div>
-
+            {/* CTA */}
+            <motion.div variants={itemVariants} className="mt-12">
+              <Button
+                href="/contact"
+                variant="primary"
+                size="lg"
+                icon={<FaCheckCircle />}
+              >
+                Start Your Career Acceleration
+              </Button>
+            </motion.div>
             {/* Background Decorative Elements */}
             <div className="absolute -z-10 top-8 -right-8 w-72 h-72 bg-customer-purple/10 rounded-full blur-2xl"></div>
             <div className="absolute -z-10 bottom-8 -left-8 w-96 h-96 bg-customer-gold/10 rounded-full blur-2xl"></div>

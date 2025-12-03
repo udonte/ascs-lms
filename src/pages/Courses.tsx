@@ -1,3 +1,4 @@
+import FAQSection from "@/assets/course/FaqSection";
 import CareerAcceleratorSection from "@/components/courses/CareerAccelerationSection";
 import CourseHero from "@/components/courses/CourseHero";
 import ProgramsSections from "@/components/courses/ProgramsSections";
@@ -12,6 +13,7 @@ const Courses = () => {
       <RecommendedCoursesSection />
       <GlobalOutcomesSection />
       <CareerAcceleratorSection />
+      <FAQSection />
     </div>
   );
 };
