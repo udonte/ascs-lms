@@ -306,7 +306,7 @@ const WhatIsCustomerSuccessSection = () => {
                     delay: 1,
                   }}
                 >
-                  💼 Career Opportunity
+                  Career Opportunity
                 </motion.div>
               </div>
             </motion.div>

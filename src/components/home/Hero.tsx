@@ -186,7 +186,7 @@ const Hero = () => {
                   ease: "easeInOut",
                 }}
               >
-                🚀 Global Careers
+                Global Careers
               </motion.div>
 
               <motion.div
@@ -202,7 +202,7 @@ const Hero = () => {
                   delay: 1,
                 }}
               >
-                💼 Job Ready
+                Job Ready
               </motion.div>
             </div>
 

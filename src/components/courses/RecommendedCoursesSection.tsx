@@ -146,7 +146,7 @@ const RecommendedCoursesSection = () => {
               <div className="absolute inset-0 bg-linear-to-br from-customer-purple/20 to-customer-gold/10 backdrop-blur-sm border border-white/20 rounded-2xl"></div>
 
               {/* Content */}
-              <div className="relative z-10 p-4 lg:p-12 h-96 lg:h-[600px]">
+              <div className="relative z-10 p-4 lg:p-8 h-96 lg:h-[600px]">
                 {/* image */}
                 <img
                   src={storySection}

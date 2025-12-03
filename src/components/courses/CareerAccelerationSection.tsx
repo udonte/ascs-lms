@@ -10,6 +10,7 @@ import {
   FaCheckCircle,
   FaChartLine,
 } from "react-icons/fa";
+import Career from "@/assets/course/career.png";
 
 const CareerAcceleratorSection = () => {
   const dynamicEase = "easeOut";
@@ -97,7 +98,7 @@ const CareerAcceleratorSection = () => {
                   ASCS™
                 </span>
                 , we don't just promise jobs — we prepare you to be job-ready,
-                not just "course-complete." Our Career Accelerator program
+                not just "course-complete." Our New Career Accelerator program
                 provides the tools, guidance, and connections you need to land
                 your dream role.
               </p>
@@ -177,68 +178,11 @@ const CareerAcceleratorSection = () => {
 
               {/* Content */}
               <div className="relative z-10 p-8 lg:p-12">
-                <div className="text-center">
-                  <div className="w-24 h-24 bg-customer-purple/20 rounded-full flex items-center justify-center mx-auto mb-6 border-2 border-customer-purple/30">
-                    <FaRocket className="text-4xl text-customer-purple/60" />
-                  </div>
-
-                  <h3 className="font-playfair text-2xl font-bold text-customer-charcoal mb-4">
-                    Career Success Journey
-                  </h3>
-
-                  {/* Timeline */}
-                  <div className="space-y-6 mb-8">
-                    {[
-                      {
-                        step: "1",
-                        title: "Skills Assessment",
-                        description: "Identify your strengths",
-                      },
-                      {
-                        step: "2",
-                        title: "Personalized Plan",
-                        description: "Create your career roadmap",
-                      },
-                      {
-                        step: "3",
-                        title: "Portfolio Development",
-                        description: "Build compelling work samples",
-                      },
-                      {
-                        step: "4",
-                        title: "Job Placement",
-                        description: "Land your dream role",
-                      },
-                    ].map((item) => (
-                      <div
-                        key={item.step}
-                        className="flex items-center gap-4 p-4 rounded-xl bg-white/80 backdrop-blur-sm border border-white/50"
-                      >
-                        <div className="w-10 h-10 bg-customer-gold rounded-full flex items-center justify-center text-customer-charcoal font-bold shrink-0">
-                          {item.step}
-                        </div>
-                        <div className="text-left">
-                          <h4 className="font-semibold text-customer-charcoal">
-                            {item.title}
-                          </h4>
-                          <p className="text-sm text-customer-charcoal/70">
-                            {item.description}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Guarantee */}
-                  <div className="bg-linear-to-r from-customer-purple/10 to-customer-gold/5 rounded-xl p-4 border-l-4 border-customer-gold">
-                    <p className="text-customer-charcoal font-medium">
-                      <FaCheckCircle className="inline text-customer-gold mr-2" />
-                      <span className="font-semibold">Guarantee:</span> You'll
-                      receive career support until you land your first Customer
-                      Success role
-                    </p>
-                  </div>
-                </div>
+                <img
+                  src={Career}
+                  alt="Career Support"
+                  className="w-full h-auto rounded-2xl shadow-lg"
+                />
               </div>
 
               {/* Floating Elements */}
@@ -254,7 +198,7 @@ const CareerAcceleratorSection = () => {
                   ease: "easeInOut",
                 }}
               >
-                🚀 Career Launch
+                Career Launch
               </motion.div>
 
               <motion.div
@@ -270,7 +214,7 @@ const CareerAcceleratorSection = () => {
                   delay: 1,
                 }}
               >
-                💼 Job Ready
+                Job Ready
               </motion.div>
             </div>
 

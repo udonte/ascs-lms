@@ -255,7 +255,7 @@ const GlobalOutcomesSection = () => {
             {/* Navigation Arrows */}
             <button
               onClick={prevSlide}
-              className="absolute left-8 top-1/2 transform -translate-y-1/2 p-2 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:bg-white transition-all duration-300 group md:block border border-customer-purple/10"
+              className="absolute left-8 top-1/2 transform -translate-y-1/2 p-2 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:bg-white transition-all duration-300 group md:block border border-customer-purple/10 cursor-pointer"
               aria-label="Previous story"
             >
               <GoChevronLeft className="w-6 h-6 text-customer-purple group-hover:scale-110 transition-transform" />
@@ -263,7 +263,7 @@ const GlobalOutcomesSection = () => {
 
             <button
               onClick={nextSlide}
-              className="absolute right-8 top-1/2 transform -translate-y-1/2 p-2 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:bg-white transition-all duration-300 group md:block border border-customer-purple/10"
+              className="absolute right-8 top-1/2 transform -translate-y-1/2 p-2 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:bg-white transition-all duration-300 group md:block border border-customer-purple/10 cursor-pointer"
               aria-label="Next story"
             >
               <GoChevronRight className="w-6 h-6 text-customer-purple group-hover:scale-110 transition-transform" />
