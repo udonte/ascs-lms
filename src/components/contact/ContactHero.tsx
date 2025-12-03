@@ -5,7 +5,6 @@ import Badge from "../ui/Badge";
 import African from "@/assets/about/hero.png";
 
 import {
-  FaPlayCircle,
   FaArrowRight,
   FaStar,
   FaWhatsapp,
@@ -82,7 +81,7 @@ const ContactHero = () => {
           >
             Get in touch with the{" "}
             <span className="text-customer-gold">ASCS™</span> Team for inquiries
-            or support.
+            or support
           </motion.h1>
 
           {/* Subtitle */}
@@ -90,8 +89,9 @@ const ContactHero = () => {
             variants={itemVariants}
             className="text-xl md:text-2xl text-customer-cream/90 leading-relaxed mb-8 font-light"
           >
-            At ASCS™, we are dedicated to empowering the next generation of
-            Customer Success leaders across Africa.
+            We're here to help you on your Customer Success journey. Reach out
+            to us via WhatsApp or join our Telegram community for support and
+            updates.
           </motion.p>
 
           {/* Description */}
@@ -99,9 +99,9 @@ const ContactHero = () => {
             variants={itemVariants}
             className="text-lg text-customer-cream/80 mb-10 leading-relaxed"
           >
-            Our mission is to provide world-class education, practical skills,
-            and industry insights that enable our students to excel in the
-            dynamic field of Customer Success.
+            Whether you have questions about our courses, need assistance, or
+            want to connect with fellow Customer Success professionals, our team
+            is ready to assist you.
           </motion.p>
 
           {/* CTA Buttons */}
@@ -118,38 +118,28 @@ const ContactHero = () => {
               Start Your CS Journey
             </Button>
 
-            <Button
-              href="/courses"
-              variant="outline"
-              size="md"
-              icon={<FaPlayCircle />}
-              iconPosition="left"
-            >
-              Explore Our Certifications
-            </Button>
+            {/* Social Media */}
+            <div className="flex space-x-4">
+              <a
+                href="https://wa.me/your-number"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-3 bg-green-500 text-white rounded-full hover:bg-green-600 transition-colors duration-200"
+                aria-label="Contact us on WhatsApp"
+              >
+                <FaWhatsapp className="text-xl" />
+              </a>
+              <a
+                href="https://t.me/your-community-link"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-3 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors duration-200"
+                aria-label="Join our Telegram community"
+              >
+                <FaTelegramPlane className="text-xl" />
+              </a>
+            </div>
           </motion.div>
-
-          {/* Social Media */}
-          <div className="flex justify-center space-x-4">
-            <a
-              href="https://wa.me/your-number"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-3 bg-green-500 text-white rounded-full hover:bg-green-600 transition-colors duration-200"
-              aria-label="Contact us on WhatsApp"
-            >
-              <FaWhatsapp className="text-xl" />
-            </a>
-            <a
-              href="https://t.me/your-community-link"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-3 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors duration-200"
-              aria-label="Join our Telegram community"
-            >
-              <FaTelegramPlane className="text-xl" />
-            </a>
-          </div>
         </motion.div>
 
         {/* Visual Content */}
