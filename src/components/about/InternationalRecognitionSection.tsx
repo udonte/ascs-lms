@@ -7,17 +7,17 @@ import {
   FaLightbulb,
   FaAward,
 } from "react-icons/fa";
-// @ts-expect-error: Allow importing JPEG asset without image module declarations
+
 import Alu from "@/assets/about/alu.png";
-// @ts-expect-error: Allow importing JPEG asset without image module declarations
+
 import csi from "@/assets/about/csi.png";
-// @ts-expect-error: Allow importing JPEG asset without image module declarations
+
 import practicalCSM from "@/assets/about/practical-csm.png";
-// @ts-expect-error: Allow importing JPEG asset without image module declarations
+
 import successCoaching from "@/assets/about/success-coaching.png";
-// @ts-expect-error: Allow importing JPEG asset without image module declarations
+
 import successLeageue from "@/assets/about/success-league.png";
-// @ts-expect-error: Allow importing JPEG asset without image module declarations
+
 import Class from "@/assets/about/class.png";
 
 const InternationalRecognitionSection = () => {

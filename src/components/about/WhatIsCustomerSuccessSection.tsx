@@ -11,7 +11,7 @@ import {
   FaBullseye,
   FaLightbulb,
 } from "react-icons/fa";
-// @ts-expect-error: Allow importing JPEG asset without image module declarations
+
 import CustomerImage from "@/assets/about/customers.png";
 
 const WhatIsCustomerSuccessSection = () => {

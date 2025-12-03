@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { NAV_LINKS, type NavLink } from "@/constants";
+
 import Logo from "@/assets/ascs-logo.png";
 import { Link, useLocation } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, Easing } from "framer-motion";
 import { HiMenuAlt3, HiX } from "react-icons/hi";
 import { FaTelegramPlane } from "react-icons/fa";
 
@@ -18,13 +19,14 @@ const Header = () => {
     setIsMobileMenuOpen(false);
   };
 
+  const dynamicEase = "easeInOut";
   const menuVariants = {
     closed: {
       opacity: 0,
       x: "100%",
       transition: {
         duration: 0.3,
-        ease: "easeInOut",
+        ease: dynamicEase as Easing,
       },
     },
     open: {
@@ -32,7 +34,7 @@ const Header = () => {
       x: 0,
       transition: {
         duration: 0.3,
-        ease: "easeInOut",
+        ease: dynamicEase as Easing,
       },
     },
   };

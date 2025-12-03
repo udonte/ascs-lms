@@ -1,7 +1,7 @@
 import { Easing, motion } from "framer-motion";
 import SectionHeader from "../ui/SectionHeader";
 import Button from "../ui/Button";
-// @ts-expect-error: Allow importing JPEG asset without image module declarations
+
 import storySection from "@/assets/home/story-section.png";
 import { FaArrowRight, FaGlobeAfrica, FaUsers, FaRocket } from "react-icons/fa";
 

@@ -2,7 +2,6 @@ import { Easing, motion } from "framer-motion";
 import SectionHeader from "../ui/SectionHeader";
 import { FaSignature } from "react-icons/fa";
 
-// @ts-expect-error: Allow importing JPEG asset without image module declarations
 import Founder from "@/assets/about/GloriaMichael.jpeg";
 
 const CeoNoteSection = () => {

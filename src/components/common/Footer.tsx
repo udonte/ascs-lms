@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { NAV_LINKS } from "@/constants";
+
 import Logo from "@/assets/ascs-logo.png";
 import { motion } from "framer-motion";
 import {
@@ -10,7 +11,6 @@ import {
   FaMapMarkerAlt,
   FaPhone,
   FaEnvelope,
-  FaHeart,
 } from "react-icons/fa";
 
 const Footer = () => {

@@ -9,7 +9,7 @@ import {
   FaAward,
   FaRocket,
 } from "react-icons/fa";
-// @ts-expect-error: Allow importing JPEG asset without image module declarations
+
 import WhyStudentsLove from "@/assets/home/WhyStudentsLove.png";
 
 const WhyStudentsLoveSection = () => {

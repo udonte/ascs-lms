@@ -1,7 +1,7 @@
 import { Easing, motion } from "framer-motion";
 import SectionHeader from "../ui/SectionHeader";
 import { FaCheck, FaUsers, FaGlobe, FaRocket, FaHeart } from "react-icons/fa";
-// @ts-expect-error: Allow importing JPEG asset without image module declarations
+
 import WhyDifferent from "@/assets/home/why-different.png";
 
 const WhyDifferentSection = () => {

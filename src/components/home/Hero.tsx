@@ -1,7 +1,7 @@
 import { Easing, motion } from "framer-motion";
 import Button from "../ui/Button";
 import Badge from "../ui/Badge";
-// @ts-expect-error: Allow importing JPEG asset without image module declarations
+
 import African from "@/assets/home/confident-african.png";
 
 import { FaPlayCircle, FaArrowRight, FaStar } from "react-icons/fa";

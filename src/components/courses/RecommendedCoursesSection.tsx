@@ -13,7 +13,6 @@ import {
   FaLaptopHouse,
 } from "react-icons/fa";
 
-// @ts-expect-error: Allow importing JPEG asset without image module declarations
 import storySection from "@/assets/course/recommend-courses.png";
 
 const RecommendedCoursesSection = () => {

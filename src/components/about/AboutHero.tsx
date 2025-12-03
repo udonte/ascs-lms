@@ -1,7 +1,7 @@
 import { Easing, motion } from "framer-motion";
 import Button from "../ui/Button";
 import Badge from "../ui/Badge";
-// @ts-expect-error: Allow importing JPEG asset without image module declarations
+
 import African from "@/assets/about/hero.png";
 
 import { FaPlayCircle, FaArrowRight, FaStar } from "react-icons/fa";
@@ -32,13 +32,14 @@ const AboutHero = () => {
     },
   };
 
+  const floatingEase = "easeInOut";
   const floatingVariants = {
     animate: {
       y: [0, -20, 0],
       transition: {
         duration: 6,
         repeat: Infinity,
-        ease: "easeInOut",
+        ease: floatingEase as Easing,
       },
     },
   };

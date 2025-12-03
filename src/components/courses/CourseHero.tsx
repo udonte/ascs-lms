@@ -1,7 +1,7 @@
 import { Easing, motion } from "framer-motion";
 import Button from "../ui/Button";
 import Badge from "../ui/Badge";
-// @ts-expect-error: Allow importing JPEG asset without image module declarations
+
 import CourseHeroImage from "@/assets/course/course-hero.png";
 
 import { FaPlayCircle, FaArrowRight, FaStar } from "react-icons/fa";

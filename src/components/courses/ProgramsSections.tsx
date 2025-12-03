@@ -15,7 +15,6 @@ import {
   FaCertificate,
 } from "react-icons/fa";
 
-// @ts-expect-error: Allow importing JPEG asset without image module declarations
 import Advisor from "@/assets/course/advisor.png";
 
 const ProgramsSections = () => {
