@@ -206,7 +206,7 @@ const FAQSection = () => {
                       >
                         <button
                           onClick={() => toggleFaq(index, catIndex)}
-                          className="w-full text-left py-3 flex items-center justify-between gap-4 hover:text-customer-purple transition-colors duration-200"
+                          className="w-full text-left py-3 flex items-center justify-between gap-4 hover:text-customer-purple transition-colors duration-200 cursor-pointer"
                         >
                           <span className="font-medium text-sm text-customer-charcoal">
                             {faq.q}

@@ -1,10 +1,9 @@
-import AboutHero from "@/components/about/AboutHero";
-import React from "react";
+import ContactHero from "@/components/contact/ContactHero";
 
 const Contact = () => {
   return (
     <div>
-      <AboutHero />
+      <ContactHero />
     </div>
   );
 };
