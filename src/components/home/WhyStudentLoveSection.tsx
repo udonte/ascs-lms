@@ -23,7 +23,7 @@ const WhyStudentsLoveSection = () => {
     },
   };
 
-  const dynamicEase = "spring";
+  const dynamicEase = "easeOut";
   const itemVariants = {
     hidden: { opacity: 0, y: 30 },
     visible: {
@@ -103,7 +103,10 @@ const WhyStudentsLoveSection = () => {
   ];
 
   return (
-    <section className="py-20 bg-linear-to-br from-customer-cream to-white">
+    <section
+      className="py-20 bg-linear-to-br from-customer-cream to-white"
+      id="why-students-love"
+    >
       <div className="max-w-7xl mx-auto px-4">
         {/* Section Header */}
         <SectionHeader

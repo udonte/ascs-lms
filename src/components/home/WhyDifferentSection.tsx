@@ -15,7 +15,7 @@ const WhyDifferentSection = () => {
     },
   };
 
-  const dynamicEase = "spring";
+  const dynamicEase = "easeOut";
 
   const itemVariants = {
     hidden: { opacity: 0, y: 30 },
@@ -69,7 +69,7 @@ const WhyDifferentSection = () => {
   ];
 
   return (
-    <section className="py-20 bg-customer-purple/5">
+    <section className="py-20 bg-customer-purple/5" id="why-different">
       <div className="max-w-7xl mx-auto px-4">
         {/* Section Header */}
         <SectionHeader

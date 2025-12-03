@@ -120,7 +120,10 @@ const RecommendedCoursesSection = () => {
   ];
 
   return (
-    <section className="py-20 bg-linear-to-br from-customer-cream to-white">
+    <section
+      id="recommended-courses"
+      className="py-20 bg-linear-to-br from-customer-cream to-white"
+    >
       <div className="max-w-7xl mx-auto px-4">
         {/* Section Header */}
         <SectionHeader

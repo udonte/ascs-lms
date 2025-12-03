@@ -30,7 +30,7 @@ const CeoNoteSection = () => {
   };
 
   return (
-    <section className="py-20 bg-white">
+    <section className="py-20 bg-white" id="ceo-note">
       <div className="max-w-7xl mx-auto px-4">
         {/* Section Header */}
         <SectionHeader

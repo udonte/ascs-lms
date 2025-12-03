@@ -43,7 +43,7 @@ const MissionVisionSection = () => {
   ];
 
   return (
-    <section className="py-20 bg-white">
+    <section className="py-20 bg-white" id="mission-vision">
       <div className="max-w-7xl mx-auto px-4">
         {/* Section Header */}
         <SectionHeader

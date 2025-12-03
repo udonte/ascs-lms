@@ -91,7 +91,7 @@ const GlobalOutcomesSection = () => {
     },
   };
 
-  const dynamicEase = "spring"; // Example dynamic string
+  const dynamicEase = "easeOut"; // Example dynamic string
 
   const itemVariants = {
     hidden: { opacity: 0, y: 30 },
@@ -109,7 +109,10 @@ const GlobalOutcomesSection = () => {
   const visibleStories = getVisibleStories();
 
   return (
-    <section className="py-20 bg-linear-to-br from-white to-customer-cream">
+    <section
+      className="py-20 bg-linear-to-br from-white to-customer-cream"
+      id="global-outcomes"
+    >
       <div className="max-w-7xl mx-auto px-4">
         {/* Section Header */}
         <SectionHeader

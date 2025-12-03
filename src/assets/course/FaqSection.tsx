@@ -18,7 +18,7 @@ const FAQSection = () => {
     {
       id: "general",
       title: "General Questions",
-      icon: <FaQuestionCircle className="text-xl" />,
+      icon: <FaQuestionCircle className="text-xl" color="#6a1b9a" />,
       questions: [
         {
           q: "Who is ASCS™ for?",
@@ -37,7 +37,7 @@ const FAQSection = () => {
     {
       id: "certificates",
       title: "Certificates & Recognition",
-      icon: <FaCertificate className="text-xl" />,
+      icon: <FaCertificate className="text-xl" color="#6a1b9a" />,
       questions: [
         {
           q: "Are your certificates globally recognized?",
@@ -56,7 +56,7 @@ const FAQSection = () => {
     {
       id: "job",
       title: "Job Preparation & Support",
-      icon: <FaBriefcase className="text-xl" />,
+      icon: <FaBriefcase className="text-xl" color="#6a1b9a" />,
       questions: [
         {
           q: "Will ASCS™ help me get a job?",
@@ -75,7 +75,7 @@ const FAQSection = () => {
     {
       id: "technical",
       title: "Technical & Learning",
-      icon: <FaLaptop className="text-xl" />,
+      icon: <FaLaptop className="text-xl" color="#6a1b9a" />,
       questions: [
         {
           q: "What tools will I learn?",
@@ -94,7 +94,7 @@ const FAQSection = () => {
     {
       id: "community",
       title: "Community & Support",
-      icon: <FaUsers className="text-xl" />,
+      icon: <FaUsers className="text-xl" color="#6a1b9a" />,
       questions: [
         {
           q: "Do I get community access?",
@@ -113,7 +113,7 @@ const FAQSection = () => {
     {
       id: "pricing",
       title: "Pricing & Payment",
-      icon: <FaUserGraduate className="text-xl" />,
+      icon: <FaUserGraduate className="text-xl" color="#6a1b9a" />,
       questions: [
         {
           q: "What payment options do you offer?",
@@ -160,7 +160,7 @@ const FAQSection = () => {
   };
 
   return (
-    <section className="py-20 bg-customer-purple/5">
+    <section className="py-20 bg-customer-purple/5" id="faq">
       <div className="max-w-7xl mx-auto px-4">
         {/* Section Header */}
         <SectionHeader
@@ -188,7 +188,7 @@ const FAQSection = () => {
                 className="p-6 rounded-2xl bg-linear-to-br from-customer-cream to-white border border-customer-purple/10 shadow-sm"
               >
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 bg-customer-gold/20 rounded-lg">
+                  <div className="p-2 bg-customer-gold/60 rounded-lg ">
                     {category.icon}
                   </div>
                   <h3 className="font-semibold text-customer-charcoal text-lg">

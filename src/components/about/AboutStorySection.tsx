@@ -51,7 +51,7 @@ const AboutStorySection = () => {
   ];
 
   return (
-    <section className="py-20 bg-customer-cream">
+    <section className="py-20 bg-customer-cream" id="about-story">
       <div className="max-w-7xl mx-auto px-4">
         {/* Section Header */}
         <SectionHeader

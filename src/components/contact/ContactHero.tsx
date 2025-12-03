@@ -2,7 +2,7 @@ import { Easing, motion } from "framer-motion";
 import Button from "../ui/Button";
 import Badge from "../ui/Badge";
 
-import African from "@/assets/about/hero.png";
+import African from "@/assets/contact/contact.png";
 
 import {
   FaArrowRight,
@@ -23,7 +23,7 @@ const ContactHero = () => {
     },
   };
 
-  const dynamicEase = "spring";
+  const dynamicEase = "easeOut";
   const itemVariants = {
     hidden: { opacity: 0, y: 50 },
     visible: {
@@ -49,7 +49,10 @@ const ContactHero = () => {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-linear-to-br from-customer-purple via-purple-800 to-customer-teal">
+    <section
+      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-linear-to-br from-customer-purple via-purple-800 to-customer-teal"
+      id="contact-hero"
+    >
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-20 left-10 w-72 h-72 bg-customer-gold rounded-full mix-blend-soft-light filter blur-xl animate-pulse"></div>
@@ -89,19 +92,10 @@ const ContactHero = () => {
             variants={itemVariants}
             className="text-xl md:text-2xl text-customer-cream/90 leading-relaxed mb-8 font-light"
           >
-            We're here to help you on your Customer Success journey. Reach out
-            to us via WhatsApp or join our Telegram community for support and
+            Questions about our courses? Assistance? Or you want to connect with
+            fellow CS professionals, our team is ready to assist. Reach out to
+            us via WhatsApp or join our Telegram community for support and
             updates.
-          </motion.p>
-
-          {/* Description */}
-          <motion.p
-            variants={itemVariants}
-            className="text-lg text-customer-cream/80 mb-10 leading-relaxed"
-          >
-            Whether you have questions about our courses, need assistance, or
-            want to connect with fellow Customer Success professionals, our team
-            is ready to assist you.
           </motion.p>
 
           {/* CTA Buttons */}
@@ -174,7 +168,7 @@ const ContactHero = () => {
                   ease: "easeInOut",
                 }}
               >
-                Quality Training
+                Learning Inquiries
               </motion.div>
 
               <motion.div
@@ -190,7 +184,7 @@ const ContactHero = () => {
                   delay: 1,
                 }}
               >
-                Global Opportunities
+                Support & Assistance
               </motion.div>
             </div>
 

@@ -28,7 +28,10 @@ const CallToActionSection = () => {
   };
 
   return (
-    <section className="relative py-20 overflow-hidden bg-customer-charcoal">
+    <section
+      className="relative py-20 overflow-hidden bg-customer-charcoal"
+      id="call-to-action"
+    >
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-20 left-10 w-72 h-72 bg-customer-gold rounded-full mix-blend-soft-light filter blur-xl animate-pulse"></div>
