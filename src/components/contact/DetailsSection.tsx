@@ -38,13 +38,6 @@ const DetailsSection = () => {
 
   const contactInfo = [
     {
-      icon: <FiMapPin className="text-2xl" />,
-      title: "Our Global Presence",
-      details: ["Africa · Global Reach"],
-      description: "Serving learners across Africa and worldwide",
-      color: "bg-customer-purple/10",
-    },
-    {
       icon: <FiPhone className="text-2xl" />,
       title: "Phone Support",
       details: ["+XXX XXX XXXX", "+XXX XXX XXXX"],
@@ -54,16 +47,9 @@ const DetailsSection = () => {
     {
       icon: <FiMail className="text-2xl" />,
       title: "Email Contact",
-      details: ["hello@ascs.africa", "admissions@ascs.africa"],
+      details: ["hello@theafricanschoolofcustomersuccess.com"],
       description: "Response within 24 hours",
       color: "bg-customer-charcoal/10",
-    },
-    {
-      icon: <FiClock className="text-2xl" />,
-      title: "Quick Response",
-      details: ["Guaranteed 24-hour reply"],
-      description: "No automated responses - real human replies",
-      color: "bg-customer-purple/10",
     },
   ];
 
@@ -155,15 +141,15 @@ const DetailsSection = () => {
               </motion.h3>
 
               {/* Contact Info Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              <div className="flex flex-wrap gap-4 mb-8 w-full">
                 {contactInfo.map((info) => (
                   <motion.div
                     key={info.title}
                     variants={itemVariants}
-                    className={`p-5 rounded-xl ${info.color} border border-customer-purple/10 hover:shadow-md transition-all duration-300`}
+                    className={`p-5 rounded-xl ${info.color} border border-customer-purple/10 hover:shadow-md transition-all duration-300 w-full`}
                     whileHover={{ y: -3 }}
                   >
-                    <div className="flex items-start gap-4">
+                    <div className="flex items-start gap-4 w-full">
                       <div className="p-3 bg-white rounded-lg shadow-sm">
                         {info.icon}
                       </div>
@@ -171,11 +157,12 @@ const DetailsSection = () => {
                         <h4 className="font-semibold text-customer-charcoal mb-1">
                           {info.title}
                         </h4>
-                        <div className="space-y-1 mb-2">
+                        {/* make sure text doesnt overflow out of the container */}
+                        <div className="space-y-1 mb-2 w-full  ">
                           {info.details.map((detail, i) => (
                             <p
                               key={i}
-                              className="text-customer-charcoal/80 font-medium"
+                              className="text-customer-charcoal/80 font-medium text-[8px] md:text-sm wrap-break-word whitespace-normal "
                             >
                               {detail}
                             </p>

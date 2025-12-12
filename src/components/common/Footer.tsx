@@ -5,12 +5,12 @@ import Logo from "@/assets/ascs-logo.png";
 import { motion } from "framer-motion";
 import {
   FaTelegramPlane,
-  FaTwitter,
   FaLinkedin,
   FaInstagram,
   FaMapMarkerAlt,
   FaPhone,
   FaEnvelope,
+  FaFacebook,
 } from "react-icons/fa";
 
 const Footer = () => {
@@ -24,9 +24,9 @@ const Footer = () => {
       color: "hover:text-blue-400",
     },
     {
-      name: "Twitter",
-      icon: FaTwitter,
-      url: "https://twitter.com/your-handle",
+      name: "Facebook",
+      icon: FaFacebook,
+      url: "https://www.facebook.com/share/17hov6HLpC/",
       color: "hover:text-blue-400",
     },
     {
@@ -38,7 +38,7 @@ const Footer = () => {
     {
       name: "Instagram",
       icon: FaInstagram,
-      url: "https://instagram.com/your-handle",
+      url: "https://www.instagram.com/africanschoolofcs?igsh=MWdpNXlxMGR5MTFvaQ==",
       color: "hover:text-pink-500",
     },
   ];
@@ -56,7 +56,7 @@ const Footer = () => {
     },
     {
       icon: FaEnvelope,
-      text: "hello@ascs.africa",
+      text: "hello@theafricanschoolofcustomersuccess.com",
       description: "We'll respond within 24 hours",
     },
   ];
@@ -145,7 +145,7 @@ const Footer = () => {
               </h3>
               <ul className="space-y-3">
                 {NAV_LINKS.map((link) => (
-                  <li key={link.name}>
+                  <li key={link.name} className="w-fit">
                     <Link
                       to={link.path}
                       className="text-customer-cream/80 hover:text-customer-gold transition-colors duration-200 hover:underline underline-offset-4 block py-1"
@@ -164,29 +164,19 @@ const Footer = () => {
               </h3>
               <ul className="space-y-3 text-customer-cream/80">
                 <li>
-                  <span className="hover:text-customer-gold transition-colors duration-200 cursor-pointer block py-1">
-                    Switch to Tech as a CSM
-                  </span>
+                  <span className=" block py-1">Switch to Tech as a CSM</span>
                 </li>
                 <li>
-                  <span className="hover:text-customer-gold transition-colors duration-200 cursor-pointer block py-1">
-                    CS Fundamentals
-                  </span>
+                  <span className=" block py-1">CS Fundamentals</span>
                 </li>
                 <li>
-                  <span className="hover:text-customer-gold transition-colors duration-200 cursor-pointer block py-1">
-                    Certified CSM
-                  </span>
+                  <span className=" block py-1">Certified CSM</span>
                 </li>
                 <li>
-                  <span className="hover:text-customer-gold transition-colors duration-200 cursor-pointer block py-1">
-                    Train-the-Trainer
-                  </span>
+                  <span className=" block py-1">Train-the-Trainer</span>
                 </li>
                 <li>
-                  <span className="hover:text-customer-gold transition-colors duration-200 cursor-pointer block py-1">
-                    CS for Businesses
-                  </span>
+                  <span className=" block py-1">CS for Businesses</span>
                 </li>
               </ul>
             </motion.div>
@@ -198,15 +188,18 @@ const Footer = () => {
               </h3>
               <div className="space-y-4">
                 {contactInfo.map((contact, index) => (
-                  <div key={index} className="flex items-start space-x-3">
+                  <div
+                    key={index}
+                    className="flex items-start space-x-3 w-full"
+                  >
                     <div className="mt-1 text-customer-gold">
                       <contact.icon className="text-lg" />
                     </div>
                     <div>
-                      <p className="font-medium text-customer-cream">
+                      <p className="font-medium text-customer-cream text-sm sm:text-xs">
                         {contact.text}
                       </p>
-                      <p className="text-sm text-customer-cream/70">
+                      <p className="text-sm text-customer-cream/70 ">
                         {contact.description}
                       </p>
                     </div>
