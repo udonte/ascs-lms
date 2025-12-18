@@ -4,6 +4,7 @@ import CourseHero from "@/components/courses/CourseHero";
 import ProgramsSections from "@/components/courses/ProgramsSections";
 import RecommendedCoursesSection from "@/components/courses/RecommendedCoursesSection";
 import GlobalOutcomesSection from "@/components/home/GlobalOutcomesSection";
+import MentorsSection from "@/components/home/MentorsSection";
 
 const Courses = () => {
   return (
@@ -11,6 +12,7 @@ const Courses = () => {
       <CourseHero />
       <ProgramsSections />
       <RecommendedCoursesSection />
+      <MentorsSection />
       <GlobalOutcomesSection />
       <CareerAcceleratorSection />
       <FAQSection />

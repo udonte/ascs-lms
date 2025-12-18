@@ -105,13 +105,17 @@ const CallToActionSection = () => {
             </Button>
 
             <Button
-              href="/contact"
               variant="outline"
               size="lg"
               icon={<FaArrowRight />}
               className="text-lg px-8 py-4 border-2 border-customer-cream text-customer-cream hover:bg-customer-cream hover:text-customer-purple"
             >
-              Speak With an Advisor
+              <a
+                href="https://calendly.com/elevateyourcscareerteam/30min"
+                target="_blank"
+              >
+                Speak With an Advisor
+              </a>
             </Button>
           </motion.div>
 

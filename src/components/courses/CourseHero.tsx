@@ -106,13 +106,10 @@ const CourseHero = () => {
             variants={itemVariants}
             className="flex flex-col sm:flex-row gap-8 mb-12"
           >
-            <Button
-              href="/courses"
-              variant="primary"
-              size="md"
-              icon={<FaArrowRight />}
-            >
-              Start Your CS Journey
+            <Button variant="primary" size="md" icon={<FaArrowRight />}>
+              <a href="https://selar.com/369z0u1736" target="_blank">
+                Download CSM Starter Kits
+              </a>
             </Button>
 
             <Button
@@ -122,7 +119,7 @@ const CourseHero = () => {
               icon={<FaPlayCircle />}
               iconPosition="left"
             >
-              Explore Our Certifications
+              Explore Our Courses
             </Button>
           </motion.div>
 

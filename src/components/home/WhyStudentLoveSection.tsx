@@ -183,7 +183,7 @@ const WhyStudentsLoveSection = () => {
                   ease: "easeInOut",
                 }}
               >
-                ⭐ 95% Satisfaction
+                95% Satisfaction
               </motion.div>
 
               <motion.div
@@ -199,7 +199,7 @@ const WhyStudentsLoveSection = () => {
                   delay: 1,
                 }}
               >
-                🎓 500+ Graduates
+                500+ Graduates
               </motion.div>
             </div>
 

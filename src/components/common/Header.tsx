@@ -5,7 +5,7 @@ import Logo from "@/assets/ascs-logo.png";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence, Easing } from "framer-motion";
 import { HiMenuAlt3, HiX } from "react-icons/hi";
-import { FaTelegramPlane } from "react-icons/fa";
+import { FaLinkedin } from "react-icons/fa";
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -103,12 +103,12 @@ const Header = () => {
           whileTap={{ scale: 0.95 }}
         >
           <a
-            href="https://t.me/your-community-link"
+            href="https://www.linkedin.com/company/elevateyour-career/"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 bg-customer-purple text-white px-6 py-2 rounded-lg hover:bg-customer-purple/90 transition-colors duration-200 font-medium"
           >
-            <FaTelegramPlane className="text-lg" />
+            <FaLinkedin className="text-lg" />
             Join Community
           </a>
         </motion.div>
@@ -194,14 +194,14 @@ const Header = () => {
                     className="pt-6 border-t border-gray-200"
                   >
                     <a
-                      href="https://t.me/your-community-link"
+                      href="https://www.linkedin.com/company/elevateyour-career/"
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={closeMobileMenu}
                       className="flex items-center justify-center gap-2 w-full bg-customer-purple text-white px-6 py-3 rounded-lg hover:bg-customer-purple/90 transition-colors duration-200 font-medium"
                     >
-                      <FaTelegramPlane className="text-lg" />
-                      Join Telegram Community
+                      <FaLinkedin className="text-lg" />
+                      Join Linkedin Community
                     </a>
                   </motion.div>
                 </div>

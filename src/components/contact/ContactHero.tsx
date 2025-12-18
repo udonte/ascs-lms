@@ -4,12 +4,7 @@ import Badge from "../ui/Badge";
 
 import African from "@/assets/contact/contact.png";
 
-import {
-  FaArrowRight,
-  FaStar,
-  FaWhatsapp,
-  FaTelegramPlane,
-} from "react-icons/fa";
+import { FaStar, FaLinkedin, FaYoutube } from "react-icons/fa";
 
 const ContactHero = () => {
   const containerVariants = {
@@ -94,8 +89,7 @@ const ContactHero = () => {
           >
             Questions about our courses? Assistance? Or you want to connect with
             fellow CS professionals, our team is ready to assist. Reach out to
-            us via WhatsApp or join our Telegram community for support and
-            updates.
+            us via linkedin community for support and updates.
           </motion.p>
 
           {/* CTA Buttons */}
@@ -103,34 +97,31 @@ const ContactHero = () => {
             variants={itemVariants}
             className="flex flex-col sm:flex-row gap-8 mb-12"
           >
-            <Button
-              href="/courses"
-              variant="primary"
-              size="md"
-              icon={<FaArrowRight />}
-            >
-              Start Your CS Journey
+            <Button variant="primary" size="md">
+              <a href="https://selar.com/369z0u1736" target="_blank">
+                Download CSM Starter Kits
+              </a>
             </Button>
 
             {/* Social Media */}
             <div className="flex space-x-4">
               <a
-                href="https://wa.me/your-number"
+                href="http://youtube.com/@theafricanschoolofcs"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-3 bg-green-500 text-white rounded-full hover:bg-green-600 transition-colors duration-200"
-                aria-label="Contact us on WhatsApp"
+                className="p-3 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors duration-200"
+                aria-label="Youtube Link"
               >
-                <FaWhatsapp className="text-xl" />
+                <FaYoutube className="text-xl" />
               </a>
               <a
-                href="https://t.me/your-community-link"
+                href="https://www.linkedin.com/company/elevateyour-career/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-3 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors duration-200"
-                aria-label="Join our Telegram community"
+                aria-label="Join our Linkedin community"
               >
-                <FaTelegramPlane className="text-xl" />
+                <FaLinkedin className="text-xl" />
               </a>
             </div>
           </motion.div>

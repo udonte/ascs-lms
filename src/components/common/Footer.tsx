@@ -4,7 +4,6 @@ import { NAV_LINKS } from "@/constants";
 import Logo from "@/assets/ascs-logo.png";
 import { motion } from "framer-motion";
 import {
-  FaTelegramPlane,
   FaLinkedin,
   FaInstagram,
   FaMapMarkerAlt,
@@ -18,12 +17,6 @@ const Footer = () => {
 
   const socialLinks = [
     {
-      name: "Telegram",
-      icon: FaTelegramPlane,
-      url: "https://t.me/your-community-link",
-      color: "hover:text-blue-400",
-    },
-    {
       name: "Facebook",
       icon: FaFacebook,
       url: "https://www.facebook.com/share/17hov6HLpC/",
@@ -32,7 +25,7 @@ const Footer = () => {
     {
       name: "LinkedIn",
       icon: FaLinkedin,
-      url: "https://linkedin.com/company/your-company",
+      url: "https://www.linkedin.com/company/elevateyour-career/",
       color: "hover:text-blue-600",
     },
     {
@@ -51,7 +44,7 @@ const Footer = () => {
     },
     {
       icon: FaPhone,
-      text: "+XXX XXX XXXX",
+      text: "+234 703 224 5842",
       description: "Mon - Fri, 9AM - 5PM",
     },
     {
@@ -162,23 +155,23 @@ const Footer = () => {
               <h3 className="font-playfair text-xl font-semibold mb-6 text-customer-gold">
                 Our Programs
               </h3>
-              <ul className="space-y-3 text-customer-cream/80">
-                <li>
+              <div className="space-y-3 text-customer-cream/80">
+                <a href="/courses">
                   <span className=" block py-1">Switch to Tech as a CSM</span>
-                </li>
-                <li>
+                </a>
+                <a href="/courses">
                   <span className=" block py-1">CS Fundamentals</span>
-                </li>
-                <li>
+                </a>
+                <a href="/courses">
                   <span className=" block py-1">Certified CSM</span>
-                </li>
-                <li>
+                </a>
+                <a href="/courses">
                   <span className=" block py-1">Train-the-Trainer</span>
-                </li>
-                <li>
+                </a>
+                <a href="/courses">
                   <span className=" block py-1">CS for Businesses</span>
-                </li>
-              </ul>
+                </a>
+              </div>
             </motion.div>
 
             {/* Contact Info */}
@@ -229,7 +222,7 @@ const Footer = () => {
       {/* Bottom Bar */}
       <div className="border-t border-customer-cream/20">
         <div className="max-w-7xl mx-auto px-4 py-6">
-          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+          <div className="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0">
             {/* Copyright */}
             <motion.div
               className="flex items-center space-x-2 text-customer-cream/70 text-sm"
@@ -242,34 +235,6 @@ const Footer = () => {
                 © {currentYear} African School of Customer Success. All rights
                 reserved.
               </span>
-            </motion.div>
-
-            {/* Legal Links */}
-            <motion.div
-              className="flex space-x-6 text-sm"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ delay: 0.3 }}
-              viewport={{ once: true }}
-            >
-              <a
-                href="/privacy"
-                className="text-customer-cream/70 hover:text-customer-gold transition-colors duration-200"
-              >
-                Privacy Policy
-              </a>
-              <a
-                href="/terms"
-                className="text-customer-cream/70 hover:text-customer-gold transition-colors duration-200"
-              >
-                Terms of Service
-              </a>
-              <a
-                href="/cookies"
-                className="text-customer-cream/70 hover:text-customer-gold transition-colors duration-200"
-              >
-                Cookie Policy
-              </a>
             </motion.div>
           </div>
         </div>

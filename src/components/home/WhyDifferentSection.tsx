@@ -192,7 +192,7 @@ const WhyDifferentSection = () => {
                   ease: "easeInOut",
                 }}
               >
-                🎯 Beyond Tools
+                Beyond Tools
               </motion.div>
 
               <motion.div
@@ -208,7 +208,7 @@ const WhyDifferentSection = () => {
                   delay: 1,
                 }}
               >
-                💡 Mindset First
+                Mindset First
               </motion.div>
             </div>
             {/* Outcome Statement */}

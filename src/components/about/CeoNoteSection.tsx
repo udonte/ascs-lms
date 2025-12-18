@@ -207,8 +207,7 @@ const CeoNoteSection = () => {
                     Gloria Michael
                   </p>
                   <p className="text-customer-charcoal/70">
-                    Founder & CEO, The African School of Customer Success
-                    (ASCS™)
+                    Lead Senior Customer Success Manager
                   </p>
                 </div>
               </div>

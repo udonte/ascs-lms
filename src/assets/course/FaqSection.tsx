@@ -98,7 +98,7 @@ const FAQSection = () => {
       questions: [
         {
           q: "Do I get community access?",
-          a: "Yes, you'll get lifetime access to our exclusive Telegram community where you can network with fellow students, alumni, and industry professionals from across Africa and the world.",
+          a: "Yes, you'll get lifetime access to our exclusive Linkedin community where you can network with fellow students, alumni, and industry professionals from across Africa and the world.",
         },
         {
           q: "Is there mentorship available?",
@@ -121,7 +121,7 @@ const FAQSection = () => {
         },
         {
           q: "Do you offer refunds?",
-          a: "Yes, we offer a 14-day money-back guarantee for all our programs. If you're not satisfied with the course within the first two weeks, you can request a full refund.",
+          a: "No, we do not offer refunds.",
         },
         {
           q: "Are there any hidden fees?",

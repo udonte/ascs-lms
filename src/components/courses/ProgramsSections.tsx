@@ -52,7 +52,7 @@ const ProgramsSections = () => {
       badgeColor: "bg-green-100 text-green-800",
       duration: "6-8 weeks",
       level: "Beginner",
-      price: "Starting at $499",
+      price: "$150",
       description:
         "For career changers moving from customer service, banking, sales, HR, or non-tech roles into Customer Success.",
       features: [
@@ -65,6 +65,7 @@ const ProgramsSections = () => {
         "How to land global CS roles",
       ],
       ctaText: "Enroll Now",
+      link: "https://tinyurl.com/gloriacustomersuccess",
       popular: true,
     },
     {
@@ -76,7 +77,7 @@ const ProgramsSections = () => {
       badgeColor: "bg-purple-100 text-purple-800",
       duration: "4 weeks",
       level: "Intermediate",
-      price: "$699",
+      price: "Free",
       description:
         "A premium industry certification uniquely designed for African and global professionals.",
       features: [
@@ -86,6 +87,7 @@ const ProgramsSections = () => {
         "Handling Difficult Customer Situations",
       ],
       ctaText: "Become Certified",
+      link: "https://www.notion.so/CUSTOMER-SUCCESS-FUNDAMENTAL-COURSE-2cb2a6e54ee3803c8d29cd92f52e5a0c?source=copy_link",
     },
     {
       id: 3,
@@ -96,7 +98,7 @@ const ProgramsSections = () => {
       badgeColor: "bg-amber-100 text-amber-800",
       duration: "8-10 weeks",
       level: "Advanced",
-      price: "$1,299",
+      price: "In View",
       description:
         "Comprehensive certification for professionals ready to lead Customer Success teams.",
       features: [
@@ -108,7 +110,8 @@ const ProgramsSections = () => {
         "Portfolio + capstone development",
         "Confidence, mindset & ethical decision-making",
       ],
-      ctaText: "Become Certified",
+      ctaText: "Make Inquiries",
+      link: "tel:07032245842",
       popular: true,
     },
     {
@@ -120,7 +123,7 @@ const ProgramsSections = () => {
       badgeColor: "bg-blue-100 text-blue-800",
       duration: "6 weeks",
       level: "Expert",
-      price: "$899",
+      price: "$200",
       description:
         "For Customer Success professionals who want to teach, coach, or build internal training within organizations.",
       features: [
@@ -130,7 +133,8 @@ const ProgramsSections = () => {
         "Coach teams & clients",
         "Build CS academies internally",
       ],
-      ctaText: "Become a Trainer",
+      ctaText: "Make Inquiries",
+      link: "tel:07032245842",
     },
     {
       id: 5,
@@ -153,7 +157,8 @@ const ProgramsSections = () => {
         "Cultural Sensitivity & Inclusiveness",
         "Customer Communication Excellence",
       ],
-      ctaText: "Enroll Your Team",
+      ctaText: "Make Inquiries",
+      link: "tel:07032245842",
       popular: true,
     },
     {
@@ -165,7 +170,7 @@ const ProgramsSections = () => {
       badgeColor: "bg-indigo-100 text-indigo-800",
       duration: "10 days",
       level: "All Levels",
-      price: "$299",
+      price: "$25",
       description:
         "A 10-day intensive mentorship helping aspiring tech professionals gain clarity, structure, confidence, and direction.",
       features: [
@@ -177,6 +182,7 @@ const ProgramsSections = () => {
         "Action plan development",
       ],
       ctaText: "Join Mentorship",
+      link: "tel:07032245842",
     },
   ];
 
@@ -342,12 +348,10 @@ const ProgramsSections = () => {
                     </div>
 
                     {/* CTA */}
-                    <Button
-                      href={`/courses/${program.id}`}
-                      variant="primary"
-                      className="w-full"
-                    >
-                      {program.ctaText}
+                    <Button variant="primary" className="w-full">
+                      <a href={program.link} target="_blank">
+                        {program.ctaText}
+                      </a>
                     </Button>
                   </div>
 
@@ -411,8 +415,13 @@ const ProgramsSections = () => {
                   <h4 className="text-xl font-semibold mb-3">
                     Free Consultation
                   </h4>
-                  <Button href="/contact" variant="primary" className=" w-full">
-                    Speak With Advisor
+                  <Button variant="primary" className=" w-full">
+                    <a
+                      href="https://calendly.com/elevateyourcscareerteam/30min"
+                      target="_blank"
+                    >
+                      Speak With an Advisor
+                    </a>
                   </Button>
                 </div>
               </div>

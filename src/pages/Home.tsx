@@ -1,6 +1,7 @@
 import CallToActionSection from "@/components/home/CallToActionSection";
 import GlobalOutcomesSection from "@/components/home/GlobalOutcomesSection";
 import Hero from "@/components/home/Hero";
+import MentorsSection from "@/components/home/MentorsSection";
 import MissionVisionSection from "@/components/home/MissionVisionSection";
 import StorySection from "@/components/home/StorySection";
 import WhyDifferentSection from "@/components/home/WhyDifferentSection";
@@ -11,6 +12,7 @@ const Home = () => {
     <div>
       <Hero />
       <StorySection />
+      <MentorsSection />
       <MissionVisionSection />
       <WhyDifferentSection />
       <WhyStudentsLoveSection />

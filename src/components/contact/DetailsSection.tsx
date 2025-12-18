@@ -3,11 +3,10 @@ import { FiMapPin, FiPhone, FiMail, FiClock } from "react-icons/fi";
 import {
   FaInstagram,
   FaYoutube,
-  FaTelegram,
   FaTwitter,
   FaLinkedin,
-  FaWhatsapp,
   FaGlobeAfrica,
+  FaFacebook,
 } from "react-icons/fa";
 import SectionHeader from "../ui/SectionHeader";
 import Button from "../ui/Button";
@@ -40,7 +39,7 @@ const DetailsSection = () => {
     {
       icon: <FiPhone className="text-2xl" />,
       title: "Phone Support",
-      details: ["+XXX XXX XXXX", "+XXX XXX XXXX"],
+      details: ["+234 703 224 5842"],
       description: "Mon - Fri, 9AM - 5PM WAT",
       color: "bg-customer-gold/10",
     },
@@ -55,18 +54,11 @@ const DetailsSection = () => {
 
   const socialLinks = [
     {
-      icon: <FaTelegram className="text-xl" />,
-      label: "Telegram Community",
-      link: "https://t.me/your-community-link",
-      color: "bg-blue-500 hover:bg-blue-600",
-      aria: "Join our Telegram community",
-    },
-    {
-      icon: <FaWhatsapp className="text-xl" />,
-      label: "WhatsApp",
-      link: "https://wa.me/your-number",
-      color: "bg-green-500 hover:bg-green-600",
-      aria: "Contact us on WhatsApp",
+      icon: <FaFacebook className="text-xl" />,
+      label: "Facebook",
+      link: "https://www.facebook.com/share/17hov6HLpC/",
+      color: "bg-blue-400 hover:bg-blue-500",
+      aria: "Follow us on Facebook",
     },
     {
       icon: <FaTwitter className="text-xl" />,
@@ -78,7 +70,7 @@ const DetailsSection = () => {
     {
       icon: <FaLinkedin className="text-xl" />,
       label: "LinkedIn",
-      link: "https://linkedin.com/company/your-company",
+      link: "https://www.linkedin.com/company/elevateyour-career/",
       color: "bg-blue-600 hover:bg-blue-700",
       aria: "Connect on LinkedIn",
     },
@@ -92,7 +84,7 @@ const DetailsSection = () => {
     {
       icon: <FaYoutube className="text-xl" />,
       label: "YouTube",
-      link: "https://youtube.com/@your-channel",
+      link: "http://youtube.com/@theafricanschoolofcs",
       color: "bg-red-500 hover:bg-red-600",
       aria: "Subscribe on YouTube",
     },
@@ -207,19 +199,13 @@ const DetailsSection = () => {
                     Need Immediate Assistance?
                   </h4>
                   <div className="flex flex-col sm:flex-row gap-3">
-                    <Button
-                      href="https://calendly.com/ascs-consultation"
-                      variant="primary"
-                      className="flex-1"
-                    >
-                      Book Consultation
-                    </Button>
-                    <Button
-                      href="https://wa.me/your-number"
-                      variant="outline"
-                      className="flex-1 border-customer-purple text-customer-purple hover:bg-customer-purple hover:text-white"
-                    >
-                      WhatsApp Chat
+                    <Button variant="primary" className="flex-1">
+                      <a
+                        href="https://calendly.com/elevateyourcscareerteam/30min"
+                        target="_blank"
+                      >
+                        Book Consultation
+                      </a>
                     </Button>
                   </div>
                 </div>
@@ -344,11 +330,15 @@ const DetailsSection = () => {
                 Join Our Community
               </Button>
               <Button
-                href="https://t.me/your-community-link"
                 variant="outline"
                 className="border-customer-purple text-customer-purple hover:bg-customer-purple hover:text-white"
               >
-                Join Telegram Group
+                <a
+                  href="https://www.linkedin.com/company/elevateyour-career/"
+                  target="_blank"
+                >
+                  Join Linkedin Group
+                </a>
               </Button>
             </div>
           </div>
