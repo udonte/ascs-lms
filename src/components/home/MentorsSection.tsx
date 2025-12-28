@@ -5,6 +5,7 @@ import Mayank from "@/assets/mentors/Mayank-Vyas.png";
 import Virginia from "@/assets/mentors/Virginia-Bloom.jpeg";
 import Mohammed from "@/assets/mentors/Mohammed-Asif.png";
 import Deepali from "@/assets/mentors/Deepali-Jagota.png";
+import Deedra from "@/assets/mentors/DeEdra-Williams.jpg";
 
 const MentorsSection = () => {
   const containerVariants = {
@@ -34,7 +35,7 @@ const MentorsSection = () => {
     {
       id: 1,
       name: "Mayank Vyas",
-      role: "Senior Key Accunt Manager at Kapture",
+      role: "Senior Key Account Manager at Kapture",
       image: Mayank,
     },
     {
@@ -55,9 +56,15 @@ const MentorsSection = () => {
       role: "Customer Success Manager Cornerstone Ondemand",
       image: Deepali,
     },
-
     {
       id: 5,
+      name: "De'Edra Williams",
+      role: "Customer Success Manager at Revenue Frontier",
+      image: Deedra,
+    },
+
+    {
+      id: 6,
       name: "Gloria Michael",
       role: "Success & Partnership Lead, WRO",
       image: Gloria,

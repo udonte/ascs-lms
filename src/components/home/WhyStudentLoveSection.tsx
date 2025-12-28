@@ -1,7 +1,6 @@
 import { Easing, motion } from "framer-motion";
 import SectionHeader from "../ui/SectionHeader";
 import {
-  FaStar,
   FaGraduationCap,
   FaHandsHelping,
   FaGlobe,
@@ -143,7 +142,6 @@ const WhyStudentsLoveSection = () => {
               <div className="absolute top-6 left-6 right-6 z-20">
                 <div className="bg-white/90 backdrop-blur-sm rounded-xl p-6 shadow-lg">
                   <h4 className="font-semibold text-customer-charcoal mb-4 flex items-center gap-2">
-                    <FaStar className="text-customer-gold" />
                     What Our Students Say:
                   </h4>
                   <div className="space-y-3">

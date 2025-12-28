@@ -66,7 +66,6 @@ const ContactHero = () => {
           {/* Badge */}
           <Badge
             variant="default"
-            icon={<FaStar className="text-customer-gold" />}
             className="mb-6 backdrop-blur-sm border-customer-cream/20"
           >
             Contact Us

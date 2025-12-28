@@ -4,7 +4,7 @@ import Badge from "../ui/Badge";
 
 import African from "@/assets/home/confident-african.png";
 
-import { FaPlayCircle, FaArrowRight, FaStar } from "react-icons/fa";
+import { FaPlayCircle, FaArrowRight } from "react-icons/fa";
 
 const Hero = () => {
   const containerVariants = {
@@ -68,7 +68,6 @@ const Hero = () => {
           {/* Badge */}
           <Badge
             variant="default"
-            icon={<FaStar className="text-customer-gold" />}
             className="mb-6 backdrop-blur-sm border-customer-cream/20"
           >
             Africa's Premier Customer Success School
@@ -89,8 +88,8 @@ const Hero = () => {
             variants={itemVariants}
             className="text-xl md:text-2xl text-customer-cream/90 leading-relaxed mb-8 font-light"
           >
-            Where global Customer Success careers begin - built in Africa, for
-            learners everywhere.
+            Where global Customer Success careers begin - for learners
+            everywhere.
           </motion.p>
 
           {/* Description */}

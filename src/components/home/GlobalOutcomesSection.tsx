@@ -27,7 +27,7 @@ const GlobalOutcomesSection = () => {
       name: "Inemesit Johnson",
       image: PlaceholderImages[1],
       quote:
-        "This program was exactly what / needed as someone new to customer success. Each session addressed the questions I had, covering roles and responsibilities and providing valuable insights on how to excel in the field. If an opportunity in customer success arises, I'm confident that I have the knowledge and skills to hit the ground running.",
+        "This program was exactly what I needed as someone new to customer success. Each session addressed the questions I had, covering roles and responsibilities and providing valuable insights on how to excel in the field. If an opportunity in customer success arises, I'm confident that I have the knowledge and skills to hit the ground running.",
     },
     {
       id: 2,

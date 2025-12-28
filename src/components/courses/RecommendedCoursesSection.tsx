@@ -171,7 +171,7 @@ const RecommendedCoursesSection = () => {
                   ease: "easeInOut",
                 }}
               >
-                🔮 Future Skills
+                Future Skills
               </motion.div>
 
               <motion.div
@@ -187,7 +187,7 @@ const RecommendedCoursesSection = () => {
                   delay: 1,
                 }}
               >
-                📈 In Demand
+                In Demand
               </motion.div>
             </div>
 

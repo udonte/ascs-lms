@@ -1,7 +1,7 @@
 import { Easing, motion } from "framer-motion";
 import Marquee from "react-fast-marquee";
 import { FiExternalLink } from "react-icons/fi";
-import { FaHandshake, FaStar } from "react-icons/fa";
+import { FaHandshake } from "react-icons/fa";
 import SectionHeader from "../ui/SectionHeader";
 import Button from "../ui/Button";
 import Client1 from "@/assets/partners/dangote.png";
@@ -132,7 +132,6 @@ const PartnersShowcaseSection = () => {
                   key={index}
                   className="flex items-center gap-3 p-3 rounded-lg bg-white/50 backdrop-blur-sm border border-white/30"
                 >
-                  <FaStar className="text-customer-gold shrink-0" />
                   <span className="text-customer-charcoal font-medium">
                     {partner}
                   </span>
