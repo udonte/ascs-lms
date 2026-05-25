@@ -1,0 +1,81 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
+@import "react-toastify/dist/ReactToastify.css";
+@import "tailwindcss";
+
+html {
+  scroll-behavior: smooth;
+}
+
+@theme {
+  --default-font-family: "Lato", sans-serif;
+  --color-customer-purple: #6a1b9a;
+  --color-customer-gold: #cda349;
+  --color-customer-teal: #00796b;
+  --color-customer-charcoal: #1e1e1e;
+  --color-customer-cream: #f9f6f2;
+  --font-lato: "Lato", sans-serif;
+  --font-playfair: "Playfair Display", serif;
+}
+
+/* Smooth transitions for all interactive elements */
+* {
+  transition-property:
+    color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.hide-scrollbar {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Custom focus styles for accessibility */
+.focus-outline:focus {
+  outline: 2px solid var(--color-customer-purple);
+  outline-offset: 2px;
+}
+
+/* Footer specific styles */
+footer a,
+footer button {
+  transition: all 0.3s ease;
+}
+
+/* Ensure good contrast and readability */
+footer .text-customer-cream\/80 {
+  color: rgba(249, 246, 242, 0.8);
+}
+
+footer .text-customer-cream\/70 {
+  color: rgba(249, 246, 242, 0.7);
+}
+
+/* Hover effects for footer links */
+footer a:hover {
+  transform: translateY(-1px);
+}
+
+/* react-toastify — ASCS brand accents */
+.Toastify__toast--success {
+  background: #003366 !important;
+}
+
+.Toastify__toast--error {
+  background: #b91c1c !important;
+}
+
+.Toastify__toast--info {
+  background: #003366 !important;
+}
+
+.Toastify__toast--warning {
+  background: #ca8a04 !important;
+}
+
+.Toastify__progress-bar {
+  background: #ffcc00 !important;
+}
