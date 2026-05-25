@@ -30,7 +30,11 @@ export default function HomeHero() {
   const floatingVariants = {
     animate: {
       y: [0, -20, 0],
-      transition: { duration: 6, repeat: Infinity, ease: floatingEase as Easing },
+      transition: {
+        duration: 6,
+        repeat: Infinity,
+        ease: floatingEase as Easing,
+      },
     },
   };
 
@@ -83,9 +87,16 @@ export default function HomeHero() {
             Success industry.
           </motion.p>
 
-          <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-8 mb-12">
+          <motion.div
+            variants={itemVariants}
+            className="flex flex-col sm:flex-row gap-8 mb-12"
+          >
             <Button variant="primary" size="md" icon={<FaArrowRight />}>
-              <a href="https://selar.com/369z0u1736" target="_blank" rel="noreferrer">
+              <a
+                href="https://selar.com/369z0u1736"
+                target="_blank"
+                rel="noreferrer"
+              >
                 Download CSM Starter Kits
               </a>
             </Button>
@@ -101,7 +112,10 @@ export default function HomeHero() {
             </Button>
           </motion.div>
 
-          <motion.div variants={itemVariants} className="grid grid-cols-3 gap-8 text-center">
+          <motion.div
+            variants={itemVariants}
+            className="grid grid-cols-3 gap-8 text-center"
+          >
             {[
               { value: "500+", label: "Students Trained" },
               { value: "95%", label: "Success Rate" },
@@ -111,16 +125,22 @@ export default function HomeHero() {
                 <div className="text-2xl md:text-3xl font-bold text-customer-gold">
                   {stat.value}
                 </div>
-                <div className="text-sm text-customer-cream/80">{stat.label}</div>
+                <div className="text-sm text-customer-cream/80">
+                  {stat.label}
+                </div>
               </div>
             ))}
           </motion.div>
         </motion.div>
 
-        <motion.div className="relative" variants={floatingVariants} animate="animate">
+        <motion.div
+          className="relative"
+          variants={floatingVariants}
+          animate="animate"
+        >
           <div className="relative">
             <div className="relative bg-linear-to-br from-customer-purple/80 to-customer-teal/60 rounded-2xl p-8 backdrop-blur-sm border border-customer-cream/10">
-              <div className="bg-customer-charcoal/30 rounded-xl h-96 lg:h-[500px] flex items-center justify-center border-2 border-customer-gold/20 overflow-hidden">
+              <div className="bg-customer-charcoal/30 rounded-xl h-96 lg:h-125 flex items-center justify-center border-2 border-customer-gold/20 overflow-hidden">
                 <div className="relative w-full h-full">
                   <Image
                     src="/assets/home/confident-african.png"
@@ -136,7 +156,11 @@ export default function HomeHero() {
               <motion.div
                 className="absolute -top-4 -left-4 bg-customer-gold text-customer-charcoal px-4 py-2 rounded-lg font-semibold shadow-lg"
                 animate={{ y: [0, -10, 0], rotate: [-5, 5, -5] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
               >
                 Global Careers
               </motion.div>
@@ -163,4 +187,3 @@ export default function HomeHero() {
     </section>
   );
 }
-

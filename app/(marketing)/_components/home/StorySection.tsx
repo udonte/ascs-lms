@@ -61,7 +61,7 @@ export default function StorySection() {
             transition={{ duration: 0.8, ease: "easeOut" }}
             viewport={{ once: true }}
           >
-            <div className="relative h-full min-h-[500px]">
+            <div className="relative h-full min-h-125">
               <Image
                 src="/assets/home/story-section.png"
                 alt="ASCS Community"
@@ -150,4 +150,3 @@ export default function StorySection() {
     </section>
   );
 }
-
