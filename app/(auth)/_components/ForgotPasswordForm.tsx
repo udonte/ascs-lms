@@ -23,7 +23,7 @@ export function ForgotPasswordForm() {
   useActionStateToast(state);
 
   return (
-    <div className="w-full max-w-md rounded-xl border border-neutral-200 bg-white p-8 shadow-sm">
+    <div className="w-full max-w-md rounded-xl border border-neutral-200 bg-[#FBF8EE] p-8 shadow-sm">
       <div className="mb-6 flex flex-col items-center text-center">
         <Link href="/" className="mb-4 inline-block">
           <Image
@@ -35,7 +35,9 @@ export function ForgotPasswordForm() {
             priority
           />
         </Link>
-        <h1 className="text-2xl font-semibold text-[#003366]">Reset password</h1>
+        <h1 className="text-2xl font-semibold text-[#003366]">
+          Reset password
+        </h1>
         <p className="mt-2 text-sm text-neutral-600">
           Enter your email and we will send you a link to choose a new password.
         </p>

@@ -1,5 +1,8 @@
 import { createClient } from "@/lib/supabase/server";
-import { ensureUserProfile, getProfileRole } from "@/src/lib/services/profile-service";
+import {
+  ensureUserProfile,
+  getProfileRole,
+} from "@/src/lib/services/profile-service";
 
 export default async function AdminHomePage() {
   const supabase = await createClient();
@@ -31,7 +34,9 @@ export default async function AdminHomePage() {
       </p>
 
       <section className="mt-10 rounded-lg border border-neutral-200 bg-white p-6 shadow-sm">
-        <h2 className="text-lg font-semibold text-[#003366]">Content management</h2>
+        <h2 className="text-lg font-semibold text-[#003366]">
+          Content management
+        </h2>
         <p className="mt-2 text-sm text-neutral-600">
           Course and lesson management will be added in the next milestone. For
           now, promote staff by setting{" "}

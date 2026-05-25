@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { createClient } from "@/lib/supabase/client";
 import { notifyError, notifySuccess } from "@/lib/toast";
+import { AiOutlineLogout } from "react-icons/ai";
 
 type SignOutButtonProps = {
   variant?: "light" | "dark";
@@ -42,7 +43,10 @@ export function SignOutButton({ variant = "light" }: SignOutButtonProps) {
       disabled={pending}
       className={className}
     >
-      {pending ? "Signing out…" : "Sign out"}
+      <span className="hidden md:block">
+        {pending ? "Signing out…" : "Sign out"}
+      </span>
+      <AiOutlineLogout className="block md:hidden ml-2 -mr-1 h-4 w-4" />
     </button>
   );
 }

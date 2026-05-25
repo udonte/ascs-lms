@@ -5,7 +5,9 @@ export default async function Page() {
     <div>
       <Header title="My Certificates" />
       <section className="rounded-lg border bg-white p-6">
-        <p className="text-neutral-700">Completed courses and downloadable certificates will be listed here.</p>
+        <p className="text-neutral-700">
+          Completed courses and downloadable certificates will be listed here.
+        </p>
       </section>
     </div>
   );

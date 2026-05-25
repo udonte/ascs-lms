@@ -5,7 +5,9 @@ export default async function Page() {
     <div>
       <Header title="Student Ledger" />
       <section className="rounded-lg border bg-white p-6">
-        <p className="text-neutral-700">A table of students, enrollments, and payments will appear here.</p>
+        <p className="text-neutral-700">
+          A table of students, enrollments, and payments will appear here.
+        </p>
       </section>
     </div>
   );

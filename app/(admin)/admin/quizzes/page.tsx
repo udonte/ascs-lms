@@ -5,7 +5,9 @@ export default async function Page() {
     <div>
       <Header title="Quiz Builder" />
       <section className="rounded-lg border bg-white p-6">
-        <p className="text-neutral-700">Create JSON-structured quizzes and set passing scores here.</p>
+        <p className="text-neutral-700">
+          Create JSON-structured quizzes and set passing scores here.
+        </p>
       </section>
     </div>
   );

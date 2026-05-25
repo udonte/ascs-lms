@@ -35,7 +35,7 @@ export function PasswordAuthForm({ mode, nextPath }: PasswordAuthFormProps) {
       : "Sign in to access your courses and progress.";
 
   return (
-    <div className="w-full max-w-md rounded-xl border border-neutral-200 bg-white p-8 shadow-sm">
+    <div className="w-full max-w-md rounded-xl border border-neutral-200 bg-[#FBF8EE] p-8 shadow-sm">
       <AuthHeader heading={heading} subheading={subheading} />
 
       <form action={formAction} className="space-y-4">
@@ -99,7 +99,7 @@ export function PasswordAuthForm({ mode, nextPath }: PasswordAuthFormProps) {
         <button
           type="submit"
           disabled={pending}
-          className="w-full rounded-md bg-[#FFCC00] px-4 py-2.5 text-sm font-semibold text-[#003366] shadow-sm transition hover:bg-[#e6b800] disabled:cursor-not-allowed disabled:opacity-60"
+          className="w-full rounded-md bg-[#FFCC00] px-4 py-2.5 text-sm font-semibold text-[#003366] shadow-sm transition hover:bg-[#e6b800] disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
         >
           {pending
             ? mode === "signup"
@@ -189,7 +189,10 @@ function AuthField({
 }) {
   return (
     <div>
-      <label htmlFor={id} className="block text-sm font-medium text-neutral-700">
+      <label
+        htmlFor={id}
+        className="block text-sm font-medium text-neutral-700"
+      >
         {label}
       </label>
       <input
