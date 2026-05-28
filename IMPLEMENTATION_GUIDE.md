@@ -39,7 +39,7 @@ courses: id, instructor_id (fk profiles.id), title, description, price, thumbnai
 
 lessons: id, course_id, title, video_url (YouTube/Vimeo), order_index, content_body.
 
-enrollments: id, user_id, course_id, status ('paid' | 'pending'), paystack_ref (UNIQUE), amount_paid.
+enrollments: id, user_id, course_id, status ('paid' | 'pending'), reference (UNIQUE), amount_paid.
 
 user_progress: id, user_id, lesson_id, is_completed (boolean), completed_at.
 
@@ -71,7 +71,7 @@ Logic:
 
 Verify Paystack Signature.
 
-Check if paystack_ref already exists in the enrollments table.
+Check if reference already exists in the enrollments table.
 
 If it exists, return 200 OK and stop (Prevents double enrollment on network retry).
 

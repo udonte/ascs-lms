@@ -1,14 +1,23 @@
 import Header from "@/app/_components/Header";
+import { QuizBuilderPanel } from "@/app/(admin)/_components/QuizBuilderPanel";
+import { AdminCourseService } from "@/lib/services/admin/courses/admin-course-service";
+import { QuizService } from "@/lib/services/admin/quizzes/quiz-service";
 
-export default async function Page() {
+export default async function QuizBuilderPage() {
+  const [quizzes, courses] = await Promise.all([
+    QuizService.getAllQuizzesForAdmin(),
+    AdminCourseService.getAdminCourses(),
+  ]);
+
+  const courseOptions = courses.map((course) => ({
+    id: course.id,
+    title: course.title,
+  }));
+
   return (
-    <div>
+    <div className="mx-auto w-full max-w-6xl">
       <Header title="Quiz Builder" />
-      <section className="rounded-lg border bg-white p-6">
-        <p className="text-neutral-700">
-          Create JSON-structured quizzes and set passing scores here.
-        </p>
-      </section>
+      <QuizBuilderPanel quizzes={quizzes} courses={courseOptions} />
     </div>
   );
 }

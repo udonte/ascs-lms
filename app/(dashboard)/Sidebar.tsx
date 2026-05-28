@@ -36,10 +36,20 @@ const links = [
 export function DashboardSidebar() {
   const pathname = usePathname();
 
+  const hasSubPages = (href: string) => {
+    return (
+      (href === "/dashboard" && pathname.startsWith("/dashboard/courses")) ||
+      (href === "/dashboard/certificates" &&
+        pathname.startsWith("/dashboard/certificates")) ||
+      (href === "/dashboard/settings" &&
+        pathname.startsWith("/dashboard/settings"))
+    );
+  };
+
   return (
     <nav className="flex flex-1 flex-col gap-2 p-3 text-sm">
       {links.map(({ href, label, icon: Icon }) => {
-        const active = pathname === href;
+        const active = pathname === href || hasSubPages(href);
         return (
           <Link
             key={href}

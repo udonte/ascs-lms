@@ -23,10 +23,13 @@ export function MobileHeader() {
 
   const title = useMemo(() => {
     if (!pathname) return "ASCS LMS";
-    return (
-      PAGE_TITLES[pathname] ??
-      (pathname.startsWith("/admin") ? "ASCS Admin" : "ASCS LMS")
-    );
+    if (PAGE_TITLES[pathname]) return PAGE_TITLES[pathname];
+    if (pathname.startsWith("/admin/courses/")) return "Course Editor";
+    if (pathname.includes("/dashboard/courses/") && pathname.includes("/lessons/")) {
+      return "Classroom";
+    }
+    if (pathname.startsWith("/dashboard/checkout")) return "Checkout";
+    return pathname.startsWith("/admin") ? "ASCS Admin" : "ASCS LMS";
   }, [pathname]);
 
   const isAdmin = pathname?.startsWith("/admin");
@@ -69,7 +72,7 @@ export function MobileHeader() {
         <p
           className={`flex items-center gap-2 truncate text-xs ${isAdmin ? "text-white/80" : "text-neutral-500 "}`}
         >
-          <span className="flex items-center justify-center font-medium w-fit bg-customer-teal text-white px-1.5 py-0.5 rounded">
+          <span className="flex items-center justify-center font-medium w-fit bg-customer-teal text-white px-1.5 py-0.5 rounded ">
             {isAdmin ? "Admin" : "Student"}
           </span>
           Signed in as {displayName}

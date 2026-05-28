@@ -1,9 +1,13 @@
+import type { ReactNode } from "react";
+
 import { createClient } from "@/lib/supabase/server";
 
 export default async function Header({
   title,
+  actions,
 }: Readonly<{
   title: string;
+  actions?: ReactNode;
 }>) {
   const supabase = await createClient();
   const {
@@ -32,16 +36,21 @@ export default async function Header({
   }
 
   return (
-    <div className="mb-6 hidden md:flex items-center justify-between ">
-      <h1 className="text-2xl font-semibold text-[#003366]">{title}</h1>
-      <div className="flex flex-col items-end gap-1 text-sm text-neutral-600">
-        <p className="font-medium bg-customer-teal text-white px-1.5 py-0.5 rounded">
-          {isAdmin ? "Admin" : "Student"}
-        </p>
-        <p>
-          Signed in as{" "}
-          <span className="font-medium text-[#003366]">{displayName}</span>
-        </p>
+    <div className="mb-6 hidden items-center justify-between gap-6 md:flex">
+      <h1 className="text-3xl font-bold text-customer-teal">{title}</h1>
+      <div className="flex flex-1 items-center justify-end gap-6">
+        {actions ? <div className="flex items-center">{actions}</div> : null}
+        <div className="flex flex-col items-end gap-1 text-sm text-neutral-600">
+          <p className="font-medium bg-customer-purple text-customer-cream px-1.5 py-0.5 rounded">
+            {isAdmin ? "Admin" : "Student"}
+          </p>
+          <p>
+            Signed in as{" "}
+            <span className="font-medium text-customer-gold">
+              {displayName}
+            </span>
+          </p>
+        </div>
       </div>
     </div>
   );

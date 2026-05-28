@@ -1,54 +1,60 @@
-import { createClient } from "@/lib/supabase/server";
-import {
-  ensureUserProfile,
-  getProfileRole,
-} from "@/src/lib/services/profile-service";
+import { AnalyticsService } from "@/lib/services/admin/analytics/analytics-service";
+import StatCard from "../_components/StatCard";
+import RecentTransactionsTable from "../_components/RecentTransactionsTable";
+import { LuUsers } from "react-icons/lu";
+import { HiOutlineCreditCard } from "react-icons/hi";
+import { BiTrendingUp } from "react-icons/bi";
+import { HiOutlineAcademicCap } from "react-icons/hi";
+import Header from "@/app/_components/Header";
 
-export default async function AdminHomePage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+function formatCurrency(value: number) {
+  return new Intl.NumberFormat("en-NG", {
+    style: "currency",
+    currency: "NGN",
+    maximumFractionDigits: 0,
+  }).format(value);
+}
 
-  if (user) {
-    await ensureUserProfile(supabase);
-  }
-
-  const role = user ? await getProfileRole(supabase, user.id) : "student";
-  const fullName =
-    typeof user?.user_metadata?.full_name === "string"
-      ? user.user_metadata.full_name
-      : null;
+export default async function AdminPerformancePage() {
+  const stats = await AnalyticsService.getPerformanceStats();
 
   return (
-    <div className="mx-auto max-w-3xl">
-      <h1 className="text-2xl font-semibold text-[#003366]">Admin console</h1>
-      <p className="mt-2 text-neutral-600">
-        Signed in as{" "}
-        <span className="font-medium text-neutral-900">
-          {fullName ?? user?.email ?? "Unknown"}
-        </span>{" "}
-        <span className="rounded-full bg-[#003366]/10 px-2 py-0.5 text-xs font-medium text-[#003366]">
-          {role}
-        </span>
-      </p>
+    <div>
+      <Header title="Performance Insights" />
+      <section className="rounded-lg border border-neutral-200 bg-white p-6">
+        <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-neutral-700">
+              A snapshot of key performance metrics for the ASCS LMS.
+            </p>
+          </div>
+        </div>
 
-      <section className="mt-10 rounded-lg border border-neutral-200 bg-white p-6 shadow-sm">
-        <h2 className="text-lg font-semibold text-[#003366]">
-          Content management
-        </h2>
-        <p className="mt-2 text-sm text-neutral-600">
-          Course and lesson management will be added in the next milestone. For
-          now, promote staff by setting{" "}
-          <code className="rounded bg-neutral-100 px-1 py-0.5 text-xs">
-            profiles.role
-          </code>{" "}
-          to{" "}
-          <code className="rounded bg-neutral-100 px-1 py-0.5 text-xs">
-            admin
-          </code>{" "}
-          in Supabase for their user id.
-        </p>
+        <div className="grid gap-6 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1">
+          <StatCard
+            label="Total Revenue"
+            value={formatCurrency(stats.totalRevenue)}
+            icon={<BiTrendingUp className="h-6 w-6" />}
+            accentClass="bg-[#DCE5F2] text-[#003366]"
+          />
+          <StatCard
+            label="Active Students"
+            value={stats.totalStudents}
+            icon={<LuUsers className="h-6 w-6" />}
+          />
+          <StatCard
+            label="Course Sales"
+            value={stats.salesCount}
+            icon={<HiOutlineCreditCard className="h-6 w-6" />}
+          />
+          <StatCard
+            label="Active Courses"
+            value={stats.totalCourses}
+            icon={<HiOutlineAcademicCap className="h-6 w-6" />}
+          />
+        </div>
+
+        <RecentTransactionsTable />
       </section>
     </div>
   );

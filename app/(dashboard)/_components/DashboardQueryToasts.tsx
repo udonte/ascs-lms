@@ -15,6 +15,12 @@ export function DashboardQueryToasts() {
 
     const messages: Record<string, string> = {
       welcome: "Welcome! Your account is ready.",
+      "payment-success":
+        "Payment successful! Your course is now unlocked.",
+      "enrollment-success": "You now have access to this course.",
+      "already-enrolled": "You already have access to this course.",
+      "payment-incomplete": "Checkout was not completed. You can try again anytime.",
+      "lesson-complete": "Great work! You completed this course.",
     };
 
     const text = messages[toast];

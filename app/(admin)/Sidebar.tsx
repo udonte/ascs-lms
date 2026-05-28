@@ -33,13 +33,20 @@ const links = [
   },
 ];
 
+function isNavLinkActive(pathname: string, href: string): boolean {
+  if (href === "/admin") {
+    return pathname === "/admin";
+  }
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
+
 export function AdminSidebar() {
   const pathname = usePathname();
 
   return (
     <nav className="flex flex-1 flex-col gap-1 p-3 text-sm">
       {links.map(({ href, label, icon: Icon }) => {
-        const active = pathname === href;
+        const active = isNavLinkActive(pathname, href);
         return (
           <Link
             key={href}
@@ -58,7 +65,6 @@ export function AdminSidebar() {
       <div className="mt-auto hidden md:block">
         <SignOutButton variant="dark" />
       </div>
-      ;
     </nav>
   );
 }

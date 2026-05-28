@@ -46,7 +46,9 @@ export function SignOutButton({ variant = "light" }: SignOutButtonProps) {
       <span className="hidden md:block">
         {pending ? "Signing out…" : "Sign out"}
       </span>
-      <AiOutlineLogout className="block md:hidden ml-2 -mr-1 h-4 w-4" />
+      <div className="md:hidden ml-2">
+        <AiOutlineLogout className="block h-3 w-auto" />
+      </div>
     </button>
   );
 }
