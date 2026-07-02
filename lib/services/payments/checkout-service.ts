@@ -134,7 +134,7 @@ export const CheckoutService = {
       userId: user.id,
       courseId,
       amountPaid: 0,
-      paymentReference: `free-${courseId}-${user.id}`,
+      paystack_ref: `free-${courseId}-${user.id}`,
     });
 
     return { alreadyEnrolled: false };
@@ -249,8 +249,10 @@ export const CheckoutService = {
       userId: user.id,
       courseId: resolvedCourseId,
       amountPaid,
-      paymentReference: payload.data.reference,
+      paystack_ref: payload.data.reference,
     });
+
+    console.log("payload", payload);
 
     return { success: true as const, courseId: resolvedCourseId };
   },

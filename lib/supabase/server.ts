@@ -19,6 +19,7 @@ export async function createClient() {
             );
           } catch {
             // Called from a Server Component without mutable cookies; middleware refreshes session.
+            console.log("Failed to set cookies");
           }
         },
       },

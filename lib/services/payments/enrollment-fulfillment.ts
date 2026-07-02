@@ -6,20 +6,24 @@ export type FulfillEnrollmentInput = {
   userId: string;
   courseId: string;
   amountPaid: number;
-  paymentReference?: string | null;
+  paystack_ref?: string | null;
 };
 
 /**
  * Paystack may return flat metadata or custom_fields depending on channel.
  */
-export function parsePaystackMetadata(
-  metadata: unknown,
-): { userId?: string; courseId?: string } {
+export function parsePaystackMetadata(metadata: unknown): {
+  userId?: string;
+  courseId?: string;
+} {
   if (!metadata || typeof metadata !== "object") return {};
 
   const record = metadata as Record<string, unknown>;
 
-  if (typeof record.user_id === "string" && typeof record.course_id === "string") {
+  if (
+    typeof record.user_id === "string" &&
+    typeof record.course_id === "string"
+  ) {
     return { userId: record.user_id, courseId: record.course_id };
   }
 
@@ -43,8 +47,10 @@ export function parsePaystackMetadata(
 }
 
 /**
- * Writes a paid enrollment using the service role.
- * Uses update-or-insert (no upsert onConflict) so it works without a composite unique index.
+ * Writes a paid enrollment using the service role client (bypasses RLS).
+ * The upsert is atomic — safe against duplicate webhook deliveries firing concurrently.
+ * Relies on the UNIQUE(user_id, course_id) constraint added in migration
+ * 20260701000000_enrollments_unique_constraint.sql
  */
 export async function fulfillPaidEnrollment(
   input: FulfillEnrollmentInput,
@@ -52,41 +58,22 @@ export async function fulfillPaidEnrollment(
 ): Promise<void> {
   const supabase = client ?? createAdminClient();
 
-  const baseRow = {
-    user_id: input.userId,
-    course_id: input.courseId,
-    status: "paid" as const,
-    amount_paid: input.amountPaid,
-  };
+  const { error } = await supabase.from("enrollments").upsert(
+    {
+      user_id: input.userId,
+      course_id: input.courseId,
+      status: "paid" as const,
+      amount_paid: input.amountPaid,
+      paystack_ref: input.paystack_ref,
+    },
+    { onConflict: "user_id,course_id" },
+  );
 
-  const { data: existing, error: selectError } = await supabase
-    .from("enrollments")
-    .select("id")
-    .eq("user_id", input.userId)
-    .eq("course_id", input.courseId)
-    .maybeSingle();
-
-  if (selectError) {
-    throw new Error(`Enrollment lookup failed: ${selectError.message}`);
+  if (error) {
+    throw new Error(`Enrollment failed: ${error.message}`);
   }
 
-  if (existing?.id) {
-    const { error: updateError } = await supabase
-      .from("enrollments")
-      .update(baseRow)
-      .eq("id", existing.id);
-
-    if (updateError) {
-      throw new Error(`Enrollment update failed: ${updateError.message}`);
-    }
-    return;
-  }
-
-  const { error: insertError } = await supabase
-    .from("enrollments")
-    .insert(baseRow);
-
-  if (insertError) {
-    throw new Error(`Enrollment insert failed: ${insertError.message}`);
-  }
+  console.log(
+    `Enrollment fulfilled: user=${input.userId} course=${input.courseId} amount=${input.amountPaid}`,
+  );
 }

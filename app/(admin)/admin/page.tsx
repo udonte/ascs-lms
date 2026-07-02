@@ -1,4 +1,5 @@
 import { AnalyticsService } from "@/lib/services/admin/analytics/analytics-service";
+import { LedgerService } from "@/lib/services/admin/students/ledger-services";
 import StatCard from "../_components/StatCard";
 import RecentTransactionsTable from "../_components/RecentTransactionsTable";
 import { LuUsers } from "react-icons/lu";
@@ -16,7 +17,10 @@ function formatCurrency(value: number) {
 }
 
 export default async function AdminPerformancePage() {
-  const stats = await AnalyticsService.getPerformanceStats();
+  const [stats, recentTransactions] = await Promise.all([
+    AnalyticsService.getPerformanceStats(),
+    LedgerService.getRecentTransactions(),
+  ]);
 
   return (
     <div>
@@ -54,7 +58,7 @@ export default async function AdminPerformancePage() {
           />
         </div>
 
-        <RecentTransactionsTable />
+        <RecentTransactionsTable rows={recentTransactions} />
       </section>
     </div>
   );

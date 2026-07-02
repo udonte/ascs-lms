@@ -75,7 +75,9 @@ async function assertStaff(supabase: Awaited<ReturnType<typeof createClient>>) {
 
   const role = await getProfileRole(supabase, user.id);
   if (!canAccessAdminRoute(role)) {
-    throw new Error("Only admins and instructors can manage the student ledger.");
+    throw new Error(
+      "Only admins and instructors can manage the student ledger.",
+    );
   }
 
   return user;
@@ -115,6 +117,41 @@ export const LedgerService = {
 
     if (error) {
       console.error("Error fetching ledger data:", error.message);
+      return [];
+    }
+
+    return (data ?? []).map(normalizeLedgerRow);
+  },
+
+  /**
+   * Fetches the 5 most recent enrollments for the admin dashboard overview.
+   */
+  async getRecentTransactions(): Promise<StudentLedgerRow[]> {
+    const supabase = await createClient();
+
+    try {
+      await assertStaff(supabase);
+    } catch {
+      return [];
+    }
+
+    const { data, error } = await supabase
+      .from("enrollments")
+      .select(
+        `
+        id,
+        status,
+        amount_paid,
+        created_at,
+        course:courses(title),
+        profile:profiles!user_id(full_name, email)
+      `,
+      )
+      .order("created_at", { ascending: false })
+      .limit(5);
+
+    if (error) {
+      console.error("Error fetching recent transactions:", error.message);
       return [];
     }
 

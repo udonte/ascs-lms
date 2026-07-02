@@ -70,7 +70,7 @@ export async function POST(request: Request) {
             userId,
             courseId,
             amountPaid,
-            paymentReference: paystackRef,
+            paystack_ref: paystackRef,
           },
           createAdminClient(),
         );
