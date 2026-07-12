@@ -9,7 +9,7 @@ import {
   signInAction,
   signUpAction,
   type AuthActionState,
-} from "@/src/lib/services/auth-service";
+} from "@/lib/services/auth-service";
 
 type AuthMode = "login" | "signup";
 

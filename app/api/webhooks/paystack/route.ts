@@ -71,6 +71,7 @@ export async function POST(request: Request) {
             courseId,
             amountPaid,
             paystack_ref: paystackRef,
+            payment_gateway: "paystack",
           },
           createAdminClient(),
         );

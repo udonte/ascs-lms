@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import {
   canAccessAdminRoute,
   getProfileRole,
-} from "@/src/lib/services/profile-service";
+} from "@/lib/services/profile-service";
 
 export interface QuizQuestion {
   id: string;

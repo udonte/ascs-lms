@@ -6,7 +6,7 @@ import {
   getCourseThumbnailUrl,
   truncateDescription,
   type CatalogCourse,
-} from "@/lib/services/student-dashboard-service";
+} from "@/lib/services/dashboard/overview/student-dashboard-service";
 
 type CatalogCourseCardProps = {
   course: CatalogCourse;
@@ -62,6 +62,16 @@ export function CatalogCourseCard({ course }: CatalogCourseCardProps) {
             className="mt-5 block w-full rounded-lg bg-customer-teal py-3 text-center text-sm font-semibold text-customer-cream shadow-sm transition hover:bg-customer-teal/90"
           >
             Buy Now / Unlock Access
+          </Link>
+        )}
+
+        {/* FEAT-09: View Details link — only shown when a public slug is set */}
+        {course.slug && (
+          <Link
+            href={`/courses/${course.slug}`}
+            className="mt-2 block w-full rounded-lg border border-neutral-200 py-2.5 text-center text-xs font-medium text-neutral-500 transition hover:border-customer-teal/40 hover:text-customer-teal"
+          >
+            View Course Details
           </Link>
         )}
       </div>

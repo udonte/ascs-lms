@@ -6,7 +6,7 @@ import {
   getProfileRole,
   resolvePostAuthPath,
   sanitizeNextPath,
-} from "@/src/lib/services/profile-service";
+} from "@/lib/services/profile-service";
 
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);

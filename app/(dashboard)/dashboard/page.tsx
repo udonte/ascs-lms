@@ -1,7 +1,7 @@
 import { EnrolledCourseCard } from "@/app/(dashboard)/_components/EnrolledCourseCard";
 import { EnrolledCoursesEmptyState } from "@/app/(dashboard)/_components/EnrolledCoursesEmptyState";
 import Header from "@/app/_components/Header";
-import { StudentDashboardService } from "@/lib/services/student-dashboard-service";
+import { StudentDashboardService } from "@/lib/services/dashboard/overview/student-dashboard-service";
 
 export default async function DashboardHomePage() {
   const [displayName, courses] = await Promise.all([

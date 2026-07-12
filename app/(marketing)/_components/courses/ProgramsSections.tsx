@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { Easing, motion } from "framer-motion";
 import SectionHeader from "../ui/SectionHeader";
 import Button from "../ui/Button";
@@ -17,8 +18,23 @@ import {
   FaDollarSign,
   FaCertificate,
 } from "react-icons/fa";
+import type { MarketingCourse } from "@/lib/services/marketing/marketing-course-service";
 
-export default function ProgramsSections() {
+type ProgramsSectionsProps = {
+  /** Published courses fetched from the DB by the parent Server Component.
+   *  Used to resolve real checkout links for LMS-managed programs.
+   *  Non-LMS programs (inquiry-based) keep their original external links. */
+  dbCourses?: MarketingCourse[];
+};
+
+/** Normalise titles for matching: lowercase, collapse whitespace */
+function normalise(s: string) {
+  return s.toLowerCase().replace(/\s+/g, " ").trim();
+}
+
+export default function ProgramsSections({
+  dbCourses = [],
+}: ProgramsSectionsProps) {
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: { opacity: 1, transition: { staggerChildren: 0.15 } },
@@ -33,6 +49,12 @@ export default function ProgramsSections() {
       transition: { duration: 0.6, ease: dynamicEase as Easing },
     },
   };
+
+  // Build a lookup map: normalised title → DB course
+  // This lets us swap external links for real checkout routes on matched programs
+  const dbCourseByTitle = new Map(
+    dbCourses.map((course) => [normalise(course.title), course]),
+  );
 
   const programs = [
     {
@@ -57,6 +79,7 @@ export default function ProgramsSections() {
         "How to land global CS roles",
       ],
       ctaText: "Enroll Now",
+      // Fallback external link — overridden below if course exists in DB
       link: "https://tinyurl.com/gloriacustomersuccess",
       popular: true,
     },
@@ -79,7 +102,9 @@ export default function ProgramsSections() {
         "Handling Difficult Customer Situations",
       ],
       ctaText: "Become Certified",
+      // Fallback external link — overridden below if course exists in DB
       link: "https://www.notion.so/CUSTOMER-SUCCESS-FUNDAMENTAL-COURSE-2cb2a6e54ee3803c8d29cd92f52e5a0c?source=copy_link",
+      popular: false,
     },
     {
       id: 3,
@@ -127,6 +152,7 @@ export default function ProgramsSections() {
       ],
       ctaText: "Make Inquiries",
       link: "tel:07032245842",
+      popular: false,
     },
     {
       id: 5,
@@ -175,8 +201,25 @@ export default function ProgramsSections() {
       ],
       ctaText: "Join Mentorship",
       link: "tel:07032245842",
+      popular: false,
     },
   ];
+
+  // Resolve each program: if a matching DB course exists, replace the external
+  // fallback link with the real LMS checkout route and add a detail page link.
+  const resolvedPrograms = programs.map((program) => {
+    const dbCourse = dbCourseByTitle.get(normalise(program.title));
+    if (!dbCourse) return { ...program, isInternal: false, detailHref: null as string | null };
+
+    return {
+      ...program,
+      link: `/dashboard/checkout/${dbCourse.id}`,
+      ctaText: "Enroll Now",
+      isInternal: true,
+      // Link to the public detail page when the course has a slug set
+      detailHref: dbCourse.slug ? `/courses/${dbCourse.slug}` : null,
+    };
+  });
 
   const programTypes = [
     {
@@ -246,7 +289,7 @@ export default function ProgramsSections() {
           </motion.div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 mb-16">
-            {programs.map((program) => (
+            {resolvedPrograms.map((program) => (
               <motion.div
                 key={program.id}
                 variants={itemVariants}
@@ -279,7 +322,16 @@ export default function ProgramsSections() {
                           </span>
                         </div>
                         <h3 className="text-xl font-bold text-white">
-                          {program.title}
+                          {program.detailHref ? (
+                            <Link
+                              href={program.detailHref}
+                              className="hover:underline underline-offset-2 decoration-white/50"
+                            >
+                              {program.title}
+                            </Link>
+                          ) : (
+                            program.title
+                          )}
                         </h3>
                         <p className="text-white/90 text-sm">
                           {program.subtitle}
@@ -330,11 +382,22 @@ export default function ProgramsSections() {
                       </ul>
                     </div>
 
-                    <Button variant="primary" className="w-full">
-                      <a href={program.link} target="_blank" rel="noreferrer">
+                    {/* Internal links (LMS checkout) use Next.js Link for SPA navigation.
+                        External links (phone, external sites) use a plain anchor tag. */}
+                    {program.isInternal ? (
+                      <Link
+                        href={program.link}
+                        className="block w-full rounded-xl bg-customer-gold py-3 text-center text-sm font-bold text-customer-charcoal shadow-sm transition hover:bg-customer-gold/90"
+                      >
                         {program.ctaText}
-                      </a>
-                    </Button>
+                      </Link>
+                    ) : (
+                      <Button variant="primary" className="w-full">
+                        <a href={program.link} target="_blank" rel="noreferrer">
+                          {program.ctaText}
+                        </a>
+                      </Button>
+                    )}
                   </div>
 
                   <div className="border-t border-customer-cream p-4 bg-customer-cream/30">
@@ -385,7 +448,10 @@ export default function ProgramsSections() {
 
               <div className="text-center">
                 <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-                  <div className="w-30 h-30 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4 relative overflow-hidden" style={{width:120, height:120}}>
+                  <div
+                    className="w-30 h-30 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4 relative overflow-hidden"
+                    style={{ width: 120, height: 120 }}
+                  >
                     <Image
                       src="/assets/course/advisor.png"
                       alt="Advisor Icon"
@@ -457,4 +523,3 @@ export default function ProgramsSections() {
     </section>
   );
 }
-

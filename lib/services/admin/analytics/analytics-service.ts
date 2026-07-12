@@ -1,4 +1,27 @@
 import { createClient } from "@/lib/supabase/server";
+import {
+  canAccessAdminRoute,
+  getProfileRole,
+} from "@/lib/services/profile-service";
+
+/**
+ * Verifies the caller is admin or instructor before running sensitive queries.
+ * Throws for non-staff callers so the error bubbles up cleanly rather than
+ * silently returning zeros.
+ */
+async function assertStaff(supabase: Awaited<ReturnType<typeof createClient>>) {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) throw new Error("Unauthorized");
+
+  const role = await getProfileRole(supabase, user.id);
+  if (!canAccessAdminRoute(role)) {
+    throw new Error("Only admins and instructors can view analytics.");
+  }
+
+  return user;
+}
 
 /**
  * ANALYTICS SERVICE
@@ -7,6 +30,19 @@ import { createClient } from "@/lib/supabase/server";
 export const AnalyticsService = {
   async getPerformanceStats() {
     const supabase = await createClient();
+
+    // BUG-06: Guard — non-staff callers are rejected explicitly rather than
+    // silently returning zeros (RLS would have returned empty rows before).
+    try {
+      await assertStaff(supabase);
+    } catch {
+      return {
+        totalRevenue: 0,
+        salesCount: 0,
+        totalStudents: 0,
+        totalCourses: 0,
+      };
+    }
 
     // 1. Fetch total paid revenue and total enrollments
     const { data: enrollments, error: enrollError } = await supabase

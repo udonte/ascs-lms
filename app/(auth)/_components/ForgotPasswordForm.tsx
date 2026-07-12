@@ -8,7 +8,7 @@ import { useActionStateToast } from "@/app/_components/useActionStateToast";
 import {
   requestPasswordResetAction,
   type AuthActionState,
-} from "@/src/lib/services/auth-service";
+} from "@/lib/services/auth-service";
 
 const initialState: AuthActionState = {};
 

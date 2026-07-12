@@ -7,6 +7,7 @@ export type FulfillEnrollmentInput = {
   courseId: string;
   amountPaid: number;
   paystack_ref?: string | null;
+  payment_gateway: "paystack" | "lemonsqueezy" | "manual" | "free";
 };
 
 /**
@@ -65,6 +66,7 @@ export async function fulfillPaidEnrollment(
       status: "paid" as const,
       amount_paid: input.amountPaid,
       paystack_ref: input.paystack_ref,
+      payment_gateway: input.payment_gateway,
     },
     { onConflict: "user_id,course_id" },
   );
@@ -72,8 +74,4 @@ export async function fulfillPaidEnrollment(
   if (error) {
     throw new Error(`Enrollment failed: ${error.message}`);
   }
-
-  console.log(
-    `Enrollment fulfilled: user=${input.userId} course=${input.courseId} amount=${input.amountPaid}`,
-  );
 }

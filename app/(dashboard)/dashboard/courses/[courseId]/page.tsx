@@ -7,7 +7,7 @@ import {
 } from "react-icons/hi";
 import { HiOutlineAcademicCap, HiOutlineLockClosed } from "react-icons/hi";
 
-import { getCourseThumbnailUrl } from "@/lib/services/student-dashboard-service";
+import { getCourseThumbnailUrl } from "@/lib/services/dashboard/overview/student-dashboard-service";
 import { StudentCourseService } from "@/lib/services/student-course-service";
 import Header from "@/app/_components/Header";
 

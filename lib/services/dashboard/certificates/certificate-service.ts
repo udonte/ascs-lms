@@ -2,6 +2,8 @@ import { createClient } from "@/lib/supabase/server";
 
 /**
  * Fetches all completed courses where the student has viewed 100% of the lessons.
+ * Completion date is read from enrollments.completed_at (stamped when the last
+ * lesson is marked complete), not generated at call time.
  */
 
 export const CertificateService = {
@@ -18,6 +20,7 @@ export const CertificateService = {
       .select(
         `
       course_id,
+      completed_at,
       course:courses (
         id,
         title,
@@ -73,14 +76,21 @@ export const CertificateService = {
 
       // If completion rate is 100% AND (quiz passed if applicable), they earned the certificate
       if (completedCount === totalLessons && quizPassed) {
+        // Read the real completion date from enrollments.completed_at
+        // Falls back to "Date unavailable" for legacy rows stamped before this fix
+        const rawDate = (enrollment as any).completed_at as string | null;
+        const completedAt = rawDate
+          ? new Date(rawDate).toLocaleDateString("en-NG", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })
+          : "Date unavailable";
+
         earnedCertificates.push({
           id: enrollment.course_id,
           courseTitle: course.title,
-          completedAt: new Date().toLocaleDateString("en-NG", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          }),
+          completedAt,
           certificateId: `ASCS-${enrollment.course_id.slice(0, 8).toUpperCase()}`,
         });
       }

@@ -1,9 +1,18 @@
 import { createClient } from "@/lib/supabase/server";
-import { formatCatalogPrice } from "@/lib/services/student-dashboard-service";
+import { formatCatalogPrice } from "@/lib/services/dashboard/overview/student-dashboard-service";
 import {
   fulfillPaidEnrollment,
   parsePaystackMetadata,
 } from "./enrollment-fulfillment";
+
+export type PrerequisiteStatus = {
+  /** True when a prerequisite exists AND the student hasn't completed it yet. */
+  required: boolean;
+  /** DB id of the required course (used to build the checkout link). */
+  courseId: string | null;
+  /** Human-readable title of the required course, for display in the UI. */
+  courseTitle: string | null;
+};
 
 export type CheckoutPreview = {
   courseId: string;
@@ -14,6 +23,8 @@ export type CheckoutPreview = {
   isFree: boolean;
   isEnrolled: boolean;
   studentEmail: string;
+  /** Prerequisite gate — required: true means student must complete another course first. */
+  prerequisite: PrerequisiteStatus;
 };
 
 type PaystackInitializeResponse = {
@@ -54,17 +65,18 @@ function getSiteUrl(): string {
   );
 }
 
-async function getAuthenticatedStudent() {
+async function getAuthenticatedStudent(): Promise<{
+  supabase: Awaited<ReturnType<typeof createClient>>;
+  user: { id: string; email: string };
+} | null> {
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user?.email) {
-    throw new Error("You must be signed in to checkout.");
-  }
+  if (!user?.email) return null;
 
-  return { supabase, user };
+  return { supabase, user: { id: user.id, email: user.email } };
 }
 
 async function hasPaidEnrollment(
@@ -84,12 +96,36 @@ async function hasPaidEnrollment(
 }
 
 export const CheckoutService = {
-  async getCheckoutPreview(courseId: string): Promise<CheckoutPreview | null> {
-    const { supabase, user } = await getAuthenticatedStudent();
+  /**
+   * Returns null when unauthenticated — the page should redirect to /login?next=...
+   * rather than showing a 404. Also returns null for unpublished / non-existent courses.
+   */
+  async getCheckoutPreview(
+    courseId: string,
+  ): Promise<CheckoutPreview | null | "unauthenticated"> {
+    const student = await getAuthenticatedStudent();
+
+    // Caller should redirect to /login?next=/dashboard/checkout/[courseId]
+    if (!student) return "unauthenticated";
+
+    const { supabase, user } = student;
 
     const { data: course, error } = await supabase
       .from("courses")
-      .select("id, title, description, price, is_published")
+      .select(
+        `
+        id,
+        title,
+        description,
+        price,
+        is_published,
+        prerequisite_course_id,
+        prerequisite:courses!prerequisite_course_id (
+          id,
+          title
+        )
+      `,
+      )
       .eq("id", courseId)
       .eq("is_published", true)
       .maybeSingle();
@@ -99,6 +135,20 @@ export const CheckoutService = {
     const price = parsePrice(course.price);
     const isEnrolled = await hasPaidEnrollment(supabase, user.id, courseId);
 
+    // ── Prerequisite check ───────────────────────────────────────────────────
+    const prereqRaw = Array.isArray(course.prerequisite)
+      ? (course.prerequisite[0] ?? null)
+      : (course.prerequisite ?? null);
+
+    const prereqId = (prereqRaw as { id?: string } | null)?.id ?? null;
+    const prereqTitle = (prereqRaw as { title?: string } | null)?.title ?? null;
+
+    let prerequisiteRequired = false;
+    if (prereqId) {
+      const prereqCompleted = await hasPaidEnrollment(supabase, user.id, prereqId);
+      prerequisiteRequired = !prereqCompleted;
+    }
+
     return {
       courseId: course.id,
       title: course.title,
@@ -107,16 +157,23 @@ export const CheckoutService = {
       priceLabel: formatCatalogPrice(price),
       isFree: price <= 0,
       isEnrolled,
-      studentEmail: user.email!,
+      studentEmail: user.email,
+      prerequisite: {
+        required: prerequisiteRequired,
+        courseId: prereqId,
+        courseTitle: prereqTitle,
+      },
     };
   },
 
   async grantFreeEnrollment(courseId: string) {
-    const { supabase, user } = await getAuthenticatedStudent();
+    const student = await getAuthenticatedStudent();
+    if (!student) throw new Error("You must be signed in to enroll.");
+    const { supabase, user } = student;
 
     const { data: course } = await supabase
       .from("courses")
-      .select("id, price, is_published")
+      .select("id, price, is_published, prerequisite_course_id")
       .eq("id", courseId)
       .eq("is_published", true)
       .maybeSingle();
@@ -124,6 +181,21 @@ export const CheckoutService = {
     if (!course) throw new Error("Course not found or unavailable.");
     if (parsePrice(course.price) > 0) {
       throw new Error("This course requires payment.");
+    }
+
+    // ── Prerequisite enforcement (write-time gate) ────────────────────────────
+    // Prevents bypass via direct server-action calls, Postman, etc.
+    if (course.prerequisite_course_id) {
+      const prereqMet = await hasPaidEnrollment(
+        supabase,
+        user.id,
+        course.prerequisite_course_id,
+      );
+      if (!prereqMet) {
+        throw new Error(
+          "You must complete the prerequisite course before enrolling here.",
+        );
+      }
     }
 
     if (await hasPaidEnrollment(supabase, user.id, courseId)) {
@@ -135,6 +207,7 @@ export const CheckoutService = {
       courseId,
       amountPaid: 0,
       paystack_ref: `free-${courseId}-${user.id}`,
+      payment_gateway: "free",
     });
 
     return { alreadyEnrolled: false };
@@ -146,7 +219,9 @@ export const CheckoutService = {
       throw new Error("Paystack is not configured on the server.");
     }
 
-    const { supabase, user } = await getAuthenticatedStudent();
+    const student = await getAuthenticatedStudent();
+    if (!student) throw new Error("You must be signed in to checkout.");
+    const { supabase, user } = student;
 
     const { data: course } = await supabase
       .from("courses")
@@ -169,24 +244,27 @@ export const CheckoutService = {
     const amountKobo = Math.round(price * 100);
     const callbackUrl = `${getSiteUrl()}/dashboard/checkout/callback?courseId=${encodeURIComponent(courseId)}`;
 
-    const response = await fetch("https://api.paystack.co/transaction/initialize", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${secret}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: user.email,
-        amount: amountKobo,
-        currency: "NGN",
-        callback_url: callbackUrl,
-        metadata: {
-          user_id: user.id,
-          course_id: courseId,
-          course_title: course.title,
+    const response = await fetch(
+      "https://api.paystack.co/transaction/initialize",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${secret}`,
+          "Content-Type": "application/json",
         },
-      }),
-    });
+        body: JSON.stringify({
+          email: user.email,
+          amount: amountKobo,
+          currency: "NGN",
+          callback_url: callbackUrl,
+          metadata: {
+            user_id: user.id,
+            course_id: courseId,
+            course_title: course.title,
+          },
+        }),
+      },
+    );
 
     const payload = (await response.json()) as PaystackInitializeResponse;
 
@@ -209,7 +287,9 @@ export const CheckoutService = {
       throw new Error("Paystack is not configured on the server.");
     }
 
-    const { user } = await getAuthenticatedStudent();
+    const student = await getAuthenticatedStudent();
+    if (!student) throw new Error("You must be signed in to verify payment.");
+    const { user } = student;
 
     const response = await fetch(
       `https://api.paystack.co/transaction/verify/${encodeURIComponent(reference)}`,
@@ -250,9 +330,8 @@ export const CheckoutService = {
       courseId: resolvedCourseId,
       amountPaid,
       paystack_ref: payload.data.reference,
+      payment_gateway: "paystack",
     });
-
-    console.log("payload", payload);
 
     return { success: true as const, courseId: resolvedCourseId };
   },

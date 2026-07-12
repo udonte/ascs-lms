@@ -11,7 +11,7 @@ import {
   getCourseThumbnailUrl,
   truncateDescription,
   type EnrolledCourse,
-} from "@/lib/services/student-dashboard-service";
+} from "@/lib/services/dashboard/overview/student-dashboard-service";
 
 type EnrolledCourseCardProps = {
   course: EnrolledCourse;

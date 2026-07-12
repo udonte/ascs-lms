@@ -5,7 +5,7 @@ import {
   canAccessAdminRoute,
   defaultHomeForRole,
   getProfileRole,
-} from "@/src/lib/services/profile-service";
+} from "@/lib/services/profile-service";
 
 function isAuthPage(pathname: string): boolean {
   const path = pathname.toLowerCase();

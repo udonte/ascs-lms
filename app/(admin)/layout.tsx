@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
-import { getProfileRole } from "@/src/lib/services/profile-service";
+import { getProfileRole } from "@/lib/services/profile-service";
 import { AdminSidebar } from "./Sidebar";
 import { MobileHeader } from "@/app/_components/MobileHeader";
 

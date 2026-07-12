@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import {
   canAccessAdminRoute,
   getProfileRole,
-} from "@/src/lib/services/profile-service";
+} from "@/lib/services/profile-service";
 
 type LedgerCourseJoin = { title: string };
 type LedgerProfileJoin = { full_name: string | null; email: string | null };
@@ -161,6 +161,8 @@ export const LedgerService = {
   /**
    * Admin Manual Override: Grants a student instant access to a course.
    * Useful for direct bank transfers or physical cash sales.
+   * Uses upsert so re-granting the same course to the same student is
+   * idempotent — updates amount_paid rather than throwing a unique constraint error.
    */
   async grantManualAccess(
     studentEmail: string,
@@ -182,14 +184,16 @@ export const LedgerService = {
 
     const { data, error } = await supabase
       .from("enrollments")
-      .insert([
+      .upsert(
         {
           user_id: profile.id,
           course_id: courseId,
           status: "paid",
           amount_paid: amountPaid,
+          payment_gateway: "manual",
         },
-      ])
+        { onConflict: "user_id,course_id" },
+      )
       .select()
       .single();
 

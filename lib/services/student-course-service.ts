@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 export type SyllabusLesson = {
   id: string;
@@ -502,14 +503,13 @@ export const StudentCourseService = {
     const passingScore = quiz.passing_score ?? 70;
     const passed = score >= passingScore;
 
-    const { error } = await supabase.from("quiz_attempts").upsert(
+    const { error } = await supabase.from("quiz_attempts").insert(
       {
         user_id: user.id,
         course_id: courseId,
         score,
         passed,
-      },
-      { onConflict: "user_id,course_id" },
+      }
     );
 
     if (error) throw new Error(error.message);
@@ -535,6 +535,7 @@ export const StudentCourseService = {
 
     if (!lesson) throw new Error("Lesson not found.");
 
+    // 1. Mark this lesson complete in user_progress
     const { error } = await supabase.from("user_progress").upsert(
       {
         user_id: user.id,
@@ -547,16 +548,42 @@ export const StudentCourseService = {
 
     if (error) throw new Error(error.message);
 
-    const { data: syllabus } = await supabase
+    // 2. Fetch all lessons in this course to determine if course is now fully complete
+    const { data: allCourseLessons } = await supabase
       .from("lessons")
       .select("id, title, order_index")
       .eq("course_id", courseId)
       .order("order_index", { ascending: true });
 
-    const nextLessonId = getNextLessonId(
-      (syllabus ?? []) as SyllabusLesson[],
-      lessonId,
+    const syllabus = (allCourseLessons ?? []) as SyllabusLesson[];
+
+    // 3. Fetch all completed lesson IDs for this user across this course
+    const { data: progressRecords } = await supabase
+      .from("user_progress")
+      .select("lesson_id")
+      .eq("user_id", user.id);
+
+    const completedSet = new Set(
+      (progressRecords ?? []).map((r) => r.lesson_id),
     );
+
+    const isCourseFullyViewed =
+      syllabus.length > 0 &&
+      syllabus.every((row) => completedSet.has(row.id));
+
+    // 4. If every lesson is now complete, stamp completed_at on the enrollment
+    //    (only if not already set — guards against duplicate writes)
+    if (isCourseFullyViewed) {
+      const adminClient = createAdminClient();
+      await adminClient
+        .from("enrollments")
+        .update({ completed_at: new Date().toISOString() })
+        .eq("user_id", user.id)
+        .eq("course_id", courseId)
+        .is("completed_at", null); // idempotent: only stamps once
+    }
+
+    const nextLessonId = getNextLessonId(syllabus, lessonId);
 
     return { success: true as const, nextLessonId };
   },
