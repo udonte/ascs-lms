@@ -18,6 +18,7 @@ import {
   MarketingCourseService,
   type CourseDetail,
 } from "@/lib/services/marketing/marketing-course-service";
+import { ShareCourseButton } from "@/app/_components/ShareCourseButton";
 import { getCourseThumbnailUrl } from "@/lib/services/dashboard/overview/student-dashboard-service";
 
 /* ─── Types ────────────────────────────────────────────────────────────────── */
@@ -49,7 +50,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description,
       siteName: "African School of Customer Success",
       images: course.thumbnailUrl
-        ? [{ url: course.thumbnailUrl, width: 1200, height: 630, alt: course.title }]
+        ? [
+            {
+              url: course.thumbnailUrl,
+              width: 1200,
+              height: 630,
+              alt: course.title,
+            },
+          ]
         : [],
     },
     twitter: {
@@ -118,9 +126,7 @@ export default async function CourseDetailPage({ params }: Props) {
               url: "https://africancustomersuccess.com",
             },
             url: `https://africancustomersuccess.com/courses/${slug}`,
-            ...(course.thumbnailUrl
-              ? { image: course.thumbnailUrl }
-              : {}),
+            ...(course.thumbnailUrl ? { image: course.thumbnailUrl } : {}),
           }),
         }}
       />
@@ -154,7 +160,9 @@ export default async function CourseDetailPage({ params }: Props) {
                       </Link>
                     </li>
                     <li className="text-white/40">/</li>
-                    <li className="text-white/80 line-clamp-1">{course.title}</li>
+                    <li className="text-white/80 line-clamp-1">
+                      {course.title}
+                    </li>
                   </ol>
                 </nav>
 
@@ -217,10 +225,11 @@ export default async function CourseDetailPage({ params }: Props) {
                     {isFree ? "Enroll for Free" : `Enroll Now — ${priceLabel}`}
                     <HiArrowRight className="text-lg" />
                   </Link>
-                  <span className="flex items-center gap-2 text-sm text-white/60">
-                    <HiShieldCheck className="text-green-400 text-base" />
-                    30-day money-back guarantee
-                  </span>
+                  <ShareCourseButton
+                    courseTitle={course.title}
+                    slug={course.slug}
+                    className="border-white/20 text-white/70 hover:border-white/40 hover:text-white"
+                  />
                 </div>
               </div>
 

@@ -7,6 +7,7 @@ import {
   truncateDescription,
   type CatalogCourse,
 } from "@/lib/services/dashboard/overview/student-dashboard-service";
+import { ShareCourseButton } from "@/app/_components/ShareCourseButton";
 
 type CatalogCourseCardProps = {
   course: CatalogCourse;
@@ -65,14 +66,17 @@ export function CatalogCourseCard({ course }: CatalogCourseCardProps) {
           </Link>
         )}
 
-        {/* FEAT-09: View Details link — only shown when a public slug is set */}
+        {/* FEAT-09: View Details + FEAT-08: Share — only shown when slug is set */}
         {course.slug && (
-          <Link
-            href={`/courses/${course.slug}`}
-            className="mt-2 block w-full rounded-lg border border-neutral-200 py-2.5 text-center text-xs font-medium text-neutral-500 transition hover:border-customer-teal/40 hover:text-customer-teal"
-          >
-            View Course Details
-          </Link>
+          <div className="mt-2 flex gap-2">
+            <Link
+              href={`/courses/${course.slug}`}
+              className="flex-1 rounded-lg border border-neutral-200 py-2.5 text-center text-xs font-medium text-neutral-500 transition hover:border-customer-teal/40 hover:text-customer-teal"
+            >
+              View Details
+            </Link>
+            <ShareCourseButton courseTitle={course.title} slug={course.slug} />
+          </div>
         )}
       </div>
     </article>

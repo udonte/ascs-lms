@@ -209,14 +209,29 @@ export default function ProgramsSections({
   // fallback link with the real LMS checkout route and add a detail page link.
   const resolvedPrograms = programs.map((program) => {
     const dbCourse = dbCourseByTitle.get(normalise(program.title));
-    if (!dbCourse) return { ...program, isInternal: false, detailHref: null as string | null };
+    if (!dbCourse)
+      return {
+        ...program,
+        isInternal: false,
+        detailHref: null as string | null,
+      };
+
+    // Use real DB price for display — overrides the hardcoded placeholder
+    const dbPrice =
+      dbCourse.price <= 0
+        ? "Free"
+        : new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: "USD",
+            maximumFractionDigits: 0,
+          }).format(dbCourse.price);
 
     return {
       ...program,
+      price: dbPrice,
       link: `/dashboard/checkout/${dbCourse.id}`,
       ctaText: "Enroll Now",
       isInternal: true,
-      // Link to the public detail page when the course has a slug set
       detailHref: dbCourse.slug ? `/courses/${dbCourse.slug}` : null,
     };
   });
@@ -382,15 +397,25 @@ export default function ProgramsSections({
                       </ul>
                     </div>
 
-                    {/* Internal links (LMS checkout) use Next.js Link for SPA navigation.
-                        External links (phone, external sites) use a plain anchor tag. */}
+                    {/* CTA buttons — LMS courses get Enroll + View Details.
+                        Inquiry-based programs keep their single external link. */}
                     {program.isInternal ? (
-                      <Link
-                        href={program.link}
-                        className="block w-full rounded-xl bg-customer-gold py-3 text-center text-sm font-bold text-customer-charcoal shadow-sm transition hover:bg-customer-gold/90"
-                      >
-                        {program.ctaText}
-                      </Link>
+                      <div className="space-y-2">
+                        <Link
+                          href={program.link}
+                          className="block w-full rounded-xl bg-customer-gold py-3 text-center text-sm font-bold text-customer-charcoal shadow-sm transition hover:bg-customer-gold/90"
+                        >
+                          {program.ctaText}
+                        </Link>
+                        {program.detailHref && (
+                          <Link
+                            href={program.detailHref}
+                            className="block w-full rounded-xl border border-customer-charcoal/20 py-2.5 text-center text-sm font-semibold text-customer-charcoal transition hover:border-customer-gold hover:text-customer-gold"
+                          >
+                            View Details
+                          </Link>
+                        )}
+                      </div>
                     ) : (
                       <Button variant="primary" className="w-full">
                         <a href={program.link} target="_blank" rel="noreferrer">

@@ -51,9 +51,9 @@ function parsePrice(value: number | string | null | undefined): number {
 
 export function formatCatalogPrice(price: number): string {
   if (price <= 0) return "FREE";
-  return new Intl.NumberFormat("en-NG", {
+  return new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "NGN",
+    currency: "USD",
     maximumFractionDigits: 0,
   }).format(price);
 }
@@ -171,23 +171,32 @@ export const StudentDashboardService = {
 
     const courseIds = (data ?? [])
       .map((row: any) => embedOne(row.course)?.id)
-      .filter((id: unknown): id is string => typeof id === "string" && Boolean(id));
+      .filter(
+        (id: unknown): id is string => typeof id === "string" && Boolean(id),
+      );
 
-    const [lessonsRes, progressRes, quizzesRes, attemptsRes] = await Promise.all([
-      supabase
-        .from("lessons")
-        .select("id, course_id")
-        .in("course_id", courseIds),
-      supabase.from("user_progress").select("lesson_id").eq("user_id", user.id),
-      supabase.from("quizzes").select("course_id").in("course_id", courseIds),
-      supabase
-        .from("quiz_attempts")
-        .select("course_id, score, passed")
-        .eq("user_id", user.id)
-        .in("course_id", courseIds),
-    ]);
+    const [lessonsRes, progressRes, quizzesRes, attemptsRes] =
+      await Promise.all([
+        supabase
+          .from("lessons")
+          .select("id, course_id")
+          .in("course_id", courseIds),
+        supabase
+          .from("user_progress")
+          .select("lesson_id")
+          .eq("user_id", user.id),
+        supabase.from("quizzes").select("course_id").in("course_id", courseIds),
+        supabase
+          .from("quiz_attempts")
+          .select("course_id, score, passed")
+          .eq("user_id", user.id)
+          .in("course_id", courseIds),
+      ]);
 
-    const lessons = (lessonsRes.data ?? []) as Array<{ id: string; course_id: string }>;
+    const lessons = (lessonsRes.data ?? []) as Array<{
+      id: string;
+      course_id: string;
+    }>;
     const progressLessonIds = new Set(
       (progressRes.data ?? []).map((p: any) => p.lesson_id),
     );
@@ -213,8 +222,13 @@ export const StudentDashboardService = {
       );
     }
 
-    const coursesWithQuiz = new Set((quizzesRes.data ?? []).map((q: any) => q.course_id));
-    const attemptByCourse = new Map<string, { score: number; passed: boolean }>();
+    const coursesWithQuiz = new Set(
+      (quizzesRes.data ?? []).map((q: any) => q.course_id),
+    );
+    const attemptByCourse = new Map<
+      string,
+      { score: number; passed: boolean }
+    >();
     for (const attempt of attemptsRes.data ?? []) {
       attemptByCourse.set(attempt.course_id, {
         score: attempt.score,
@@ -330,7 +344,8 @@ export const StudentDashboardService = {
    * The server grades using stored correct answers and logs into quiz_attempts.
    */
   async submitCourseQuiz(courseId: string, selections: Record<string, number>) {
-    const { StudentCourseService } = await import("../../student-course-service");
+    const { StudentCourseService } =
+      await import("../../student-course-service");
     return await StudentCourseService.submitQuizScore(courseId, selections);
   },
 };

@@ -110,21 +110,14 @@ export const CheckoutService = {
 
     const { supabase, user } = student;
 
+    // Fetch course without a self-join — PostgREST self-joins on the same table
+    // are unreliable and can silently return null for the joined relation even
+    // when prerequisite_course_id is set. We resolve the prerequisite title in
+    // a separate query below instead.
     const { data: course, error } = await supabase
       .from("courses")
       .select(
-        `
-        id,
-        title,
-        description,
-        price,
-        is_published,
-        prerequisite_course_id,
-        prerequisite:courses!prerequisite_course_id (
-          id,
-          title
-        )
-      `,
+        "id, title, description, price, is_published, prerequisite_course_id",
       )
       .eq("id", courseId)
       .eq("is_published", true)
@@ -136,16 +129,27 @@ export const CheckoutService = {
     const isEnrolled = await hasPaidEnrollment(supabase, user.id, courseId);
 
     // ── Prerequisite check ───────────────────────────────────────────────────
-    const prereqRaw = Array.isArray(course.prerequisite)
-      ? (course.prerequisite[0] ?? null)
-      : (course.prerequisite ?? null);
-
-    const prereqId = (prereqRaw as { id?: string } | null)?.id ?? null;
-    const prereqTitle = (prereqRaw as { title?: string } | null)?.title ?? null;
-
+    // Use the foreign key column directly — never rely on the joined relation.
+    const prereqId: string | null = course.prerequisite_course_id ?? null;
+    let prereqTitle: string | null = null;
     let prerequisiteRequired = false;
+
     if (prereqId) {
-      const prereqCompleted = await hasPaidEnrollment(supabase, user.id, prereqId);
+      // Fetch prerequisite course title for display in the UI
+      const { data: prereqCourse } = await supabase
+        .from("courses")
+        .select("title")
+        .eq("id", prereqId)
+        .maybeSingle();
+
+      prereqTitle = prereqCourse?.title ?? null;
+
+      // Gate: student must have a paid enrollment in the prerequisite course
+      const prereqCompleted = await hasPaidEnrollment(
+        supabase,
+        user.id,
+        prereqId,
+      );
       prerequisiteRequired = !prereqCompleted;
     }
 
@@ -225,7 +229,7 @@ export const CheckoutService = {
 
     const { data: course } = await supabase
       .from("courses")
-      .select("id, title, price, is_published")
+      .select("id, title, price, is_published, prerequisite_course_id")
       .eq("id", courseId)
       .eq("is_published", true)
       .maybeSingle();
@@ -237,11 +241,27 @@ export const CheckoutService = {
       throw new Error("Use free enrollment for complimentary courses.");
     }
 
+    // ── Prerequisite enforcement (server-side gate) ───────────────────────────
+    // Prevents bypassing the UI prerequisite gate via direct action calls.
+    if (course.prerequisite_course_id) {
+      const prereqMet = await hasPaidEnrollment(
+        supabase,
+        user.id,
+        course.prerequisite_course_id,
+      );
+      if (!prereqMet) {
+        throw new Error(
+          "You must complete the prerequisite course before purchasing this one.",
+        );
+      }
+    }
+
     if (await hasPaidEnrollment(supabase, user.id, courseId)) {
       throw new Error("You are already enrolled in this course.");
     }
 
-    const amountKobo = Math.round(price * 100);
+    // Paystack expects amount in the smallest currency unit (cents for USD)
+    const amountCents = Math.round(price * 100);
     const callbackUrl = `${getSiteUrl()}/dashboard/checkout/callback?courseId=${encodeURIComponent(courseId)}`;
 
     const response = await fetch(
@@ -254,8 +274,8 @@ export const CheckoutService = {
         },
         body: JSON.stringify({
           email: user.email,
-          amount: amountKobo,
-          currency: "NGN",
+          amount: amountCents,
+          currency: "USD",
           callback_url: callbackUrl,
           metadata: {
             user_id: user.id,

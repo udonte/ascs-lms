@@ -8,6 +8,7 @@ import {
   type EditorActionState,
 } from "@/lib/services/admin/courses/admin-course-editor-actions";
 import type { AdminCourseDetail } from "@/lib/services/admin/courses/admin-course-service";
+import { ThumbnailUploadField } from "./ThumbnailUploadField";
 import { adminFieldClassName } from "./admin-form-styles";
 
 const initialState: EditorActionState = {};
@@ -40,6 +41,7 @@ export function CourseSettingsForm({ course }: CourseSettingsFormProps) {
       <form action={formAction} className="mt-6 space-y-4 text-left">
         <input type="hidden" name="courseId" value={course.id} />
 
+        {/* Title */}
         <div>
           <label
             htmlFor="edit-title"
@@ -57,6 +59,7 @@ export function CourseSettingsForm({ course }: CourseSettingsFormProps) {
           />
         </div>
 
+        {/* Description */}
         <div>
           <label
             htmlFor="edit-description"
@@ -73,16 +76,17 @@ export function CourseSettingsForm({ course }: CourseSettingsFormProps) {
           />
         </div>
 
+        {/* Price — USD */}
         <div>
           <label
             htmlFor="edit-price"
             className="text-sm font-medium text-customer-charcoal"
           >
-            Price (₦)
+            Price (USD)
           </label>
           <div className="relative mt-1">
             <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-neutral-500">
-              ₦
+              $
             </span>
             <input
               id="edit-price"
@@ -94,25 +98,18 @@ export function CourseSettingsForm({ course }: CourseSettingsFormProps) {
               className={`${adminFieldClassName} pl-8`}
             />
           </div>
+          <p className="mt-1 text-xs text-neutral-500">
+            Set to 0 for free courses.
+          </p>
         </div>
 
-        <div>
-          <label
-            htmlFor="edit-thumbnail"
-            className="text-sm font-medium text-customer-charcoal"
-          >
-            Thumbnail URL
-          </label>
-          <input
-            id="edit-thumbnail"
-            name="thumbnail_url"
-            type="url"
-            placeholder="https://..."
-            defaultValue={course.thumbnail_url ?? ""}
-            className={adminFieldClassName}
-          />
-        </div>
+        {/* Thumbnail — file upload */}
+        <ThumbnailUploadField
+          currentUrl={course.thumbnail_url}
+          courseId={course.id}
+        />
 
+        {/* Publish toggle */}
         <label className="flex cursor-pointer items-center gap-3 rounded-lg border border-neutral-200 px-4 py-3">
           <input
             type="checkbox"
@@ -121,7 +118,7 @@ export function CourseSettingsForm({ course }: CourseSettingsFormProps) {
             className="h-4 w-4 rounded border-neutral-300 text-customer-teal focus:ring-customer-gold"
           />
           <span className="text-sm font-medium text-customer-charcoal">
-            Published (visible to students when enrolled)
+            Published — visible to students in the catalog
           </span>
         </label>
 

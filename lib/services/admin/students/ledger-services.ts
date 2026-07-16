@@ -31,9 +31,10 @@ function parseAmount(value: number | string | null | undefined): number {
 
 export function formatLedgerAmount(amount: number | string | null): string {
   const value = parseAmount(amount);
-  return new Intl.NumberFormat("en-NG", {
+  if (value <= 0) return "—";
+  return new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "NGN",
+    currency: "USD",
     maximumFractionDigits: 0,
   }).format(value);
 }

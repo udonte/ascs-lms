@@ -192,11 +192,11 @@ export default function Footer() {
                 whileTap={{ scale: 0.98 }}
               >
                 <Link
-                  href="/contact"
+                  href="/verify/"
                   className="inline-flex items-center gap-2 bg-customer-gold text-customer-charcoal px-6 py-3 rounded-lg font-semibold hover:bg-customer-gold/90 transition-colors duration-200"
                 >
                   <FaEnvelope className="text-lg" />
-                  Contact Us
+                  Verify Certificate
                 </Link>
               </motion.div>
             </motion.div>
@@ -225,4 +225,3 @@ export default function Footer() {
     </footer>
   );
 }
-

@@ -1,6 +1,7 @@
 import Header from "@/app/_components/Header";
 import { GrantManualAccessDialog } from "@/app/(admin)/_components/GrantManualAccessDialog";
 import { StudentLedgerTable } from "@/app/(admin)/_components/StudentLedgerTable";
+import { StudentsSubNav } from "@/app/(admin)/_components/StudentsSubNav";
 import { AdminCourseService } from "@/lib/services/admin/courses/admin-course-service";
 import { LedgerService } from "@/lib/services/admin/students/ledger-services";
 
@@ -25,7 +26,8 @@ export default async function StudentLedgerPage() {
 
   return (
     <div className="mx-auto w-full max-w-6xl">
-      <Header title="Student Ledger" />
+      <Header title="Students" />
+      <StudentsSubNav />
 
       <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <p className="max-w-2xl text-sm text-customer-charcoal">

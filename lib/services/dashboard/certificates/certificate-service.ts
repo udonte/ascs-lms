@@ -1,11 +1,11 @@
 import { createClient } from "@/lib/supabase/server";
 
 /**
- * Fetches all completed courses where the student has viewed 100% of the lessons.
- * Completion date is read from enrollments.completed_at (stamped when the last
- * lesson is marked complete), not generated at call time.
+ * Fetches all certificates the student has earned.
+ * Certificate numbers and issue dates are read from the `certificates` table
+ * (populated by generate_certificate() Postgres function on course completion).
+ * Falls back gracefully for courses completed before the certificates table existed.
  */
-
 export const CertificateService = {
   async getEarnedCertificates() {
     const supabase = await createClient();
@@ -14,88 +14,108 @@ export const CertificateService = {
     } = await supabase.auth.getUser();
     if (!user) return [];
 
-    // 1. Get all the student's paid courses
+    // 1. Paid enrollments with course + lessons
     const { data: enrollments, error: enrollError } = await supabase
       .from("enrollments")
       .select(
         `
-      course_id,
-      completed_at,
-      course:courses (
-        id,
-        title,
-        lessons (id)
-      )
-    `,
+        course_id,
+        completed_at,
+        course:courses (
+          id,
+          title,
+          lessons (id)
+        )
+      `,
       )
       .eq("user_id", user.id)
       .eq("status", "paid");
 
-    if (enrollError || !enrollments) return [];
+    if (enrollError || !enrollments || enrollments.length === 0) return [];
 
-    // 2. Get all completed lessons for this user
+    // 2. Completed lesson IDs
     const { data: progress } = await supabase
       .from("user_progress")
       .select("lesson_id")
       .eq("user_id", user.id);
 
-    const completedLessonIds = new Set(progress?.map((p) => p.lesson_id) || []);
+    const completedLessonIds = new Set(
+      (progress ?? []).map((p) => p.lesson_id),
+    );
 
-    // 2b. Get any passed quiz attempts for this user (one per course)
+    // 3. Passed quiz attempts
+    const courseIds = enrollments.map((e: any) => e.course_id);
+
     const { data: attempts } = await supabase
       .from("quiz_attempts")
       .select("course_id, passed")
-      .eq("user_id", user.id);
+      .eq("user_id", user.id)
+      .in("course_id", courseIds);
 
     const passedQuizCourseIds = new Set(
       (attempts ?? []).filter((a) => a.passed).map((a) => a.course_id),
     );
 
-    // 2c. Identify which courses have a quiz configured
-    const courseIds = (enrollments ?? []).map((e: any) => e.course_id);
+    // 4. Which courses have a quiz
     const { data: quizzes } = await supabase
       .from("quizzes")
       .select("course_id")
       .in("course_id", courseIds);
 
     const coursesWithQuiz = new Set((quizzes ?? []).map((q) => q.course_id));
-    const earnedCertificates = [];
 
-    // 3. Loop through courses and check if every single lesson ID is marked complete
+    // 5. Issued certificates (the source of truth for cert numbers + dates)
+    const { data: issuedCerts } = await supabase
+      .from("certificates")
+      .select("course_id, certificate_number, issued_at")
+      .eq("user_id", user.id);
+
+    const certByCourse = new Map(
+      (issuedCerts ?? []).map((c) => [c.course_id, c]),
+    );
+
+    const earned = [];
+
     for (const enrollment of enrollments) {
       const course = enrollment.course as any;
-      if (!course || !course.lessons || course.lessons.length === 0) continue;
+      if (!course?.lessons?.length) continue;
 
-      const totalLessons = course.lessons.length;
-      const completedCount = course.lessons.filter((lesson: any) =>
-        completedLessonIds.has(lesson.id),
-      ).length;
+      const allLessonsComplete = course.lessons.every((l: any) =>
+        completedLessonIds.has(l.id),
+      );
 
       const hasQuiz = coursesWithQuiz.has(enrollment.course_id);
-      const quizPassed = !hasQuiz || passedQuizCourseIds.has(enrollment.course_id);
+      const quizPassed =
+        !hasQuiz || passedQuizCourseIds.has(enrollment.course_id);
 
-      // If completion rate is 100% AND (quiz passed if applicable), they earned the certificate
-      if (completedCount === totalLessons && quizPassed) {
-        // Read the real completion date from enrollments.completed_at
-        // Falls back to "Date unavailable" for legacy rows stamped before this fix
-        const rawDate = (enrollment as any).completed_at as string | null;
-        const completedAt = rawDate
-          ? new Date(rawDate).toLocaleDateString("en-NG", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })
-          : "Date unavailable";
+      if (!allLessonsComplete || !quizPassed) continue;
 
-        earnedCertificates.push({
-          id: enrollment.course_id,
-          courseTitle: course.title,
-          completedAt,
-          certificateId: `ASCS-${enrollment.course_id.slice(0, 8).toUpperCase()}`,
-        });
-      }
+      // Prefer real certificate record; fall back for legacy completions
+      const issued = certByCourse.get(enrollment.course_id);
+
+      const certificateId =
+        issued?.certificate_number ??
+        `ASCS-${enrollment.course_id.slice(0, 8).toUpperCase()}`;
+
+      const rawDate =
+        issued?.issued_at ?? (enrollment as any).completed_at ?? null;
+
+      const completedAt = rawDate
+        ? new Date(rawDate).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })
+        : "Date unavailable";
+
+      earned.push({
+        id: enrollment.course_id,
+        courseTitle: course.title,
+        completedAt,
+        certificateId,
+      });
     }
 
-    return earnedCertificates;
+    return earned;
   },
 };

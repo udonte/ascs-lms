@@ -37,7 +37,7 @@ export async function updateCourseAction(
 
   const price = priceRaw === "" ? 0 : Number(priceRaw);
   if (Number.isNaN(price) || price < 0) {
-    return { error: "Enter a valid price in Naira." };
+    return { error: "Enter a valid price in USD." };
   }
 
   try {
@@ -134,7 +134,6 @@ export async function deleteLessonAction(
   }
 }
 
-
 /** For native `<form action={…}>` without useActionState */
 export async function reorderLessonFormAction(formData: FormData) {
   const courseId = readField(formData, "courseId");
@@ -150,4 +149,12 @@ export async function reorderLessonFormAction(formData: FormData) {
   } catch (error) {
     console.error("Failed to reorder lesson:", error);
   }
+}
+
+/** Permanently deletes a course and all dependent data. Admin only. */
+export async function deleteCourseAction(courseId: string) {
+  if (!courseId) throw new Error("Course not found.");
+  await AdminCourseService.deleteCourse(courseId);
+  revalidatePath("/admin/courses");
+  redirect("/admin/courses");
 }

@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import {
   canAccessAdminRoute,
   getProfileRole,
@@ -249,5 +250,59 @@ export const AdminCourseService = {
 
     if (error) throw new Error(error.message);
     return data;
+  },
+
+  /**
+   * Permanently deletes a course and all its dependent data.
+   * Cascades manually because FK constraints don't all have ON DELETE CASCADE.
+   * Only admins can delete courses.
+   */
+  async deleteCourse(courseId: string) {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) throw new Error("Unauthorized");
+
+    const role = await getProfileRole(supabase, user.id);
+    if (role !== "admin") {
+      throw new Error("Only admins can delete courses.");
+    }
+
+    const admin = createAdminClient();
+
+    // If this course is a prerequisite for another, clear that reference first
+    await admin
+      .from("courses")
+      .update({ prerequisite_course_id: null })
+      .eq("prerequisite_course_id", courseId);
+
+    // Get lesson IDs so we can delete user_progress
+    const { data: lessons } = await admin
+      .from("lessons")
+      .select("id")
+      .eq("course_id", courseId);
+
+    const lessonIds = (lessons ?? []).map((l) => l.id);
+
+    // Delete in dependency order
+    if (lessonIds.length > 0) {
+      await admin.from("user_progress").delete().in("lesson_id", lessonIds);
+    }
+
+    await admin.from("certificates").delete().eq("course_id", courseId);
+    await admin
+      .from("certificate_sequences")
+      .delete()
+      .eq("course_id", courseId);
+    await admin.from("quiz_attempts").delete().eq("course_id", courseId);
+    await admin.from("quizzes").delete().eq("course_id", courseId);
+    await admin.from("enrollments").delete().eq("course_id", courseId);
+    await admin.from("lemonsqueezy_orders").delete().eq("course_id", courseId);
+
+    // Delete the course itself — lessons cascade automatically
+    const { error } = await admin.from("courses").delete().eq("id", courseId);
+
+    if (error) throw new Error(`Failed to delete course: ${error.message}`);
   },
 };

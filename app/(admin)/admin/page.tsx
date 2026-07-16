@@ -1,5 +1,6 @@
 import { AnalyticsService } from "@/lib/services/admin/analytics/analytics-service";
 import { LedgerService } from "@/lib/services/admin/students/ledger-services";
+import { VerifyCertificateModal } from "../_components/VerifyCertificateModal";
 import StatCard from "../_components/StatCard";
 import RecentTransactionsTable from "../_components/RecentTransactionsTable";
 import { LuUsers } from "react-icons/lu";
@@ -9,9 +10,9 @@ import { HiOutlineAcademicCap } from "react-icons/hi";
 import Header from "@/app/_components/Header";
 
 function formatCurrency(value: number) {
-  return new Intl.NumberFormat("en-NG", {
+  return new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "NGN",
+    currency: "USD",
     maximumFractionDigits: 0,
   }).format(value);
 }
@@ -26,15 +27,15 @@ export default async function AdminPerformancePage() {
     <div>
       <Header title="Performance Insights" />
       <section className="rounded-lg border border-neutral-200 bg-white p-6">
-        <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <p className="text-neutral-700">
-              A snapshot of key performance metrics for the ASCS LMS.
-            </p>
-          </div>
+        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <p className="max-w-2xl text-sm text-neutral-700">
+            A snapshot of key performance metrics for the ASCS LMS.
+          </p>
+          {/* FEAT-06: Certificate verification modal trigger */}
+          <VerifyCertificateModal />
         </div>
 
-        <div className="grid gap-6 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1">
+        <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
           <StatCard
             label="Total Revenue"
             value={formatCurrency(stats.totalRevenue)}

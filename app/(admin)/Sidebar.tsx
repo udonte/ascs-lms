@@ -23,7 +23,7 @@ const links = [
   },
   {
     href: "/admin/students",
-    label: "Student Ledger",
+    label: "Students",
     icon: HiOutlineUsers,
   },
   {

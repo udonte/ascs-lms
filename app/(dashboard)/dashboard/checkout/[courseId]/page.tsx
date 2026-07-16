@@ -1,6 +1,10 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { HiOutlineArrowLeft, HiOutlineLockClosed, HiArrowRight } from "react-icons/hi";
+import {
+  HiOutlineArrowLeft,
+  HiOutlineLockClosed,
+  HiArrowRight,
+} from "react-icons/hi";
 import { FaExclamationTriangle } from "react-icons/fa";
 
 import { CheckoutPanel } from "@/app/(dashboard)/_components/CheckoutPanel";
@@ -40,7 +44,9 @@ export default async function CheckoutPage({
   // or fall back to the course catalogue.
   const backHref = from && from.startsWith("/") ? from : "/dashboard/browse";
   const backLabel =
-    from && from.startsWith("/courses") ? "Back to course details" : "Back to catalog";
+    from && from.startsWith("/courses")
+      ? "Back to course details"
+      : "Back to catalog";
 
   return (
     <div className="mx-auto w-full max-w-lg">
@@ -86,6 +92,7 @@ export default async function CheckoutPage({
         {preview.prerequisite.required ? (
           <div className="mt-6">
             <PrerequisiteGate
+              lockedCourseTitle={preview.title}
               prereqCourseId={preview.prerequisite.courseId}
               prereqCourseTitle={preview.prerequisite.courseTitle}
             />
@@ -103,13 +110,15 @@ export default async function CheckoutPage({
 /* ─── Prerequisite Gate Notice ─────────────────────────────────────────────── */
 
 function PrerequisiteGate({
+  lockedCourseTitle,
   prereqCourseId,
   prereqCourseTitle,
 }: {
+  lockedCourseTitle: string;
   prereqCourseId: string | null;
   prereqCourseTitle: string | null;
 }) {
-  const displayName = prereqCourseTitle ?? "the prerequisite course";
+  const prereqName = prereqCourseTitle ?? "the prerequisite course";
 
   return (
     <div
@@ -125,14 +134,14 @@ function PrerequisiteGate({
       </div>
 
       <div className="px-5 py-5">
-        {/* Notice body */}
+        {/* Notice body — fully dynamic, works for any course with a prerequisite */}
         <div className="mb-5 flex items-start gap-3">
           <FaExclamationTriangle className="mt-0.5 shrink-0 text-amber-500" />
           <p className="text-sm leading-relaxed text-amber-900">
-            <strong>Customer Success Fundamentals</strong> is only available after
-            you complete{" "}
-            <strong>&ldquo;{displayName}&rdquo;</strong>. Please purchase and
-            complete that course first, then return here to unlock this one.
+            <strong>&ldquo;{lockedCourseTitle}&rdquo;</strong> is only available
+            after you complete <strong>&ldquo;{prereqName}&rdquo;</strong>.
+            Please purchase and complete that course first, then return here to
+            unlock this one.
           </p>
         </div>
 
@@ -143,7 +152,7 @@ function PrerequisiteGate({
             id="prerequisite-checkout-cta"
             className="inline-flex items-center gap-2 rounded-lg bg-[#003366] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#004080]"
           >
-            Go to &ldquo;{displayName}&rdquo;
+            Go to &ldquo;{prereqName}&rdquo;
             <HiArrowRight className="h-4 w-4" />
           </Link>
         ) : (

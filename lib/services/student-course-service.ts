@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { generateAndIssueCertificate } from "@/lib/services/dashboard/certificates/certificate-generation-service";
 
 export type SyllabusLesson = {
   id: string;
@@ -440,10 +441,7 @@ export const StudentCourseService = {
     };
   },
 
-  async submitQuizScore(
-    courseId: string,
-    selections: Record<string, number>,
-  ) {
+  async submitQuizScore(courseId: string, selections: Record<string, number>) {
     const supabase = await createClient();
     const {
       data: { user },
@@ -503,16 +501,30 @@ export const StudentCourseService = {
     const passingScore = quiz.passing_score ?? 70;
     const passed = score >= passingScore;
 
-    const { error } = await supabase.from("quiz_attempts").insert(
-      {
-        user_id: user.id,
-        course_id: courseId,
-        score,
-        passed,
-      }
-    );
+    const { error } = await supabase.from("quiz_attempts").insert({
+      user_id: user.id,
+      course_id: courseId,
+      score,
+      passed,
+    });
 
     if (error) throw new Error(error.message);
+
+    // On pass: stamp enrollment completion and issue certificate
+    if (passed) {
+      const adminClient = createAdminClient();
+      await adminClient
+        .from("enrollments")
+        .update({ completed_at: new Date().toISOString() })
+        .eq("user_id", user.id)
+        .eq("course_id", courseId)
+        .is("completed_at", null);
+
+      // Issue certificate — non-blocking, errors logged but don't fail the quiz submission
+      generateAndIssueCertificate(user.id, courseId).catch((err) => {
+        console.error("Certificate generation error after quiz pass:", err);
+      });
+    }
 
     return { score, passed, passingScore };
   },
@@ -568,8 +580,7 @@ export const StudentCourseService = {
     );
 
     const isCourseFullyViewed =
-      syllabus.length > 0 &&
-      syllabus.every((row) => completedSet.has(row.id));
+      syllabus.length > 0 && syllabus.every((row) => completedSet.has(row.id));
 
     // 4. If every lesson is now complete, stamp completed_at on the enrollment
     //    (only if not already set — guards against duplicate writes)
@@ -581,6 +592,23 @@ export const StudentCourseService = {
         .eq("user_id", user.id)
         .eq("course_id", courseId)
         .is("completed_at", null); // idempotent: only stamps once
+
+      // For courses without a quiz, issue certificate now.
+      // For courses WITH a quiz, submitQuizScore() handles cert generation on pass.
+      const { data: quiz } = await supabase
+        .from("quizzes")
+        .select("id")
+        .eq("course_id", courseId)
+        .maybeSingle();
+
+      if (!quiz) {
+        generateAndIssueCertificate(user.id, courseId).catch((err) => {
+          console.error(
+            "Certificate generation error after lesson completion:",
+            err,
+          );
+        });
+      }
     }
 
     const nextLessonId = getNextLessonId(syllabus, lessonId);
