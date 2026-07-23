@@ -87,9 +87,9 @@ export async function assertCanManageCourse(
 export function formatCoursePrice(price: number | string | null): string {
   const amount = parsePrice(price);
   if (amount <= 0) return "Free";
-  return new Intl.NumberFormat("en-NG", {
+  return new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "NGN",
+    currency: "USD",
     maximumFractionDigits: 0,
   }).format(amount);
 }

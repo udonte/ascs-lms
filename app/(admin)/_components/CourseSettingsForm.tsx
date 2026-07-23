@@ -1,6 +1,8 @@
 "use client";
 
 import { useActionState } from "react";
+import Link from "next/link";
+import { HiOutlineExternalLink } from "react-icons/hi";
 
 import { useActionStateToast } from "@/app/_components/useActionStateToast";
 import {
@@ -15,6 +17,7 @@ const initialState: EditorActionState = {};
 
 type CourseSettingsFormProps = {
   course: AdminCourseDetail;
+  hasQuiz: boolean;
 };
 
 function parsePriceForInput(price: AdminCourseDetail["price"]): number {
@@ -24,7 +27,7 @@ function parsePriceForInput(price: AdminCourseDetail["price"]): number {
   return Number.isFinite(n) ? n : 0;
 }
 
-export function CourseSettingsForm({ course }: CourseSettingsFormProps) {
+export function CourseSettingsForm({ course, hasQuiz }: CourseSettingsFormProps) {
   const [state, formAction, pending] = useActionState(
     updateCourseAction,
     initialState,
@@ -110,17 +113,42 @@ export function CourseSettingsForm({ course }: CourseSettingsFormProps) {
         />
 
         {/* Publish toggle */}
-        <label className="flex cursor-pointer items-center gap-3 rounded-lg border border-neutral-200 px-4 py-3">
+        <label
+          className={`flex items-center gap-3 rounded-lg border px-4 py-3 ${
+            hasQuiz
+              ? "cursor-pointer border-neutral-200"
+              : "cursor-not-allowed border-amber-200 bg-amber-50/50"
+          }`}
+        >
           <input
             type="checkbox"
             name="is_published"
             defaultChecked={course.is_published}
-            className="h-4 w-4 rounded border-neutral-300 text-customer-teal focus:ring-customer-gold"
+            disabled={!hasQuiz}
+            className="h-4 w-4 rounded border-neutral-300 text-customer-teal focus:ring-customer-gold disabled:opacity-50"
           />
-          <span className="text-sm font-medium text-customer-charcoal">
+          <span
+            className={`text-sm font-medium ${
+              hasQuiz ? "text-customer-charcoal" : "text-neutral-400"
+            }`}
+          >
             Published — visible to students in the catalog
           </span>
         </label>
+        {!hasQuiz && (
+          <p className="-mt-2 text-xs text-amber-600">
+            ⚠ A quiz is required before this course can be published.
+          </p>
+        )}
+
+        {/* Quiz builder link */}
+        <Link
+          href="/admin/quizzes"
+          className="inline-flex items-center gap-2 rounded-lg border border-customer-teal/30 px-4 py-2.5 text-sm font-semibold text-customer-teal transition hover:bg-customer-teal/5"
+        >
+          {hasQuiz ? "Edit quiz" : "Set up quiz"}
+          <HiOutlineExternalLink className="h-4 w-4" aria-hidden />
+        </Link>
 
         <button
           type="submit"

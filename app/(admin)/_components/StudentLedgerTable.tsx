@@ -1,3 +1,4 @@
+import { Pagination } from "@/app/_components/Pagination";
 import {
   formatLedgerAmount,
   formatLedgerDate,
@@ -5,11 +6,14 @@ import {
 } from "@/lib/services/admin/students/ledger-services";
 import { LedgerStatusBadge } from "./LedgerStatusBadge";
 
+const PAGE_SIZE = 15;
+
 type StudentLedgerTableProps = {
   rows: StudentLedgerRow[];
+  page: number;
 };
 
-export function StudentLedgerTable({ rows }: StudentLedgerTableProps) {
+export function StudentLedgerTable({ rows, page }: StudentLedgerTableProps) {
   if (rows.length === 0) {
     return (
       <section className="rounded-2xl border border-dashed border-neutral-300 bg-white px-6 py-16 text-center shadow-sm">
@@ -23,6 +27,10 @@ export function StudentLedgerTable({ rows }: StudentLedgerTableProps) {
       </section>
     );
   }
+
+  const totalPages = Math.ceil(rows.length / PAGE_SIZE);
+  const safePage = Math.max(1, Math.min(page, totalPages));
+  const pageRows = rows.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
 
   return (
     <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm">
@@ -48,7 +56,7 @@ export function StudentLedgerTable({ rows }: StudentLedgerTableProps) {
             </tr>
           </thead>
           <tbody className="divide-y divide-neutral-100">
-            {rows.map((row) => (
+            {pageRows.map((row) => (
               <tr key={row.id} className="hover:bg-neutral-50/80">
                 <td className="px-4 py-4 sm:px-6">
                   <p className="font-semibold text-customer-charcoal">
@@ -75,6 +83,11 @@ export function StudentLedgerTable({ rows }: StudentLedgerTableProps) {
           </tbody>
         </table>
       </div>
+      <Pagination
+        page={safePage}
+        totalPages={totalPages}
+        basePath="/admin/students"
+      />
     </div>
   );
 }

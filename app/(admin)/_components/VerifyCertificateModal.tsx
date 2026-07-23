@@ -36,7 +36,7 @@ export function VerifyCertificateModal() {
         className="inline-flex items-center gap-2 rounded-lg border border-customer-teal bg-white px-4 py-2.5 text-sm font-semibold text-customer-teal shadow-sm transition hover:bg-customer-teal/5"
       >
         <HiOutlineBadgeCheck className="h-4 w-4" aria-hidden />
-        Verify Certificate
+        Verify Student Certificate
       </button>
 
       <Modal

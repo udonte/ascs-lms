@@ -13,7 +13,7 @@ import {
 const initialState: AuthActionState = {};
 
 const inputClassName =
-  "mt-1 w-full rounded-md border border-neutral-300 px-3 py-2 text-sm shadow-sm focus:border-[#003366] focus:outline-none focus:ring-1 focus:ring-[#003366]";
+  "mt-1 w-full rounded-md border border-neutral-300 px-3 py-2 text-base sm:text-sm shadow-sm focus:border-[#003366] focus:outline-none focus:ring-1 focus:ring-[#003366]";
 
 export function ForgotPasswordForm() {
   const [state, formAction, pending] = useActionState(
@@ -39,44 +39,72 @@ export function ForgotPasswordForm() {
           Reset password
         </h1>
         <p className="mt-2 text-sm text-neutral-600">
-          Enter your email and we will send you a link to choose a new password.
+          {state.success
+            ? "Check your email for a reset link."
+            : "Enter your email and we will send you a link to choose a new password."}
         </p>
       </div>
 
-      <form action={formAction} className="space-y-4">
-        <div>
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-neutral-700"
+      {/* ── Success state — show confirmation, hide form ──────────────────── */}
+      {state.success ? (
+        <div className="space-y-4">
+          <div className="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-center">
+            <p className="text-sm font-medium text-emerald-800">
+              ✉️ Reset link sent!
+            </p>
+            <p className="mt-1 text-xs text-emerald-700">
+              If an account exists for that email, you'll receive a password
+              reset link shortly. Check your spam folder if you don't see it
+              within a few minutes.
+            </p>
+          </div>
+
+          <Link
+            href="/login"
+            className="block w-full rounded-md bg-[#003366] px-4 py-2.5 text-center text-sm font-semibold text-white shadow-sm transition hover:bg-[#004080]"
           >
-            Email
-          </label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            autoComplete="email"
-            required
-            className={inputClassName}
-            placeholder="you@example.com"
-          />
+            Back to sign in
+          </Link>
         </div>
+      ) : (
+        /* ── Email form ──────────────────────────────────────────────────── */
+        <>
+          <form action={formAction} className="space-y-4">
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-neutral-700"
+              >
+                Email
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                className={inputClassName}
+                placeholder="you@example.com"
+              />
+            </div>
 
-        <button
-          type="submit"
-          disabled={pending}
-          className="w-full rounded-md bg-[#FFCC00] px-4 py-2.5 text-sm font-semibold text-[#003366] shadow-sm transition hover:bg-[#e6b800] disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          {pending ? "Sending…" : "Send reset link"}
-        </button>
-      </form>
+            <button
+              type="submit"
+              disabled={pending}
+              className="w-full rounded-md bg-[#FFCC00] px-4 py-2.5 text-sm font-semibold text-[#003366] shadow-sm transition hover:bg-[#e6b800] disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
+            >
+              {pending ? "Sending…" : "Send reset link"}
+            </button>
+          </form>
 
-      <Link
-        href="/login"
-        className="mt-6 block text-center text-sm font-medium text-[#003366] underline-offset-4 hover:underline"
-      >
-        Back to sign in
-      </Link>
+          <Link
+            href="/login"
+            className="mt-6 block text-center text-sm font-medium text-[#003366] underline-offset-4 hover:underline"
+          >
+            Back to sign in
+          </Link>
+        </>
+      )}
     </div>
   );
 }

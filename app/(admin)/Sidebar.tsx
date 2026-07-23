@@ -23,7 +23,7 @@ const links = [
   },
   {
     href: "/admin/students",
-    label: "Students",
+    label: "Students Enrollment",
     icon: HiOutlineUsers,
   },
   {
@@ -57,12 +57,12 @@ export function AdminSidebar() {
                 : "text-customer-cream hover:bg-customer-cream/10 hover:text-customer-cream/80"
             }`}
           >
-            <Icon className="h-5 w-5" />
-            <span className="hidden md:block">{label}</span>
+            <Icon className="h-5 w-5 shrink-0" />
+            <span>{label}</span>
           </Link>
         );
       })}
-      <div className="mt-auto hidden md:block">
+      <div className="mt-auto pt-4">
         <SignOutButton variant="dark" />
       </div>
     </nav>

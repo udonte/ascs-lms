@@ -84,7 +84,9 @@ const AUTH_ROUTE_PREFIXES = [
   "/signup",
   "/signUp",
   "/forgot-password",
-  "/reset-password",
+  // NOTE: /reset-password is intentionally NOT here — the password reset
+  // callback must be allowed to redirect to /reset-password after exchanging
+  // the recovery code for a session.
   "/auth/",
 ] as const;
 

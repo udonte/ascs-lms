@@ -68,8 +68,8 @@ export function AdminCourseList({ courses }: AdminCourseListProps) {
                 <StatusBadge published={course.is_published} />
               </div>
               {course.description ? (
-                <p className="mt-1 line-clamp-2 text-sm text-neutral-600">
-                  {course.description}
+                <p className="mt-1 line-clamp-2 text-sm text-neutral-600 w-full max-w-2xl">
+                  {course.description.slice(0, 200)}...
                 </p>
               ) : (
                 <p className="mt-1 text-sm italic text-neutral-400">

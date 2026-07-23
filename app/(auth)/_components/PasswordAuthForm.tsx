@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useActionState } from "react";
 
 import { useActionStateToast } from "@/app/_components/useActionStateToast";
+import { PasswordInput } from "./PasswordInput";
 import {
   signInAction,
   signUpAction,
@@ -21,7 +22,7 @@ type PasswordAuthFormProps = {
 const initialState: AuthActionState = {};
 
 const inputClassName =
-  "mt-1 w-full rounded-md border border-neutral-300 px-3 py-2 text-sm shadow-sm focus:border-[#003366] focus:outline-none focus:ring-1 focus:ring-[#003366]";
+  "mt-1 w-full rounded-md border border-neutral-300 px-3 py-2 text-base sm:text-sm shadow-sm focus:border-[#003366] focus:outline-none focus:ring-1 focus:ring-[#003366]";
 
 export function PasswordAuthForm({ mode, nextPath }: PasswordAuthFormProps) {
   const action = mode === "signup" ? signUpAction : signInAction;
@@ -63,38 +64,27 @@ export function PasswordAuthForm({ mode, nextPath }: PasswordAuthFormProps) {
           placeholder="you@example.com"
         />
 
-        <div>
-          <div className="flex items-center justify-between">
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-neutral-700"
-            >
-              Password
-            </label>
-            {mode === "login" ? (
+        <PasswordInput
+          id="password"
+          name="password"
+          label="Password"
+          autoComplete={
+            mode === "signup" ? "new-password" : "current-password"
+          }
+          placeholder={
+            mode === "signup" ? "At least 8 characters" : "••••••••"
+          }
+          labelExtra={
+            mode === "login" ? (
               <Link
                 href="/forgot-password"
                 className="text-xs font-medium text-[#003366] underline-offset-2 hover:underline"
               >
                 Forgot password?
               </Link>
-            ) : null}
-          </div>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            autoComplete={
-              mode === "signup" ? "new-password" : "current-password"
-            }
-            required
-            minLength={8}
-            className={inputClassName}
-            placeholder={
-              mode === "signup" ? "At least 8 characters" : "••••••••"
-            }
-          />
-        </div>
+            ) : undefined
+          }
+        />
 
         <button
           type="submit"

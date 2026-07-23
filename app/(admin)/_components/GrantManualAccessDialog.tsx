@@ -63,7 +63,7 @@ export function GrantManualAccessDialog({
         className="inline-flex items-center gap-2 rounded-lg bg-customer-gold px-4 py-2.5 text-sm font-semibold text-customer-charcoal shadow-md transition hover:bg-customer-gold/90 disabled:cursor-not-allowed disabled:opacity-50"
       >
         <HiOutlineUserAdd className="h-4 w-4" aria-hidden />
-        Grant Manual Access
+        Grant Manual Course Access
       </button>
 
       <Modal
@@ -124,12 +124,10 @@ export function GrantManualAccessDialog({
                 htmlFor="amount-paid"
                 className="text-sm font-medium text-customer-charcoal"
               >
-                Amount received (₦)
+                Amount received ($)
               </label>
               <div className="relative mt-1">
-                <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-neutral-500">
-                  ₦
-                </span>
+                <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-neutral-500"></span>
                 <input
                   id="amount-paid"
                   name="amountPaid"

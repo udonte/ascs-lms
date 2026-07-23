@@ -8,16 +8,10 @@ export default async function CourseCatalogPage() {
 
   return (
     <div className="mx-auto w-full max-w-6xl">
-      <Header title="Course Catalog" />
-      <header className="mb-10">
-        <h1 className="text-xl font-bold text-customer-teal">
-          Available Courses
-        </h1>
-        <p className="mt-2 max-w-2xl text-sm text-neutral-600">
-          Invest in your professional growth. Explore our premium training
-          programs and unlock lifetime access.
-        </p>
-      </header>
+      <Header
+        title="Course Catalog"
+        description="Invest in your professional growth. Explore our premium training programs and unlock lifetime access."
+      />
 
       {catalog.length === 0 ? (
         <CatalogEmptyState />

@@ -5,15 +5,13 @@ import Link from "next/link";
 import { useActionState } from "react";
 
 import { useActionStateToast } from "@/app/_components/useActionStateToast";
+import { PasswordInput } from "./PasswordInput";
 import {
   updatePasswordAction,
   type AuthActionState,
 } from "@/lib/services/auth-service";
 
 const initialState: AuthActionState = {};
-
-const inputClassName =
-  "mt-1 w-full rounded-md border border-neutral-300 px-3 py-2 text-sm shadow-sm focus:border-[#003366] focus:outline-none focus:ring-1 focus:ring-[#003366]";
 
 export function ResetPasswordForm() {
   const [state, formAction, pending] = useActionState(
@@ -44,43 +42,21 @@ export function ResetPasswordForm() {
       </div>
 
       <form action={formAction} className="space-y-4">
-        <div>
-          <label
-            htmlFor="password"
-            className="block text-sm font-medium text-neutral-700"
-          >
-            New password
-          </label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            autoComplete="new-password"
-            required
-            minLength={8}
-            className={inputClassName}
-            placeholder="At least 8 characters"
-          />
-        </div>
+        <PasswordInput
+          id="password"
+          name="password"
+          label="New password"
+          autoComplete="new-password"
+          placeholder="At least 8 characters"
+        />
 
-        <div>
-          <label
-            htmlFor="confirmPassword"
-            className="block text-sm font-medium text-neutral-700"
-          >
-            Confirm password
-          </label>
-          <input
-            id="confirmPassword"
-            name="confirmPassword"
-            type="password"
-            autoComplete="new-password"
-            required
-            minLength={8}
-            className={inputClassName}
-            placeholder="Repeat your password"
-          />
-        </div>
+        <PasswordInput
+          id="confirmPassword"
+          name="confirmPassword"
+          label="Confirm password"
+          autoComplete="new-password"
+          placeholder="Repeat your password"
+        />
 
         <button
           type="submit"

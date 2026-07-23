@@ -8,18 +8,15 @@ export default async function ContentManagerPage() {
 
   return (
     <div className="mx-auto w-full">
-      <Header title="Content Manager" />
-      <div className="flex flex-col lg:flex-row items-start justify-between  mb-8">
-        <p className="mb-6 text-sm text-customer-charcoal">
-          Create, edit, and organize mastercourses. Drafts stay hidden from
-          students until published.
-        </p>
-        <div className="">
-          <CreateCourseDialog
-            triggerLabel="Create New Course"
-            triggerVariant="header"
-          />
-        </div>
+      <Header
+        title="Content Manager"
+        description="Create, edit, and organize mastercourses. Drafts stay hidden from students until published."
+      />
+      <div className="mb-6 flex items-center justify-end gap-2">
+        <CreateCourseDialog
+          triggerLabel="Create New Course"
+          triggerVariant="header"
+        />
       </div>
 
       <AdminCourseList courses={courses} />

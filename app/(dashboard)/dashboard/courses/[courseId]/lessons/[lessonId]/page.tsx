@@ -39,8 +39,22 @@ export default async function ClassroomLessonPage({
         Back to Course Overview
       </Link>
 
-      <div className="grid gap-8 lg:grid-cols-4">
-        <div className="lg:col-span-3">
+      <div className="flex flex-col gap-6 lg:grid lg:grid-cols-4 lg:gap-8">
+        <div className="lg:col-span-1 lg:order-last">
+          <LessonSyllabusSidebar
+            courseId={context.courseId}
+            courseTitle={context.courseTitle}
+            syllabus={context.syllabus}
+            completedLessonIds={context.completedLessonIds}
+            activeLessonId={lessonId}
+            quizUnlocked={context.isCourseFullyViewed}
+            quizHref={quizHref}
+            activeMode={showQuiz ? "quiz" : "lesson"}
+            quizAttempt={context.quizAttempt}
+          />
+        </div>
+
+        <div className="lg:col-span-3 lg:order-first">
           {showQuiz ? (
             <ClassroomQuizPanel
               courseId={context.courseId}
@@ -61,20 +75,6 @@ export default async function ClassroomLessonPage({
               />
             </>
           )}
-        </div>
-
-        <div className="lg:col-span-1">
-          <LessonSyllabusSidebar
-            courseId={context.courseId}
-            courseTitle={context.courseTitle}
-            syllabus={context.syllabus}
-            completedLessonIds={context.completedLessonIds}
-            activeLessonId={lessonId}
-            quizUnlocked={context.isCourseFullyViewed}
-            quizHref={quizHref}
-            activeMode={showQuiz ? "quiz" : "lesson"}
-            quizAttempt={context.quizAttempt}
-          />
         </div>
       </div>
     </div>

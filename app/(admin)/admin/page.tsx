@@ -25,16 +25,11 @@ export default async function AdminPerformancePage() {
 
   return (
     <div>
-      <Header title="Performance Insights" />
+      <Header
+        title="Performance Insights"
+        description="A snapshot of key performance metrics for the ASCS LMS."
+      />
       <section className="rounded-lg border border-neutral-200 bg-white p-6">
-        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-          <p className="max-w-2xl text-sm text-neutral-700">
-            A snapshot of key performance metrics for the ASCS LMS.
-          </p>
-          {/* FEAT-06: Certificate verification modal trigger */}
-          <VerifyCertificateModal />
-        </div>
-
         <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
           <StatCard
             label="Total Revenue"

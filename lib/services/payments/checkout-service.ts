@@ -20,12 +20,43 @@ export type CheckoutPreview = {
   description: string | null;
   price: number;
   priceLabel: string;
+  /** NGN equivalent shown on the Paystack button e.g. "₦240,000" */
+  ngnPriceLabel: string;
   isFree: boolean;
   isEnrolled: boolean;
   studentEmail: string;
   /** Prerequisite gate — required: true means student must complete another course first. */
   prerequisite: PrerequisiteStatus;
 };
+
+/**
+ * Fetches the live USD → NGN exchange rate.
+ * Uses open.er-api.com (free, no API key needed).
+ * Falls back to FALLBACK_USD_NGN_RATE env var or 1600 if the API is down.
+ */
+async function fetchUsdToNgnRate(): Promise<number> {
+  try {
+    const res = await fetch("https://open.er-api.com/v6/latest/USD", {
+      next: { revalidate: 3600 }, // cache rate for 1 hour
+    });
+    if (!res.ok) throw new Error("Rate API returned non-200");
+    const data = await res.json();
+    const rate = data?.rates?.NGN;
+    if (typeof rate === "number" && rate > 0) return rate;
+    throw new Error("Invalid rate in response");
+  } catch {
+    const fallback = Number(process.env.FALLBACK_USD_NGN_RATE ?? 1600);
+    return Number.isFinite(fallback) && fallback > 0 ? fallback : 1600;
+  }
+}
+
+function formatNgn(amount: number): string {
+  return new Intl.NumberFormat("en-NG", {
+    style: "currency",
+    currency: "NGN",
+    maximumFractionDigits: 0,
+  }).format(amount);
+}
 
 type PaystackInitializeResponse = {
   status: boolean;
@@ -159,6 +190,10 @@ export const CheckoutService = {
       description: course.description,
       price,
       priceLabel: formatCatalogPrice(price),
+      ngnPriceLabel:
+        price <= 0
+          ? "Free"
+          : formatNgn(Math.round(price * (await fetchUsdToNgnRate()))),
       isFree: price <= 0,
       isEnrolled,
       studentEmail: user.email,
@@ -260,8 +295,10 @@ export const CheckoutService = {
       throw new Error("You are already enrolled in this course.");
     }
 
-    // Paystack expects amount in the smallest currency unit (cents for USD)
-    const amountCents = Math.round(price * 100);
+    // Convert USD price → NGN → kobo (Paystack's smallest unit)
+    const usdToNgn = await fetchUsdToNgnRate();
+    const ngnAmount = Math.round(price * usdToNgn);
+    const amountKobo = ngnAmount * 100;
     const callbackUrl = `${getSiteUrl()}/dashboard/checkout/callback?courseId=${encodeURIComponent(courseId)}`;
 
     const response = await fetch(
@@ -274,8 +311,8 @@ export const CheckoutService = {
         },
         body: JSON.stringify({
           email: user.email,
-          amount: amountCents,
-          currency: "USD",
+          amount: amountKobo,
+          currency: "NGN",
           callback_url: callbackUrl,
           metadata: {
             user_id: user.id,

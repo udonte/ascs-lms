@@ -1,3 +1,4 @@
+import Header from "@/app/_components/Header";
 import { StudentSettingsForm } from "@/app/(dashboard)/_components/StudentSettingsForm";
 import { SettingsService } from "@/lib/services/dashboard/settings/settings-service";
 
@@ -6,15 +7,10 @@ export default async function SettingsPage() {
 
   return (
     <div className="mx-auto w-full max-w-4xl">
-      <header className="mb-8 space-y-2">
-        <h1 className="text-2xl font-bold text-customer-teal md:text-3xl">
-          Account Settings
-        </h1>
-        <p className="max-w-2xl text-sm text-neutral-600">
-          Manage your personal profile details, contact settings, and account
-          preferences.
-        </p>
-      </header>
+      <Header
+        title="Account Settings"
+        description="Manage your personal profile details, contact settings, and account preferences."
+      />
 
       <section className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm sm:p-8">
         <div className="mb-6">

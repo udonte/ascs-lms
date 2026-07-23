@@ -9,6 +9,8 @@ const errorCopy: Record<string, string> = {
   missing_code: "That sign-in link is incomplete. Request a new link below.",
   missing_env: "Server configuration error. Please contact support.",
   auth_callback: "We could not complete sign-in. Try again or request a new link.",
+  reset_link_expired:
+    "Your password reset link has expired. Please request a new one.",
 };
 
 export function AuthQueryToasts() {

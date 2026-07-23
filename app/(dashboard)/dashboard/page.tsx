@@ -11,22 +11,12 @@ export default async function DashboardHomePage() {
 
   return (
     <div className="mx-auto w-full max-w-6xl">
-      <Header title="My Courses" />
-      <header className="mb-10">
-        <h1 className="text-2xl font-semibold text-customer-teal">
-          Welcome back, {displayName}!
-        </h1>
-        <p className="mt-2 max-w-2xl text-sm text-neutral-600">
-          Pick up where you left off and keep building the skills that move your
-          Customer Success career forward.
-        </p>
-      </header>
+      <Header
+        title={`Welcome back to your courses, ${displayName}!`}
+        description="Pick up where you left off and keep building the skills that move your Customer Success career forward."
+      />
 
       <section>
-        <h2 className="mb-6 text-lg font-semibold text-customer-charcoal">
-          My Courses
-        </h2>
-
         {courses.length === 0 ? (
           <EnrolledCoursesEmptyState />
         ) : (

@@ -49,12 +49,13 @@ export async function updateCourseAction(
       is_published: isPublished,
     });
     revalidateCourseEditor(courseId);
-    return { success: "Course settings saved." };
   } catch (error) {
     return {
       error: error instanceof Error ? error.message : "Failed to save course.",
     };
   }
+
+  redirect("/admin/courses");
 }
 
 export async function createLessonAction(

@@ -43,7 +43,10 @@ export default async function CourseEntryPage({
 
   return (
     <div className="mx-auto w-full max-w-6xl">
-      <Header title="Welcome to the Course" />
+      <Header
+        title={course.title}
+        description="Explore the curriculum, track your progress, and complete lessons to earn your certificate."
+      />
       <Link
         href="/dashboard"
         className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-customer-teal transition hover:text-customer-purple cursor-pointer"

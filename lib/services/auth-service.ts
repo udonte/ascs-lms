@@ -148,7 +148,6 @@ export async function requestPasswordResetAction(
 
   const siteUrl = await resolveSiteUrl();
   if (!siteUrl) {
-    211;
     return {
       error:
         "Site URL is not configured. Set NEXT_PUBLIC_SITE_URL in .env.local.",
@@ -157,9 +156,10 @@ export async function requestPasswordResetAction(
 
   const supabase = await createClient();
 
-  const redirectTo =
-    (await buildAuthCallbackUrl("/reset-password")) ??
-    `${siteUrl}/auth/callback?next=/reset-password`;
+  // redirectTo is where Supabase sends the user AFTER they click
+  // {{ .ConfirmationURL }} in the email. With the token-based flow,
+  // Supabase validates the token server-side and then redirects here.
+  const redirectTo = `${siteUrl}/reset-password`;
 
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
     redirectTo,

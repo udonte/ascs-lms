@@ -1,6 +1,7 @@
 import { HiOutlineUsers } from "react-icons/hi";
 
 import Header from "@/app/_components/Header";
+import { Pagination } from "@/app/_components/Pagination";
 import { StudentsSubNav } from "@/app/(admin)/_components/StudentsSubNav";
 import {
   StudentListService,
@@ -8,15 +9,34 @@ import {
   formatStudentTotalPaid,
 } from "@/lib/services/admin/students/student-list-service";
 
-export default async function StudentListPage() {
+const PAGE_SIZE = 15;
+
+export default async function StudentListPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const { page: pageParam } = await searchParams;
+  const page = Math.max(1, parseInt(pageParam ?? "1", 10) || 1);
+
   const students = await StudentListService.getStudentList();
 
   const totalEnrolled = students.filter((s) => s.enrollmentCount > 0).length;
   const totalRevenue = students.reduce((sum, s) => sum + s.totalPaid, 0);
 
+  const totalPages = Math.ceil(students.length / PAGE_SIZE);
+  const safePage = Math.max(1, Math.min(page, totalPages));
+  const pageStudents = students.slice(
+    (safePage - 1) * PAGE_SIZE,
+    safePage * PAGE_SIZE,
+  );
+
   return (
     <div className="mx-auto w-full max-w-6xl">
-      <Header title="Students" />
+      <Header
+        title="Student List"
+        description="View all registered student accounts, their enrollment counts, and total spent."
+      />
       <StudentsSubNav />
 
       {/* Summary stats */}
@@ -81,7 +101,7 @@ export default async function StudentListPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-neutral-100">
-                {students.map((student) => (
+                {pageStudents.map((student) => (
                   <tr key={student.id} className="hover:bg-neutral-50/80">
                     <td className="px-4 py-4 sm:px-6">
                       <p className="font-semibold text-customer-charcoal">
@@ -114,6 +134,11 @@ export default async function StudentListPage() {
               </tbody>
             </table>
           </div>
+          <Pagination
+            page={safePage}
+            totalPages={totalPages}
+            basePath="/admin/students/list"
+          />
         </div>
       )}
     </div>

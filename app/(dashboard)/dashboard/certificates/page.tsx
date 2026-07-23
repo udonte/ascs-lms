@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { FiAward } from "react-icons/fi";
 
+import Header from "@/app/_components/Header";
 import { CertificateService } from "@/lib/services/dashboard/certificates/certificate-service";
 
 export default async function CertificatesPage() {
@@ -8,15 +9,10 @@ export default async function CertificatesPage() {
 
   return (
     <div className="mx-auto w-full max-w-6xl">
-      <header className="mb-8 space-y-2">
-        <h1 className="text-2xl font-bold text-customer-teal md:text-3xl">
-          My Certificates & Credentials
-        </h1>
-        <p className="max-w-2xl text-sm text-neutral-600">
-          Your achievements and professional credentials. Download and share your
-          verified honors.
-        </p>
-      </header>
+      <Header
+        title="My Certificates & Credentials"
+        description="Your achievements and professional credentials. Download and share your verified honors."
+      />
 
       {earned.length === 0 ? (
         <section className="rounded-2xl border border-neutral-200 bg-white shadow-sm">

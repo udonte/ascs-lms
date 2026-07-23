@@ -2,9 +2,11 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
+import { HiMenu } from "react-icons/hi";
 
 import { SignOutButton } from "@/app/(dashboard)/_components/SignOutButton";
 import { createClient } from "@/lib/supabase/client";
+import { MobileNavDrawer } from "./MobileNavDrawer";
 
 const PAGE_TITLES: Record<string, string> = {
   "/dashboard": "Overview / My Courses",
@@ -13,19 +15,23 @@ const PAGE_TITLES: Record<string, string> = {
   "/dashboard/settings": "Account Settings",
   "/admin": "Performance Insights",
   "/admin/courses": "Content Manager",
-  "/admin/students": "Student Ledger",
+  "/admin/students": "Student Enrollment",
   "/admin/quizzes": "Quiz Builder",
 };
 
 export function MobileHeader() {
   const pathname = usePathname();
   const [displayName, setDisplayName] = useState("Guest");
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const title = useMemo(() => {
     if (!pathname) return "ASCS LMS";
     if (PAGE_TITLES[pathname]) return PAGE_TITLES[pathname];
     if (pathname.startsWith("/admin/courses/")) return "Course Editor";
-    if (pathname.includes("/dashboard/courses/") && pathname.includes("/lessons/")) {
+    if (
+      pathname.includes("/dashboard/courses/") &&
+      pathname.includes("/lessons/")
+    ) {
       return "Classroom";
     }
     if (pathname.startsWith("/dashboard/checkout")) return "Checkout";
@@ -60,25 +66,55 @@ export function MobileHeader() {
   }, []);
 
   return (
-    <div
-      className={`flex h-16 items-center justify-between gap-2 border-b px-4 md:hidden ${isAdmin ? "bg-customer-purple" : "bg-white"}`}
-    >
-      <div className="min-w-0">
-        <p
-          className={`truncate text-sm font-semibold ${isAdmin ? "text-white" : "text-customer-purple"}`}
-        >
-          {title}
-        </p>
-        <p
-          className={`flex items-center gap-2 truncate text-xs ${isAdmin ? "text-white/80" : "text-neutral-500 "}`}
-        >
-          <span className="flex items-center justify-center font-medium w-fit bg-customer-teal text-white px-1.5 py-0.5 rounded ">
-            {isAdmin ? "Admin" : "Student"}
-          </span>
-          Signed in as {displayName}
-        </p>
+    <>
+      <div
+        className={`flex h-16 shrink-0 items-center justify-between gap-3 border-b px-4 md:hidden ${
+          isAdmin ? "bg-customer-purple" : "bg-white"
+        }`}
+      >
+        <div className="flex items-center gap-3 min-w-0">
+          <button
+            onClick={() => setIsDrawerOpen(true)}
+            className={`rounded-lg p-2 transition ${
+              isAdmin
+                ? "text-white hover:bg-white/10"
+                : "text-customer-purple hover:bg-customer-purple/10"
+            }`}
+            aria-label="Open navigation menu"
+          >
+            <HiMenu className="h-6 w-6" />
+          </button>
+
+          <div className="min-w-0">
+            <p
+              className={`truncate text-sm font-semibold ${
+                isAdmin ? "text-white" : "text-customer-purple"
+              }`}
+            >
+              {title}
+            </p>
+            <p
+              className={`flex items-center gap-2 truncate text-xs ${
+                isAdmin ? "text-white/80" : "text-neutral-500"
+              }`}
+            >
+              <span className="flex items-center justify-center font-medium w-fit bg-customer-teal text-white px-1.5 py-0.5 rounded text-[10px]">
+                {isAdmin ? "Admin" : "Student"}
+              </span>
+              Signed in as {displayName}
+            </p>
+          </div>
+        </div>
+
+        <SignOutButton variant={isAdmin ? "dark" : "light"} />
       </div>
-      <SignOutButton variant={isAdmin ? "dark" : "light"} />
-    </div>
+
+      <MobileNavDrawer
+        isOpen={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+        displayName={displayName}
+        isAdmin={Boolean(isAdmin)}
+      />
+    </>
   );
 }

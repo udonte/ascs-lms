@@ -133,7 +133,7 @@ export default async function CourseDetailPage({ params }: Props) {
 
       <div className="min-h-screen bg-white">
         {/* ── HERO ─────────────────────────────────────────────────────────── */}
-        <section className="relative overflow-hidden bg-gradient-to-br from-[#003366] via-[#004080] to-[#002244] py-20 lg:py-28">
+        <section className="relative overflow-hidden bg-gradient-to-br from-customer-purple via-customer-purple to-customer-purple py-20 lg:py-28">
           {/* Decorative blobs */}
           <div className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-[#FFCC00]/10 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-32 -left-16 h-80 w-80 rounded-full bg-white/5 blur-3xl" />
@@ -227,7 +227,7 @@ export default async function CourseDetailPage({ params }: Props) {
                   </Link>
                   <ShareCourseButton
                     courseTitle={course.title}
-                    slug={course.slug}
+                    slug={course.slug ?? slug}
                     className="border-white/20 text-white/70 hover:border-white/40 hover:text-white"
                   />
                 </div>
@@ -246,12 +246,6 @@ export default async function CourseDetailPage({ params }: Props) {
                       priority
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                    {/* Play button overlay */}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm transition hover:bg-white/30">
-                        <FaPlayCircle className="text-4xl text-white" />
-                      </div>
-                    </div>
                   </div>
 
                   {/* Price tag */}

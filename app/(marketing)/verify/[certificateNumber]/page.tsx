@@ -137,9 +137,8 @@ export default async function VerifyCertificatePage({
       )}
 
       <p className="mt-8 text-center text-xs text-neutral-400">
-        African School of Customer Success ·{" "}
         <Link href="/" className="underline hover:text-customer-teal">
-          africancustomersuccess.com
+          Back to home
         </Link>
       </p>
     </div>

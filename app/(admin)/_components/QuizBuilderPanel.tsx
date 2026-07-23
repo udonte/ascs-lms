@@ -12,12 +12,10 @@ type QuizBuilderPanelProps = {
   courses: QuizCourseOption[];
 };
 
-export function QuizBuilderPanel({
-  quizzes,
-  courses,
-}: QuizBuilderPanelProps) {
+export function QuizBuilderPanel({ quizzes, courses }: QuizBuilderPanelProps) {
   const [open, setOpen] = useState(false);
   const [editingQuiz, setEditingQuiz] = useState<AdminQuizRow | null>(null);
+  const [page, setPage] = useState(1);
 
   const openCreate = () => {
     setEditingQuiz(null);
@@ -36,11 +34,7 @@ export function QuizBuilderPanel({
 
   return (
     <>
-      <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-        <p className="max-w-2xl text-sm text-customer-charcoal">
-          Create assessments linked to mastercourses. Students must meet the
-          passing score to complete certification requirements.
-        </p>
+      <div className="mb-8 flex justify-end">
         <button
           type="button"
           onClick={openCreate}
@@ -52,7 +46,7 @@ export function QuizBuilderPanel({
         </button>
       </div>
 
-      <QuizListTable quizzes={quizzes} onEdit={openEdit} />
+      <QuizListTable quizzes={quizzes} onEdit={openEdit} page={page} onPageChange={setPage} />
 
       <QuizFormDialog
         open={open}

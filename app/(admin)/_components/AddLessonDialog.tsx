@@ -27,8 +27,10 @@ export function AddLessonDialog({ courseId }: AddLessonDialogProps) {
   useActionStateToast(state);
 
   useEffect(() => {
-    if (state.success) setOpen(false);
-  }, [state.success]);
+    if (state.success) {
+      setOpen(false);
+    }
+  }, [state]);
 
   return (
     <>

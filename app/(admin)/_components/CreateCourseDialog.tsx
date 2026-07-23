@@ -97,11 +97,11 @@ export function CreateCourseDialog({
               htmlFor="course-price"
               className="text-sm font-medium text-neutral-800"
             >
-              Price (₦ / Naira)
+              Price ($ / USD)
             </label>
             <div className="relative mt-1">
               <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-neutral-500">
-                ₦
+                $
               </span>
               <input
                 id="course-price"

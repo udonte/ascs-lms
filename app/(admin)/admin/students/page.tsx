@@ -4,6 +4,7 @@ import { StudentLedgerTable } from "@/app/(admin)/_components/StudentLedgerTable
 import { StudentsSubNav } from "@/app/(admin)/_components/StudentsSubNav";
 import { AdminCourseService } from "@/lib/services/admin/courses/admin-course-service";
 import { LedgerService } from "@/lib/services/admin/students/ledger-services";
+import { VerifyCertificateModal } from "../../_components/VerifyCertificateModal";
 
 function parseCoursePrice(price: number | string | null): number {
   if (price == null) return 0;
@@ -12,7 +13,13 @@ function parseCoursePrice(price: number | string | null): number {
   return Number.isFinite(n) ? n : 0;
 }
 
-export default async function StudentLedgerPage() {
+export default async function StudentLedgerPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const { page: pageParam } = await searchParams;
+  const page = Math.max(1, parseInt(pageParam ?? "1", 10) || 1);
   const [ledger, courses] = await Promise.all([
     LedgerService.getStudentLedger(),
     AdminCourseService.getAdminCourses(),
@@ -26,18 +33,16 @@ export default async function StudentLedgerPage() {
 
   return (
     <div className="mx-auto w-full max-w-6xl">
-      <Header title="Students" />
-      <StudentsSubNav />
-
-      <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-        <p className="max-w-2xl text-sm text-customer-charcoal">
-          Audit student access records, verify incoming transactions, or
-          manually grant offline course enrollments.
-        </p>
+      <Header
+        title="Students"
+        description="Audit student access records, verify incoming transactions, or manually grant offline course enrollments."
+      />
+      <div className="mb-8 flex flex-col md:flex-row items-center justify-center lg:justify-between gap-4 w-full">
+        <VerifyCertificateModal />
         <GrantManualAccessDialog courses={courseOptions} />
       </div>
-
-      <StudentLedgerTable rows={ledger} />
+      <StudentsSubNav />
+      <StudentLedgerTable rows={ledger} page={page} />
     </div>
   );
 }

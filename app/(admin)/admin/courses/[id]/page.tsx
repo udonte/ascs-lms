@@ -10,6 +10,7 @@ import {
   AdminCourseService,
   formatCoursePrice,
 } from "@/lib/services/admin/courses/admin-course-service";
+import { QuizService } from "@/lib/services/admin/quizzes/quiz-service";
 
 type CourseEditorPageProps = {
   params: Promise<{ id: string }>;
@@ -19,7 +20,10 @@ export default async function CourseEditorPage({
   params,
 }: CourseEditorPageProps) {
   const { id } = await params;
-  const course = await AdminCourseService.getAdminCourseById(id);
+  const [course, hasQuiz] = await Promise.all([
+    AdminCourseService.getAdminCourseById(id),
+    QuizService.courseHasQuiz(id),
+  ]);
 
   if (!course) {
     notFound();
@@ -29,7 +33,10 @@ export default async function CourseEditorPage({
 
   return (
     <div className="mx-auto w-full max-w-6xl">
-      <Header title="Course Editor" />
+      <Header
+        title={`Course Editor — ${course.title}`}
+        description="Manage curriculum lessons, pricing, publishing status, and quiz settings for this course."
+      />
 
       <Link
         href="/admin/courses"
@@ -60,7 +67,7 @@ export default async function CourseEditorPage({
 
       {/* Main editor grid */}
       <div className="grid gap-8 lg:grid-cols-2">
-        <CourseSettingsForm course={course} />
+        <CourseSettingsForm course={course} hasQuiz={hasQuiz} />
         <CourseLessonsPanel courseId={course.id} lessons={course.lessons} />
       </div>
 

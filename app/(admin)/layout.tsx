@@ -28,35 +28,27 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className="flex min-h-full flex-1 bg-[#F9FAFB]">
-      <aside className="w-16 md:w-72 shrink-0 border-r border-neutral-200 bg-customer-purple md:flex md:flex-col">
-        <div className="flex items-center justify-between gap-2 border-b border-white/10 px-4 py-4 mb-4 bg-customer-cream">
-          <Link href="/" className="hidden md:inline-block">
-            <Image
-              src="/assets/ascs-logo.png"
-              alt="African School of Customer Success"
-              width={140}
-              height={48}
-              className="h-12 w-auto object-contain"
-              priority
-            />
-          </Link>
-          <Link href="/" className="inline-block md:hidden">
-            <Image
-              src="/assets/ascs-flag-logo.png"
-              alt="African School of Customer Success"
-              width={140}
-              height={48}
-              className="h-8 w-auto object-contain"
-              priority
-            />
-          </Link>
+    <div className="flex h-screen w-full overflow-hidden bg-[#F9FAFB]">
+      <aside className="hidden md:flex md:w-72 shrink-0 md:flex-col border-r border-neutral-200 bg-customer-purple overflow-y-auto">
+        <div className="border-b border-white/10 px-4 py-4 mb-4 bg-customer-purple shrink-0">
+          <div className="flex items-center justify-between gap-2 bg-customer-cream w-fit rounded p-1">
+            <Link href="/" className="inline-block">
+              <Image
+                src="/assets/ascs-logo.png"
+                alt="African School of Customer Success"
+                width={140}
+                height={48}
+                className="h-12 w-auto object-contain"
+                priority
+              />
+            </Link>
+          </div>
         </div>
         <AdminSidebar />
       </aside>
-      <div className="flex min-w-0 flex-1 flex-col">
+      <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
         <MobileHeader />
-        <main className="flex-1 p-4 md:p-8">{children}</main>
+        <main className="flex-1 overflow-y-auto p-4 md:p-8">{children}</main>
       </div>
     </div>
   );

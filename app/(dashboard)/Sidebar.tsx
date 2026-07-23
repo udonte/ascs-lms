@@ -60,12 +60,12 @@ export function DashboardSidebar() {
                 : "text-customer-purple hover:bg-customer-purple/10 hover:text-customer-purple"
             }`}
           >
-            <Icon className="h-5 w-5" />
-            <span className="hidden md:block">{label}</span>
+            <Icon className="h-5 w-5 shrink-0" />
+            <span>{label}</span>
           </Link>
         );
       })}
-      <div className="mt-auto hidden md:block">
+      <div className="mt-auto pt-4">
         <SignOutButton />
       </div>
     </nav>

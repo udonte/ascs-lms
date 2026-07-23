@@ -104,7 +104,7 @@ export async function updateSession(request: NextRequest) {
     const url = request.nextUrl.clone();
     url.pathname = "/auth/callback";
     if (!url.searchParams.has("next")) {
-      url.searchParams.set("next", "/dashboard");
+      url.searchParams.set("next", pathname);
     }
     const redirectResponse = NextResponse.redirect(url);
     supabaseResponse.cookies.getAll().forEach((cookie) => {

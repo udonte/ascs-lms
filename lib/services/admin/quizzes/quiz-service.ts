@@ -172,4 +172,22 @@ export const QuizService = {
     if (error) throw new Error(error.message);
     return data;
   },
+  /**
+   * Returns true if at least one quiz row exists for the given course.
+   */
+  async courseHasQuiz(courseId: string): Promise<boolean> {
+    const supabase = await createClient();
+
+    const { count, error } = await supabase
+      .from("quizzes")
+      .select("id", { count: "exact", head: true })
+      .eq("course_id", courseId);
+
+    if (error) {
+      console.error("Error checking quiz existence:", error.message);
+      return false;
+    }
+
+    return (count ?? 0) > 0;
+  },
 };
