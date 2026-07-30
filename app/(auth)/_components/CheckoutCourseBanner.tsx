@@ -22,9 +22,9 @@ export async function CheckoutCourseBanner({ courseId }: Props) {
   const priceLabel =
     course.price <= 0
       ? "FREE"
-      : new Intl.NumberFormat("en-NG", {
+      : new Intl.NumberFormat("en-US", {
           style: "currency",
-          currency: "NGN",
+          currency: "USD",
           maximumFractionDigits: 0,
         }).format(course.price);
 
