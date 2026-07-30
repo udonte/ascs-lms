@@ -6,7 +6,7 @@ export default async function SettingsPage() {
   const profile = await SettingsService.getStudentProfile();
 
   return (
-    <div className="mx-auto w-full max-w-4xl">
+    <div className="mx-auto w-full">
       <Header
         title="Account Settings"
         description="Manage your personal profile details, contact settings, and account preferences."

@@ -89,7 +89,7 @@ export function CheckoutPanel({ preview }: CheckoutPanelProps) {
 
       {/* ── Paystack (NGN) ──────────────────────────────────────────────────── */}
       <div className="overflow-hidden rounded-xl border border-neutral-200 bg-white">
-        <div className="flex items-center gap-3 border-b border-neutral-100 bg-neutral-50 px-4 py-3">
+        {/* <div className="flex items-center gap-3 border-b border-neutral-100 bg-neutral-50 px-4 py-3">
           <FaCreditCard className="text-[#00C3F7] text-lg" aria-hidden />
           <div>
             <p className="text-sm font-semibold text-customer-charcoal">
@@ -102,10 +102,10 @@ export function CheckoutPanel({ preview }: CheckoutPanelProps) {
           <span className="ml-auto rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-semibold text-green-700">
             🇳🇬 NGN
           </span>
-        </div>
+        </div> */}
         <div className="px-4 py-4">
           {/* Price display — USD listed price + NGN equivalent */}
-          <div className="mb-3 flex items-baseline justify-between rounded-lg bg-neutral-50 px-3 py-2.5">
+          {/* <div className="mb-3 flex items-baseline justify-between rounded-lg bg-neutral-50 px-3 py-2.5">
             <span className="text-xs text-neutral-500">Amount</span>
             <div className="text-right">
               <span className="text-base font-bold text-customer-charcoal">
@@ -115,7 +115,7 @@ export function CheckoutPanel({ preview }: CheckoutPanelProps) {
                 ≈ {preview.priceLabel}
               </span>
             </div>
-          </div>
+          </div> */}
 
           <form
             action={(formData) =>

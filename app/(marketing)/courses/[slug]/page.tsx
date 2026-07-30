@@ -75,9 +75,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 function formatPrice(price: number): string {
   if (price <= 0) return "FREE";
-  return new Intl.NumberFormat("en-NG", {
+  return new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "NGN",
+    currency: "USD",
     maximumFractionDigits: 0,
   }).format(price);
 }

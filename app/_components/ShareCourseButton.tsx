@@ -55,7 +55,7 @@ export function ShareCourseButton({
       type="button"
       onClick={handleShare}
       aria-label={`Share ${courseTitle}`}
-      className={`inline-flex items-center gap-1.5 rounded-lg border border-neutral-200 px-3 py-2 text-xs font-medium text-neutral-500 transition hover:border-customer-teal/40 hover:text-customer-teal ${className}`}
+      className={`bg-blue-100 inline-flex items-center gap-1.5 rounded-lg border border-blue-200 px-3 py-2 text-xs font-medium text-blue-500 transition hover:border-blue-300 hover:text-blue-600 ${className}`}
     >
       {copied ? (
         <>
