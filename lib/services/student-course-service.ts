@@ -42,6 +42,8 @@ export type CourseResumeContext = {
   isCourseFullyViewed: boolean;
   quiz: CourseQuiz | null;
   quizAttempt: QuizAttempt | null;
+  /** True when the student has a paid enrollment but hasn't agreed to the course contract yet. */
+  needsContractAgreement: boolean;
 };
 
 export type CourseQuizQuestion = {
@@ -146,6 +148,26 @@ async function assertPaidEnrollment(
   if (error || !data) {
     throw new Error("You do not have access to this course.");
   }
+}
+
+async function getContractStatus(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  userId: string,
+  courseId: string,
+): Promise<boolean> {
+  const { data } = await supabase
+    .from("enrollments")
+    .select("contract_agreed_at, amount_paid")
+    .eq("user_id", userId)
+    .eq("course_id", courseId)
+    .eq("status", "paid")
+    .maybeSingle();
+
+  if (!data) return false;
+  // Free courses (amount_paid = 0) skip the contract gate
+  if ((data.amount_paid ?? 0) === 0) return false;
+  // Needs agreement when contract_agreed_at has not been set yet
+  return data.contract_agreed_at === null;
 }
 
 export const StudentCourseService = {
@@ -296,9 +318,10 @@ export const StudentCourseService = {
       orderedSyllabus.length > 0 &&
       orderedSyllabus.every((lesson) => completedSet.has(lesson.id));
 
-    const [quiz, quizAttempt] = await Promise.all([
+    const [quiz, quizAttempt, needsContractAgreement] = await Promise.all([
       StudentCourseService.getCourseQuiz(courseId),
       StudentCourseService.getQuizAttempt(courseId),
+      getContractStatus(supabase, user.id, courseId),
     ]);
 
     return {
@@ -310,6 +333,7 @@ export const StudentCourseService = {
       isCourseFullyViewed,
       quiz,
       quizAttempt,
+      needsContractAgreement,
     };
   },
 

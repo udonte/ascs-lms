@@ -10,6 +10,7 @@ import { HiOutlineAcademicCap, HiOutlineLockClosed } from "react-icons/hi";
 import { getCourseThumbnailUrl } from "@/lib/services/dashboard/overview/student-dashboard-service";
 import { StudentCourseService } from "@/lib/services/student-course-service";
 import Header from "@/app/_components/Header";
+import { CourseContractModal } from "@/app/(dashboard)/_components/CourseContractModal";
 
 type CourseEntryPageProps = {
   params: Promise<{ courseId: string }>;
@@ -34,6 +35,7 @@ export default async function CourseEntryPage({
     isCourseFullyViewed,
     quiz,
     quizAttempt,
+    needsContractAgreement,
   } = resumeContext;
 
   const resumeHref = `/dashboard/courses/${courseId}/lessons/${resumeLessonId}`;
@@ -43,6 +45,12 @@ export default async function CourseEntryPage({
 
   return (
     <div className="mx-auto w-full max-w-6xl">
+      {needsContractAgreement && (
+        <CourseContractModal
+          courseId={course.id}
+          courseTitle={course.title}
+        />
+      )}
       <Header
         title={course.title}
         description="Explore the curriculum, track your progress, and complete lessons to earn your certificate."
