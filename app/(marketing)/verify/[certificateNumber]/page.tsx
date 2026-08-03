@@ -136,11 +136,17 @@ export default async function VerifyCertificatePage({
         </div>
       )}
 
-      <p className="mt-8 text-center text-xs text-neutral-400">
+      <div className="mt-8 flex flex-col items-center gap-3 text-center text-xs text-neutral-400">
+        <Link
+          href="/verify"
+          className="inline-flex items-center gap-1.5 rounded-lg border border-neutral-200 bg-white px-4 py-2 text-sm font-medium text-neutral-600 transition hover:bg-neutral-50 hover:text-customer-teal"
+        >
+          Verify another certificate
+        </Link>
         <Link href="/" className="underline hover:text-customer-teal">
           Back to home
         </Link>
-      </p>
+      </div>
     </div>
   );
 }

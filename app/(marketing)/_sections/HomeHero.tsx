@@ -89,16 +89,15 @@ export default function HomeHero() {
 
           <motion.div
             variants={itemVariants}
-            className="flex flex-col sm:flex-row gap-8 mb-12"
+            className="flex flex-col sm:flex-row items-center lg:items-start gap-8 mb-12"
           >
-            <Button variant="primary" size="md" icon={<FaArrowRight />}>
-              <a
-                href="https://selar.com/369z0u1736"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Download CSM Starter Kits
-              </a>
+            <Button
+              variant="primary"
+              size="md"
+              icon={<FaArrowRight />}
+              href="/signup?next=%2Fdashboard"
+            >
+              Sign up on Learning Platform
             </Button>
 
             <Button
@@ -139,7 +138,7 @@ export default function HomeHero() {
           animate="animate"
         >
           <div className="relative">
-            <div className="relative bg-linear-to-br from-customer-purple/80 to-customer-teal/60 rounded-2xl p-8 backdrop-blur-sm border border-customer-cream/10">
+            <div className="relative bg-linear-to-br from-customer-purple/80 to-customer-teal/60 rounded-2xl p-2 lg:p-8 backdrop-blur-sm border border-customer-cream/10">
               <div className="bg-customer-charcoal/30 rounded-xl h-96 lg:h-125 flex items-center justify-center border-2 border-customer-gold/20 overflow-hidden">
                 <div className="relative w-full h-full">
                   <Image
@@ -154,7 +153,7 @@ export default function HomeHero() {
               </div>
 
               <motion.div
-                className="absolute -top-4 -left-4 bg-customer-gold text-customer-charcoal px-4 py-2 rounded-lg font-semibold shadow-lg"
+                className="absolute -top-4 -left-4 bg-customer-gold text-customer-charcoal px-4 py-2 rounded-lg font-semibold shadow-lg cursor-pointer"
                 animate={{ y: [0, -10, 0], rotate: [-5, 5, -5] }}
                 transition={{
                   duration: 4,
@@ -162,7 +161,13 @@ export default function HomeHero() {
                   ease: "easeInOut",
                 }}
               >
-                Global Careers
+                <a
+                  href="https://selar.com/369z0u1736"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Download CSM Starter Kits
+                </a>
               </motion.div>
 
               <motion.div

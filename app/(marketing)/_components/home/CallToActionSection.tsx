@@ -66,7 +66,9 @@ export default function CallToActionSection() {
           >
             <p>Africa is rising.</p>
             <p>Customer Success is booming.</p>
-            <p className="text-customer-gold font-semibold">Your moment is now.</p>
+            <p className="text-customer-gold font-semibold">
+              Your moment is now.
+            </p>
           </motion.div>
 
           <motion.p
@@ -75,8 +77,8 @@ export default function CallToActionSection() {
           >
             Join <span className="font-semibold text-customer-gold">ASCS™</span>{" "}
             - where African talent becomes global leaders. Transform your career
-            with world-class education, mentorship, and a community that supports
-            your growth every step of the way.
+            with world-class education, mentorship, and a community that
+            supports your growth every step of the way.
           </motion.p>
 
           <motion.div
@@ -84,7 +86,7 @@ export default function CallToActionSection() {
             className="flex flex-col sm:flex-row gap-8 justify-center mb-12"
           >
             <Button
-              href="/courses"
+              href="/signup?next=%2Fdashboard"
               variant="primary"
               size="lg"
               icon={<FaRocket />}
@@ -164,4 +166,3 @@ export default function CallToActionSection() {
     </section>
   );
 }
-

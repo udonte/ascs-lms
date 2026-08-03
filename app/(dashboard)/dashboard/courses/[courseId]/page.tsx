@@ -46,10 +46,7 @@ export default async function CourseEntryPage({
   return (
     <div className="mx-auto w-full max-w-6xl">
       {needsContractAgreement && (
-        <CourseContractModal
-          courseId={course.id}
-          courseTitle={course.title}
-        />
+        <CourseContractModal courseId={course.id} courseTitle={course.title} />
       )}
       <Header
         title={course.title}
@@ -64,7 +61,7 @@ export default async function CourseEntryPage({
       </Link>
       <div className="overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-sm">
         <div className="flex items-start gap-4 px-4 py-6">
-          <div className="relative aspect-video w-full lg:w-1/2 bg-linear-to-br from-customer-purple via-customer-teal to-customer-gold rounded-2xl">
+          <div className="hidden md:block relative aspect-video w-full lg:w-1/2 bg-linear-to-br from-customer-purple via-customer-teal to-customer-gold rounded-2xl">
             <img
               src={heroImageUrl}
               alt={course.title}
@@ -74,7 +71,7 @@ export default async function CourseEntryPage({
             <div className="absolute inset-0 bg-customer-charcoal/20" />
           </div>
 
-          <div className="space-y-6 flex-1">
+          <div className="space-y-6">
             <div>
               <p className="text-xs font-semibold uppercase tracking-wider text-customer-purple">
                 Your course

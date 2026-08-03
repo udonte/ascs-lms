@@ -55,7 +55,7 @@ export function ShareCourseButton({
       type="button"
       onClick={handleShare}
       aria-label={`Share ${courseTitle}`}
-      className={`bg-blue-100 inline-flex items-center gap-1.5 rounded-lg border border-blue-200 px-3 py-2 text-xs font-medium text-blue-500 transition hover:border-blue-300 hover:text-blue-600 ${className}`}
+      className={`bg-blue-100 inline-flex items-center gap-1.5 rounded-lg border border-blue-200 px-3 py-2 text-xs font-medium text-blue-500 transition hover:border-blue-300 hover:text-blue-600 cursor-pointer ${className}`}
     >
       {copied ? (
         <>
@@ -65,7 +65,7 @@ export function ShareCourseButton({
       ) : (
         <>
           <HiOutlineShare className="h-3.5 w-3.5" />
-          Share
+          Share Course
         </>
       )}
     </button>

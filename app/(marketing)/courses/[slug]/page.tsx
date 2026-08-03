@@ -133,7 +133,7 @@ export default async function CourseDetailPage({ params }: Props) {
 
       <div className="min-h-screen bg-white">
         {/* ── HERO ─────────────────────────────────────────────────────────── */}
-        <section className="relative overflow-hidden bg-gradient-to-br from-customer-purple via-customer-purple to-customer-purple py-20 lg:py-28">
+        <section className="relative overflow-hidden bg-gradient-to-br from-customer-purple via-customer-purple to-customer-purple py-4 lg:py-28">
           {/* Decorative blobs */}
           <div className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-[#FFCC00]/10 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-32 -left-16 h-80 w-80 rounded-full bg-white/5 blur-3xl" />
@@ -174,12 +174,12 @@ export default async function CourseDetailPage({ params }: Props) {
                   </span>
                 </div>
 
-                <h1 className="mb-6 font-bold text-white text-3xl leading-tight sm:text-4xl lg:text-5xl">
+                <h1 className="mb-6 font-bold text-white text-xl md:text-3xl leading-tight sm:text-4xl lg:text-5xl">
                   {course.title}
                 </h1>
 
                 {course.description && (
-                  <p className="mb-8 text-lg leading-relaxed text-white/80">
+                  <p className="mb-8 text-base md:text-lg leading-relaxed text-white/80">
                     {course.description}
                   </p>
                 )}
@@ -228,7 +228,7 @@ export default async function CourseDetailPage({ params }: Props) {
                   <ShareCourseButton
                     courseTitle={course.title}
                     slug={course.slug ?? slug}
-                    className="border-white/20 text-white/70 hover:border-white/40 hover:text-white"
+                    className="border-white/20 text-white/70 hover:border-white/40 hover:text-white bg-blue-400 text-center"
                   />
                 </div>
               </div>
@@ -293,17 +293,17 @@ export default async function CourseDetailPage({ params }: Props) {
         {/* ── WHAT YOU'LL LEARN ────────────────────────────────────────────── */}
         <section className="border-b border-gray-100 bg-[#F9FAFB] py-16">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <h2 className="mb-8 text-2xl font-bold text-[#003366] sm:text-3xl">
+            <h2 className="mb-8 text-2xl font-bold text-[#003366] sm:text-3xl text-center md:text-left">
               What you'll learn
             </h2>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-2 md:gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {OUTCOMES.map((outcome) => (
                 <div
                   key={outcome}
-                  className="flex items-start gap-3 rounded-xl border border-gray-200 bg-white p-4 shadow-sm"
+                  className="flex items-start gap-3 rounded-xl border border-gray-200 bg-white p-2 md:p-4 shadow-sm"
                 >
                   <FaCheckCircle className="mt-0.5 shrink-0 text-[#003366]" />
-                  <p className="text-sm leading-relaxed text-gray-700">
+                  <p className="text-xs md:text-sm leading-relaxed text-gray-700">
                     {outcome}
                   </p>
                 </div>
@@ -316,7 +316,7 @@ export default async function CourseDetailPage({ params }: Props) {
         {lessonCount > 0 && (
           <section className="border-b border-gray-100 py-16">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-              <div className="mb-8 flex items-baseline justify-between gap-4">
+              <div className="mb-8 flex flex-col md:flex-row items-center md:items-baseline justify-between gap-4">
                 <h2 className="text-2xl font-bold text-[#003366] sm:text-3xl">
                   Course curriculum
                 </h2>
@@ -340,13 +340,6 @@ export default async function CourseDetailPage({ params }: Props) {
                         {lesson.orderIndex + 1}
                       </span>
 
-                      {/* Icon */}
-                      {isFirst ? (
-                        <FaPlayCircle className="shrink-0 text-[#003366]" />
-                      ) : (
-                        <FaLock className="shrink-0 text-gray-300" />
-                      )}
-
                       {/* Title */}
                       <span
                         className={`flex-1 text-sm font-medium ${
@@ -355,46 +348,9 @@ export default async function CourseDetailPage({ params }: Props) {
                       >
                         {lesson.title}
                       </span>
-
-                      {/* Preview badge on first lesson */}
-                      {isFirst && (
-                        <span className="rounded-full bg-[#003366]/10 px-3 py-0.5 text-xs font-semibold text-[#003366]">
-                          Preview
-                        </span>
-                      )}
                     </div>
                   );
                 })}
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* ── INSTRUCTOR ──────────────────────────────────────────────────── */}
-        {course.instructorName && (
-          <section className="border-b border-gray-100 bg-[#F9FAFB] py-16">
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-              <h2 className="mb-8 text-2xl font-bold text-[#003366] sm:text-3xl">
-                Your instructor
-              </h2>
-              <div className="flex items-start gap-6 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#003366] to-[#004080]">
-                  <FaGraduationCap className="text-2xl text-[#FFCC00]" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-[#003366]">
-                    {course.instructorName}
-                  </h3>
-                  <p className="mb-3 text-sm font-medium text-[#FFCC00]">
-                    ASCS™ Lead Instructor
-                  </p>
-                  <p className="max-w-2xl text-sm leading-relaxed text-gray-600">
-                    A seasoned Customer Success professional with over a decade
-                    of experience training global CS teams. Certified by
-                    industry-leading bodies and committed to producing
-                    world-class Customer Success talent from Africa.
-                  </p>
-                </div>
               </div>
             </div>
           </section>
@@ -436,11 +392,6 @@ export default async function CourseDetailPage({ params }: Props) {
                 Browse all courses
               </Link>
             </div>
-
-            <p className="mt-8 flex items-center justify-center gap-2 text-sm text-white/50">
-              <HiShieldCheck className="text-green-400" />
-              30-day money-back guarantee · Secure payment
-            </p>
           </div>
         </section>
       </div>

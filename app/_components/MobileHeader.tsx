@@ -68,11 +68,11 @@ export function MobileHeader() {
   return (
     <>
       <div
-        className={`flex h-16 shrink-0 items-center justify-between gap-3 border-b px-4 md:hidden ${
+        className={`flex h-16 shrink-0 items-center justify-between gap-2 border-b px-2 md:hidden ${
           isAdmin ? "bg-customer-purple" : "bg-white"
         }`}
       >
-        <div className="flex items-center gap-3 min-w-0">
+        <div className="flex items-center gap-2 min-w-0">
           <button
             onClick={() => setIsDrawerOpen(true)}
             className={`rounded-lg p-2 transition ${
