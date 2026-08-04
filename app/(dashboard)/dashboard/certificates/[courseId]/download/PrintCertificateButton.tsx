@@ -17,27 +17,61 @@ function downloadDataUrl(dataUrl: string, filename: string) {
   link.remove();
 }
 
+// Minimum landscape width — forces the certificate to render horizontally
+// on any screen size, including narrow mobile viewports.
+const CERT_WIDTH = 1123;
+
 async function exportCertificateImage(element: HTMLElement) {
   const filenameBase = `ascs-certificate-${new Date().toISOString().slice(0, 10)}`;
 
-  // Prefer PNG (best quality). Some browsers/devices may be memory constrained,
-  // so we fall back to JPEG if needed.
+  // Snapshot current inline styles so we can restore them after capture.
+  const prev = {
+    width: element.style.width,
+    height: element.style.height,
+    minWidth: element.style.minWidth,
+    overflow: element.style.overflow,
+  };
+
+  // Force landscape width and let height be natural (no hard-coded height).
+  // After the browser reflows at CERT_WIDTH, scrollHeight gives us the exact
+  // content height — so the exported image has zero blank space at the bottom.
+  element.style.width = `${CERT_WIDTH}px`;
+  element.style.minWidth = `${CERT_WIDTH}px`;
+  element.style.height = "auto";
+  element.style.overflow = "visible";
+
+  // Allow one animation frame for the browser to reflow at the new width.
+  await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+
+  const captureHeight = element.scrollHeight;
+
+  const captureOpts = {
+    cacheBust: true,
+    pixelRatio: 2,
+    backgroundColor: "#ffffff",
+    width: CERT_WIDTH,
+    height: captureHeight,
+  };
+
   try {
-    const dataUrl = await toPng(element, {
-      cacheBust: true,
-      pixelRatio: 2,
-      backgroundColor: "#ffffff",
-    });
-    downloadDataUrl(dataUrl, `${filenameBase}.png`);
-    return;
-  } catch {
-    const dataUrl = await toJpeg(element, {
-      cacheBust: true,
-      pixelRatio: 2,
-      backgroundColor: "#ffffff",
-      quality: 0.95,
-    });
-    downloadDataUrl(dataUrl, `${filenameBase}.jpeg`);
+    // Prefer PNG (best quality). Some browsers/devices may be memory constrained,
+    // so we fall back to JPEG if needed.
+    try {
+      const dataUrl = await toPng(element, captureOpts);
+      downloadDataUrl(dataUrl, `${filenameBase}.png`);
+    } catch {
+      const dataUrl = await toJpeg(element, {
+        ...captureOpts,
+        quality: 0.95,
+      });
+      downloadDataUrl(dataUrl, `${filenameBase}.jpeg`);
+    }
+  } finally {
+    // Always restore original styles so the page layout is unaffected.
+    element.style.width = prev.width;
+    element.style.height = prev.height;
+    element.style.minWidth = prev.minWidth;
+    element.style.overflow = prev.overflow;
   }
 }
 
