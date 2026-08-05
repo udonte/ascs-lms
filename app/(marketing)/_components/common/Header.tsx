@@ -9,6 +9,7 @@ import { HiMenuAlt3, HiX } from "react-icons/hi";
 import { FaLinkedin } from "react-icons/fa";
 
 import { NAV_LINKS, type NavLink } from "../../_constants/nav";
+import { UserGreeting } from "./UserGreeting";
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -90,20 +91,19 @@ export default function Header() {
           ))}
         </div>
 
-        <motion.div
-          className="hidden md:flex"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <a
-            href="https://www.linkedin.com/company/elevateyour-career/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 bg-customer-purple text-white px-6 py-2 rounded-lg hover:bg-customer-purple/90 transition-colors duration-200 font-medium"
-          >
-            <FaLinkedin className="text-lg" />
-            Join Community
-          </a>
+        <motion.div className="hidden md:flex items-center gap-3">
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <a
+              href="https://www.linkedin.com/company/elevateyour-career/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 bg-customer-purple text-white px-6 py-2 rounded-lg hover:bg-customer-purple/90 transition-colors duration-200 font-medium"
+            >
+              <FaLinkedin className="text-lg" />
+              Join Community
+            </a>
+          </motion.div>
+          <UserGreeting />
         </motion.div>
 
         <motion.button
@@ -180,8 +180,9 @@ export default function Header() {
                   <motion.div
                     variants={itemVariants}
                     transition={{ delay: NAV_LINKS.length * 0.1 }}
-                    className="pt-6 border-t border-gray-200"
+                    className="pt-6 border-t border-gray-200 space-y-3"
                   >
+                    <UserGreeting mobile />
                     <a
                       href="https://www.linkedin.com/company/elevateyour-career/"
                       target="_blank"
@@ -202,4 +203,3 @@ export default function Header() {
     </header>
   );
 }
-

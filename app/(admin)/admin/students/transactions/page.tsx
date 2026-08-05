@@ -1,17 +1,22 @@
-import { HiOutlineUsers } from "react-icons/hi";
-
+import { HiOutlineCreditCard } from "react-icons/hi";
 import Header from "@/app/_components/Header";
 import { Pagination } from "@/app/_components/Pagination";
 import { StudentsSubNav } from "@/app/(admin)/_components/StudentsSubNav";
 import {
-  StudentListService,
-  formatStudentJoinDate,
-  formatStudentTotalPaid,
-} from "@/lib/services/admin/students/student-list-service";
+  PaymentTransactionService,
+  formatTxAmount,
+  formatTxDate,
+} from "@/lib/services/admin/students/payment-transaction-service";
 
-const PAGE_SIZE = 15;
+const PAGE_SIZE = 20;
 
-export default async function StudentListPage({
+const STATUS_STYLES: Record<string, string> = {
+  paid: "bg-emerald-100 text-emerald-700",
+  refunded: "bg-amber-100 text-amber-700",
+  failed: "bg-red-100 text-red-600",
+};
+
+export default async function PaymentTransactionsPage({
   searchParams,
 }: {
   searchParams: Promise<{ page?: string }>;
@@ -19,14 +24,19 @@ export default async function StudentListPage({
   const { page: pageParam } = await searchParams;
   const page = Math.max(1, parseInt(pageParam ?? "1", 10) || 1);
 
-  const students = await StudentListService.getStudentList();
+  const transactions = await PaymentTransactionService.getAll();
 
-  const totalEnrolled = students.filter((s) => s.enrollmentCount > 0).length;
-  const totalRevenue = students.reduce((sum, s) => sum + s.totalPaid, 0);
+  const totalRevenue = transactions
+    .filter((t) => t.status === "paid")
+    .reduce((sum, t) => sum + t.amount, 0);
 
-  const totalPages = Math.ceil(students.length / PAGE_SIZE);
+  const totalRefunded = transactions
+    .filter((t) => t.status === "refunded")
+    .reduce((sum, t) => sum + t.amount, 0);
+
+  const totalPages = Math.ceil(transactions.length / PAGE_SIZE);
   const safePage = Math.max(1, Math.min(page, totalPages));
-  const pageStudents = students.slice(
+  const pageRows = transactions.slice(
     (safePage - 1) * PAGE_SIZE,
     safePage * PAGE_SIZE,
   );
@@ -34,50 +44,49 @@ export default async function StudentListPage({
   return (
     <div className="mx-auto w-full max-w-6xl">
       <Header
-        title="Student List"
-        description="View all registered student accounts, their enrollment counts, and total spent."
+        title="Payment Transactions"
+        description="Full history of every individual Paystack payment, including refunds."
       />
       <StudentsSubNav />
 
       {/* Summary stats */}
-      <div className="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div className="rounded-xl border border-neutral-200 bg-white px-5 py-4 shadow-sm">
           <p className="text-xs font-semibold uppercase tracking-wider text-neutral-400">
-            Total Registered
+            Total Transactions
           </p>
           <p className="mt-1 text-2xl font-bold text-customer-teal">
-            {students.length}
+            {transactions.length}
           </p>
         </div>
         <div className="rounded-xl border border-neutral-200 bg-white px-5 py-4 shadow-sm">
           <p className="text-xs font-semibold uppercase tracking-wider text-neutral-400">
-            With Enrollments
-          </p>
-          <p className="mt-1 text-2xl font-bold text-customer-purple">
-            {totalEnrolled}
-          </p>
-        </div>
-        <div className="rounded-xl border border-neutral-200 bg-white px-5 py-4 shadow-sm">
-          <p className="text-xs font-semibold uppercase tracking-wider text-neutral-400">
-            Total Revenue
+            Total Collected
           </p>
           <p className="mt-1 text-2xl font-bold text-customer-charcoal">
-            {formatStudentTotalPaid(totalRevenue)}
+            {formatTxAmount(totalRevenue)}
+          </p>
+        </div>
+        <div className="rounded-xl border border-neutral-200 bg-white px-5 py-4 shadow-sm">
+          <p className="text-xs font-semibold uppercase tracking-wider text-neutral-400">
+            Total Refunded
+          </p>
+          <p className="mt-1 text-2xl font-bold text-amber-600">
+            {formatTxAmount(totalRefunded) || "—"}
           </p>
         </div>
       </div>
 
-      {/* Student table */}
-      {students.length === 0 ? (
+      {transactions.length === 0 ? (
         <section className="rounded-2xl border border-dashed border-neutral-300 bg-white px-6 py-16 text-center shadow-sm">
           <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-neutral-100 text-neutral-400">
-            <HiOutlineUsers className="h-7 w-7" aria-hidden />
+            <HiOutlineCreditCard className="h-7 w-7" aria-hidden />
           </div>
           <h2 className="mt-4 text-lg font-bold text-customer-teal">
-            No students yet
+            No transactions yet
           </h2>
           <p className="mx-auto mt-2 max-w-md text-sm text-neutral-600">
-            Student accounts will appear here once people sign up for ASCS.
+            Paystack payment transactions will appear here as students enroll.
           </p>
         </section>
       ) : (
@@ -90,44 +99,53 @@ export default async function StudentListPage({
                     Student
                   </th>
                   <th className="px-4 py-3 font-semibold text-customer-charcoal sm:px-6">
-                    Joined
+                    Course
                   </th>
                   <th className="px-4 py-3 font-semibold text-customer-charcoal sm:px-6">
-                    Courses
+                    Reference
                   </th>
                   <th className="px-4 py-3 font-semibold text-customer-charcoal sm:px-6">
-                    Total Paid
+                    Amount
+                  </th>
+                  <th className="px-4 py-3 font-semibold text-customer-charcoal sm:px-6">
+                    Status
+                  </th>
+                  <th className="px-4 py-3 font-semibold text-customer-charcoal sm:px-6">
+                    Date
                   </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-neutral-100">
-                {pageStudents.map((student) => (
-                  <tr key={student.id} className="hover:bg-neutral-50/80">
+                {pageRows.map((tx) => (
+                  <tr key={tx.id} className="hover:bg-neutral-50/80">
                     <td className="px-4 py-4 sm:px-6">
                       <p className="font-semibold text-customer-charcoal">
-                        {student.fullName}
+                        {tx.studentName}
                       </p>
                       <p className="mt-0.5 text-xs text-neutral-500">
-                        {student.email}
+                        {tx.studentEmail}
                       </p>
                     </td>
                     <td className="px-4 py-4 text-neutral-600 sm:px-6">
-                      {formatStudentJoinDate(student.joinedAt)}
+                      {tx.courseTitle}
                     </td>
                     <td className="px-4 py-4 sm:px-6">
-                      {student.enrollmentCount > 0 ? (
-                        <span className="inline-flex items-center rounded-full bg-customer-teal/10 px-2.5 py-1 text-xs font-semibold text-customer-teal">
-                          {student.enrollmentCount}{" "}
-                          {student.enrollmentCount === 1 ? "course" : "courses"}
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center rounded-full bg-neutral-100 px-2.5 py-1 text-xs font-medium text-neutral-500">
-                          Not enrolled
-                        </span>
-                      )}
+                      <span className="font-mono text-xs text-neutral-500">
+                        {tx.paystackRef}
+                      </span>
                     </td>
                     <td className="px-4 py-4 font-semibold text-customer-purple sm:px-6">
-                      {formatStudentTotalPaid(student.totalPaid)}
+                      {formatTxAmount(tx.amount)}
+                    </td>
+                    <td className="px-4 py-4 sm:px-6">
+                      <span
+                        className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold capitalize ${STATUS_STYLES[tx.status] ?? "bg-neutral-100 text-neutral-600"}`}
+                      >
+                        {tx.status}
+                      </span>
+                    </td>
+                    <td className="px-4 py-4 text-neutral-500 sm:px-6">
+                      {formatTxDate(tx.createdAt)}
                     </td>
                   </tr>
                 ))}
@@ -137,7 +155,7 @@ export default async function StudentListPage({
           <Pagination
             page={safePage}
             totalPages={totalPages}
-            basePath="/admin/students/list"
+            basePath="/admin/students/transactions"
           />
         </div>
       )}

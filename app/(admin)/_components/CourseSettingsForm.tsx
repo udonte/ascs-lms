@@ -27,7 +27,10 @@ function parsePriceForInput(price: AdminCourseDetail["price"]): number {
   return Number.isFinite(n) ? n : 0;
 }
 
-export function CourseSettingsForm({ course, hasQuiz }: CourseSettingsFormProps) {
+export function CourseSettingsForm({
+  course,
+  hasQuiz,
+}: CourseSettingsFormProps) {
   const [state, formAction, pending] = useActionState(
     updateCourseAction,
     initialState,
@@ -153,7 +156,7 @@ export function CourseSettingsForm({ course, hasQuiz }: CourseSettingsFormProps)
         <button
           type="submit"
           disabled={pending}
-          className="w-full rounded-lg bg-customer-teal px-4 py-2.5 text-sm font-semibold text-customer-cream transition hover:bg-customer-teal/90 disabled:opacity-60"
+          className="w-full rounded-lg bg-customer-teal px-4 py-2.5 text-sm font-semibold text-customer-cream transition hover:bg-customer-teal/90 disabled:opacity-60 cursor-pointer"
         >
           {pending ? "Saving…" : "Save course settings"}
         </button>

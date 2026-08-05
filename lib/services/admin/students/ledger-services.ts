@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import {
   canAccessAdminRoute,
   getProfileRole,
@@ -125,7 +126,9 @@ export const LedgerService = {
   },
 
   /**
-   * Fetches the 5 most recent enrollments for the admin dashboard overview.
+   * Fetches the 5 most recent individual payment events for the admin dashboard overview.
+   * Pulls from paystack_transactions (not enrollments) so each payment is a row —
+   * including accidental double payments and refunds.
    */
   async getRecentTransactions(): Promise<StudentLedgerRow[]> {
     const supabase = await createClient();
@@ -136,13 +139,15 @@ export const LedgerService = {
       return [];
     }
 
-    const { data, error } = await supabase
-      .from("enrollments")
+    // Use adminClient to bypass RLS on paystack_transactions
+    const adminClient = createAdminClient();
+    const { data, error } = await adminClient
+      .from("paystack_transactions")
       .select(
         `
         id,
         status,
-        amount_paid,
+        amount,
         created_at,
         course:courses(title),
         profile:profiles!user_id(full_name, email)
@@ -156,7 +161,19 @@ export const LedgerService = {
       return [];
     }
 
-    return (data ?? []).map(normalizeLedgerRow);
+    return (data ?? []).map((row) => {
+      const course = embedOne(row.course as LedgerCourseJoin | LedgerCourseJoin[] | null);
+      const profile = embedOne(row.profile as LedgerProfileJoin | LedgerProfileJoin[] | null);
+      return {
+        id: row.id,
+        status: row.status,
+        amount_paid: row.amount,
+        created_at: row.created_at,
+        studentName: profile?.full_name?.trim() || "Unknown student",
+        studentEmail: profile?.email?.trim() || "—",
+        courseTitle: course?.title?.trim() || "Unknown course",
+      };
+    });
   },
 
   /**

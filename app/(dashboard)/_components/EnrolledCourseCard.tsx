@@ -42,7 +42,10 @@ export function EnrolledCourseCard({ course }: EnrolledCourseCardProps) {
 
         <div className="mt-3 flex flex-wrap gap-2">
           <span className="inline-flex items-center gap-2 rounded-full bg-neutral-100 px-3 py-1 text-xs font-semibold text-neutral-700">
-            <span className="h-2 w-2 rounded-full bg-customer-teal" aria-hidden />
+            <span
+              className="h-2 w-2 rounded-full bg-customer-teal"
+              aria-hidden
+            />
             {course.progressPercent}% complete
           </span>
 
@@ -50,22 +53,34 @@ export function EnrolledCourseCard({ course }: EnrolledCourseCardProps) {
             <span className="inline-flex items-center gap-1.5 rounded-full bg-neutral-100 px-3 py-1 text-xs font-semibold text-neutral-700">
               {course.progressPercent < 100 ? (
                 <>
-                  <HiOutlineLockClosed className="h-4 w-4 text-neutral-500" aria-hidden />
+                  <HiOutlineLockClosed
+                    className="h-4 w-4 text-neutral-500"
+                    aria-hidden
+                  />
                   Assessment locked
                 </>
               ) : course.quizAttempt?.passed ? (
                 <>
-                  <HiOutlineCheckCircle className="h-4 w-4 text-emerald-600" aria-hidden />
+                  <HiOutlineCheckCircle
+                    className="h-4 w-4 text-emerald-600"
+                    aria-hidden
+                  />
                   Passed
                 </>
               ) : course.quizAttempt ? (
                 <>
-                  <HiOutlineExclamationCircle className="h-4 w-4 text-amber-600" aria-hidden />
+                  <HiOutlineExclamationCircle
+                    className="h-4 w-4 text-amber-600"
+                    aria-hidden
+                  />
                   Not passed
                 </>
               ) : (
                 <>
-                  <HiOutlineAcademicCap className="h-4 w-4 text-customer-gold" aria-hidden />
+                  <HiOutlineAcademicCap
+                    className="h-4 w-4 text-customer-gold"
+                    aria-hidden
+                  />
                   Assessment ready
                 </>
               )}
@@ -82,7 +97,7 @@ export function EnrolledCourseCard({ course }: EnrolledCourseCardProps) {
             href={resumeHref}
             className="mt-5 block w-full rounded-lg bg-customer-gold py-3 text-center text-sm font-semibold text-customer-charcoal shadow-sm transition hover:bg-customer-gold/90"
           >
-            Resume Learning
+            Continue Learning
           </Link>
         ) : (
           <div className="mt-5 w-full rounded-lg bg-neutral-100 py-3 text-center text-sm font-semibold text-neutral-500">

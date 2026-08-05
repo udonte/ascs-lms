@@ -17,17 +17,17 @@ export default function RecentTransactionsTable({
 }: RecentTransactionsTableProps) {
   return (
     <section className="mt-8 overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-sm">
-      <div className="flex items-center justify-between border-b border-neutral-100 px-6 py-5">
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-2 border-b border-neutral-100 px-4 py-3 md:px-6 md:py-5">
         <div>
           <h2 className="text-lg font-semibold text-customer-teal">
             Recent Transactions
           </h2>
           <p className="mt-1 text-sm text-customer-charcoal">
-            The 5 most recent enrollment activities.
+            The 5 most recent payment transactions
           </p>
         </div>
         <Link
-          href="/admin/students"
+          href="/admin/students/transactions"
           className="inline-flex items-center gap-1.5 rounded-lg border border-neutral-300 px-3 py-2 text-sm font-medium text-neutral-700 transition hover:bg-neutral-50"
         >
           View all

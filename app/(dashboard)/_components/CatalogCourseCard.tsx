@@ -55,7 +55,7 @@ export function CatalogCourseCard({ course }: CatalogCourseCardProps) {
             href="/dashboard"
             className="mt-5 block w-full rounded-lg border-2 border-customer-teal py-3 text-center text-sm font-semibold text-customer-teal transition hover:bg-customer-teal/5"
           >
-            Already Enrolled →
+            Access Enrolled Course
           </Link>
         ) : (
           <Link
@@ -73,7 +73,7 @@ export function CatalogCourseCard({ course }: CatalogCourseCardProps) {
               href={`/courses/${course.slug}`}
               className="flex-1 rounded-lg border border-neutral-200 py-2.5 text-center text-xs font-medium text-neutral-500 transition hover:border-customer-teal/40 hover:text-customer-teal"
             >
-              View Details
+              View Course Details
             </Link>
             <ShareCourseButton courseTitle={course.title} slug={course.slug} />
           </div>

@@ -25,6 +25,7 @@ import {
 } from "react-icons/hi2";
 import { FaArrowRight } from "react-icons/fa";
 import Button from "../../_components/ui/Button";
+import BackButton from "@/app/_components/BackButton";
 
 /* ─── Types ────────────────────────────────────────────────────────────────── */
 
@@ -136,48 +137,12 @@ export default async function CourseDetailPage({ params }: Props) {
           <div className="pointer-events-none absolute -bottom-32 -left-16 h-80 w-80 rounded-full bg-white/5 blur-3xl" />
 
           <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-center justify-end">
+              <BackButton label="Go Back" className="" />
+            </div>
             <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
               {/* Left — copy */}
               <div>
-                {/* Breadcrumb */}
-                <nav aria-label="breadcrumb" className="mb-6">
-                  <ol className="flex items-center gap-2 text-sm text-white/60">
-                    <li>
-                      <Link href="/" className="transition hover:text-white">
-                        Home
-                      </Link>
-                    </li>
-                    <li className="text-white/40">/</li>
-                    <li>
-                      <Link
-                        href="/courses"
-                        className="transition hover:text-white"
-                      >
-                        Courses
-                      </Link>
-                    </li>
-                    <li className="text-white/40">/</li>
-                    <li className="text-white/80 line-clamp-1">
-                      {course.title}
-                    </li>
-                  </ol>
-                </nav>
-                <div className="flex flex-col sm:flex-row items-center lg:items-start gap-1 lg:gap-4 mb-4">
-                  {/* Badge */}
-                  <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#FFCC00]/30 bg-[#FFCC00]/10 px-4 py-1.5">
-                    <FaCertificate className="text-[#FFCC00]" />
-                    <span className="text-sm font-semibold text-[#FFCC00]">
-                      ASCS™ Certified Program
-                    </span>
-                  </div>
-
-                  <ShareCourseButton
-                    courseTitle={course.title}
-                    slug={course.slug ?? slug}
-                    className="border-white/20 text-white/70 hover:border-white/40 hover:text-white bg-blue-400 text-center"
-                  />
-                </div>
-
                 <h1 className="mb-6 font-playfair font-bold text-white text-2xl md:text-3xl leading-tight sm:text-4xl lg:text-5xl text-center lg:text-left">
                   {course.title}
                 </h1>
@@ -191,7 +156,12 @@ export default async function CourseDetailPage({ params }: Props) {
                 {/* CTA group */}
 
                 <div className="flex flex-col sm:flex-row items-center lg:items-start gap-2">
-                  <Button variant="primary" size="lg" href={checkoutHref}>
+                  <Button
+                    variant="primary"
+                    size="lg"
+                    href={checkoutHref}
+                    className="animate animate-pulse duration-500 transition-all"
+                  >
                     {isFree
                       ? "Enroll for Free"
                       : `Enroll Now for ${priceLabel}`}
@@ -425,11 +395,14 @@ export default async function CourseDetailPage({ params }: Props) {
                   </div>
                   <ul className="divide-y divide-gray-100">
                     {courseData.standards.map((std, i) => (
-                      <li key={i} className="flex items-start gap-4 px-6 py-4">
+                      <li
+                        key={i}
+                        className="flex items-start gap-4 px-3 py-2 md:px-6 md:py-4"
+                      >
                         <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-customer-gold/15 text-xs font-bold text-customer-gold">
                           ✓
                         </span>
-                        <p className="text-sm leading-relaxed text-gray-700">
+                        <p className="text-xs md:text-sm leading-relaxed text-gray-700">
                           {std}
                         </p>
                       </li>

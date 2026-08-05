@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { HiOutlineClipboardList, HiOutlineUsers } from "react-icons/hi";
+import { HiOutlineClipboardList, HiOutlineCreditCard, HiOutlineUsers } from "react-icons/hi";
 
 const tabs = [
   {
@@ -15,6 +15,12 @@ const tabs = [
     href: "/admin/students/list",
     label: "All Students",
     icon: HiOutlineUsers,
+    exact: false,
+  },
+  {
+    href: "/admin/students/transactions",
+    label: "Transactions",
+    icon: HiOutlineCreditCard,
     exact: false,
   },
 ];
@@ -32,12 +38,12 @@ export function StudentsSubNav() {
             href={href}
             className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition ${
               active
-                ? "bg-white text-customer-teal shadow-sm"
-                : "text-neutral-500 hover:text-customer-charcoal"
+                ? "bg-customer-purple text-white shadow-sm"
+                : "text-neutral-500 hover:text-customer-purple hover:bg-customer-purple/10"
             }`}
           >
             <Icon className="h-4 w-4" aria-hidden />
-            {label}
+            <span className="hidden md:block">{label}</span>
           </Link>
         );
       })}

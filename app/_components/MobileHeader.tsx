@@ -16,6 +16,7 @@ const PAGE_TITLES: Record<string, string> = {
   "/admin": "Performance Insights",
   "/admin/courses": "Content Manager",
   "/admin/students": "Student Enrollment",
+  "/admin/students/list": "Student List",
   "/admin/quizzes": "Quiz Builder",
 };
 

@@ -190,4 +190,34 @@ export const QuizService = {
 
     return (count ?? 0) > 0;
   },
+  /**
+   * Fetches a single quiz by its UUID for the edit page.
+   */
+  async getQuizById(quizId: string): Promise<AdminQuizRow | null> {
+    const supabase = await createClient();
+
+    try {
+      await assertStaff(supabase);
+    } catch {
+      return null;
+    }
+
+    const { data, error } = await supabase
+      .from("quizzes")
+      .select(
+        `
+        id,
+        course_id,
+        title,
+        passing_score,
+        questions,
+        course:courses(title)
+      `,
+      )
+      .eq("id", quizId)
+      .maybeSingle();
+
+    if (error || !data) return null;
+    return normalizeQuizRow(data);
+  },
 };

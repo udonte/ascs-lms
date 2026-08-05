@@ -33,11 +33,11 @@ export default async function Header({
   return (
     <header className="sticky -top-8 z-30 mb-6 hidden items-start justify-between gap-6 border-b border-neutral-200/80 bg-[#F9FAFB] py-3 backdrop-blur-xs md:flex h-full">
       <div className="min-w-0 flex-1">
-        <h1 className="text-2xl font-bold text-customer-teal lg:text-3xl">
+        <h1 className="text-2xl  font-bold text-customer-teal lg:text-3xl">
           {title}
         </h1>
         {description ? (
-          <p className="mt-1 max-w-3xl text-sm text-neutral-600">
+          <p className="font-playfair italic mt-1 max-w-3xl text-sm text-neutral-600">
             {description}
           </p>
         ) : null}

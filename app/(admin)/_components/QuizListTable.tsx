@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
 import type { AdminQuizRow } from "@/lib/services/admin/quizzes/quiz-service";
 
@@ -7,14 +8,12 @@ const PAGE_SIZE = 15;
 
 type QuizListTableProps = {
   quizzes: AdminQuizRow[];
-  onEdit: (quiz: AdminQuizRow) => void;
   page: number;
   onPageChange: (page: number) => void;
 };
 
 export function QuizListTable({
   quizzes,
-  onEdit,
   page,
   onPageChange,
 }: QuizListTableProps) {
@@ -69,7 +68,7 @@ export function QuizListTable({
                 <td className="px-4 py-4 text-customer-charcoal sm:px-6">
                   {quiz.courseTitle}
                 </td>
-                <td className="px-4 py-4 sm:px-6">
+                <td className="px-2 py-4 md:px-6">
                   <span className="inline-flex rounded-full bg-customer-purple/10 px-3 py-1 text-xs font-semibold text-customer-purple">
                     {quiz.passing_score}% to Pass
                   </span>
@@ -80,13 +79,12 @@ export function QuizListTable({
                     : `${quiz.questionCount} questions`}
                 </td>
                 <td className="px-4 py-4 sm:px-6">
-                  <button
-                    type="button"
-                    onClick={() => onEdit(quiz)}
+                  <Link
+                    href={`/admin/quizzes/${quiz.id}`}
                     className="rounded-lg border border-customer-teal px-3 py-1.5 text-xs font-semibold text-customer-teal transition hover:bg-customer-teal hover:text-customer-cream"
                   >
                     Edit quiz
-                  </button>
+                  </Link>
                 </td>
               </tr>
             ))}

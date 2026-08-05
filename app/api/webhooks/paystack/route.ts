@@ -9,6 +9,9 @@ import {
 /**
  * POST /api/webhooks/paystack
  * Secure background endpoint handling automatic course access delivery upon payment confirmation.
+ *
+ * Idempotency: each paystack_ref is recorded in paystack_transactions with a UNIQUE constraint.
+ * If Paystack retries the same webhook, the duplicate ref insert fails gracefully and we return 200.
  */
 export async function POST(request: Request) {
   try {
@@ -64,6 +67,59 @@ export async function POST(request: Request) {
         );
       }
 
+      if (!paystackRef) {
+        console.error("❌ Webhook missing payment reference.");
+        return NextResponse.json(
+          { error: "Missing payment reference" },
+          { status: 400 },
+        );
+      }
+
+      const adminClient = createAdminClient();
+
+      // 5. Idempotency check — if this ref was already processed, skip silently.
+      //    This handles Paystack retries (same webhook fired 2× due to network issues).
+      const { data: existingTx } = await adminClient
+        .from("paystack_transactions")
+        .select("id")
+        .eq("paystack_ref", paystackRef)
+        .maybeSingle();
+
+      if (existingTx) {
+        console.log(
+          `⏭️ Duplicate webhook for ref ${paystackRef} — already processed, skipping.`,
+        );
+        return NextResponse.json({ received: true }, { status: 200 });
+      }
+
+      // 6. Record this transaction (UNIQUE on paystack_ref guards against race conditions)
+      const { error: txError } = await adminClient
+        .from("paystack_transactions")
+        .insert({
+          paystack_ref: paystackRef,
+          user_id: userId,
+          course_id: courseId,
+          amount: amountPaid,
+          status: "paid",
+        });
+
+      if (txError) {
+        // If the insert fails due to UNIQUE violation (race condition on concurrent delivery),
+        // it means another request already processed this ref — return 200.
+        if (txError.code === "23505") {
+          console.log(
+            `⏭️ Race-condition duplicate for ref ${paystackRef} — skipping.`,
+          );
+          return NextResponse.json({ received: true }, { status: 200 });
+        }
+        console.error("❌ Failed to record transaction:", txError.message);
+        return NextResponse.json(
+          { error: "Transaction recording failed" },
+          { status: 500 },
+        );
+      }
+
+      // 7. Fulfill the enrollment (upsert — idempotent on user_id + course_id)
       try {
         await fulfillPaidEnrollment(
           {
@@ -73,7 +129,7 @@ export async function POST(request: Request) {
             paystack_ref: paystackRef,
             payment_gateway: "paystack",
           },
-          createAdminClient(),
+          adminClient,
         );
       } catch (fulfillError) {
         const message =
@@ -88,14 +144,15 @@ export async function POST(request: Request) {
       }
 
       console.log(
-        `✅ Course ${courseId} unlocked successfully for Student ${userId}`,
+        `✅ Course ${courseId} unlocked for Student ${userId} (ref: ${paystackRef})`,
       );
     }
 
-    // Paystack expects a clean 200 OK statement within 2 seconds to close out hooks
+    // Paystack expects a clean 200 OK within 5 seconds to acknowledge delivery
     return NextResponse.json({ received: true }, { status: 200 });
-  } catch (error: any) {
-    console.error("❌ Webhook runtime crash exception handler:", error.message);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Unknown error";
+    console.error("❌ Webhook runtime crash:", message);
     return NextResponse.json(
       { error: "Internal pipeline error" },
       { status: 500 },

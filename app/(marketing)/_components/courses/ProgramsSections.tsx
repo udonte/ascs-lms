@@ -412,7 +412,7 @@ export default function ProgramsSections({
                             href={program.detailHref}
                             className="block w-full rounded-xl border border-customer-charcoal/20 py-2.5 text-center text-sm font-semibold text-customer-charcoal transition hover:border-customer-gold hover:text-customer-gold"
                           >
-                            View Details
+                            View Course Details
                           </Link>
                         )}
                       </div>

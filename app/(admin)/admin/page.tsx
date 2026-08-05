@@ -29,7 +29,7 @@ export default async function AdminPerformancePage() {
         title="Performance Insights"
         description="A snapshot of key performance metrics for the ASCS LMS."
       />
-      <section className="rounded-lg border border-neutral-200 bg-white p-6">
+      <section className="rounded-lg border border-neutral-200 bg-white p-3 lg:p-6">
         <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
           <StatCard
             label="Total Revenue"
