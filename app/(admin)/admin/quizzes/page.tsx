@@ -15,7 +15,7 @@ export default async function QuizBuilderPage() {
   }));
 
   return (
-    <div className="mx-auto w-full max-w-6xl">
+    <div className="mx-auto w-full">
       <Header
         title="Quiz Builder"
         description="Build and manage course assessments to evaluate student completion."

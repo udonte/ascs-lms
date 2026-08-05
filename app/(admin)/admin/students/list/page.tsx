@@ -6,7 +6,6 @@ import { StudentsSubNav } from "@/app/(admin)/_components/StudentsSubNav";
 import {
   StudentListService,
   formatStudentJoinDate,
-  formatStudentTotalPaid,
 } from "@/lib/services/admin/students/student-list-service";
 
 const PAGE_SIZE = 15;
@@ -30,6 +29,15 @@ export default async function StudentListPage({
     (safePage - 1) * PAGE_SIZE,
     safePage * PAGE_SIZE,
   );
+
+  function formatCurrency(value: number) {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "NGN",
+      currencyDisplay: "narrowSymbol",
+      maximumFractionDigits: 0,
+    }).format(value);
+  }
 
   return (
     <div className="mx-auto w-full max-w-6xl">
@@ -62,7 +70,7 @@ export default async function StudentListPage({
             Total Revenue
           </p>
           <p className="mt-1 text-2xl font-bold text-customer-charcoal">
-            {formatStudentTotalPaid(totalRevenue)}
+            {formatCurrency(totalRevenue)}
           </p>
         </div>
       </div>
@@ -127,7 +135,7 @@ export default async function StudentListPage({
                       )}
                     </td>
                     <td className="px-4 py-4 font-semibold text-customer-purple sm:px-6">
-                      {formatStudentTotalPaid(student.totalPaid)}
+                      {formatCurrency(student.totalPaid)}
                     </td>
                   </tr>
                 ))}

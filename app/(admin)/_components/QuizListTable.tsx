@@ -40,7 +40,7 @@ export function QuizListTable({
     <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm">
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-neutral-200 text-left text-sm">
-          <thead className="bg-neutral-50">
+          <thead className="bg-customer-gold/10">
             <tr>
               <th className="px-4 py-3 font-semibold text-customer-charcoal sm:px-6">
                 Quiz

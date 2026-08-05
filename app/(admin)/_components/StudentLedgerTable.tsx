@@ -27,6 +27,14 @@ export function StudentLedgerTable({ rows, page }: StudentLedgerTableProps) {
       </section>
     );
   }
+  function formatCurrency(value: number) {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "NGN",
+      currencyDisplay: "narrowSymbol",
+      maximumFractionDigits: 0,
+    }).format(value);
+  }
 
   const totalPages = Math.ceil(rows.length / PAGE_SIZE);
   const safePage = Math.max(1, Math.min(page, totalPages));
@@ -76,7 +84,7 @@ export function StudentLedgerTable({ rows, page }: StudentLedgerTableProps) {
                   <LedgerStatusBadge status={row.status} />
                 </td>
                 <td className="px-4 py-4 font-semibold text-customer-purple sm:px-6">
-                  {formatLedgerAmount(row.amount_paid)}
+                  {formatCurrency(Number(row.amount_paid))}
                 </td>
               </tr>
             ))}

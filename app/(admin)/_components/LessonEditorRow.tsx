@@ -70,9 +70,11 @@ export function LessonEditorRow({
         <button
           type="button"
           onClick={() => setExpanded((value) => !value)}
-          className="min-w-0 flex-1 text-left"
+          className="min-w-0 flex-1 text-left cursor-pointer hover:bg-customer-gold/10 transition-colors duration-200 px-3 py-2 rounded-lg"
         >
-          <p className="font-semibold text-customer-charcoal">{lesson.title}</p>
+          <p className="font-semibold text-customer-charcoal ">
+            {lesson.title}
+          </p>
           <p className="mt-0.5 text-xs text-neutral-500">
             {lesson.video_url ? "Video linked" : "No video yet"}
             {lesson.content_body ? " · Has content" : ""}

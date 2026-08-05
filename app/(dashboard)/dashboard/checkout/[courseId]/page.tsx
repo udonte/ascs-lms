@@ -66,9 +66,7 @@ export default async function CheckoutPage({
           {preview.title}
         </h1>
         {preview.description ? (
-          <p className="mt-2 text-sm text-neutral-600 line-clamp-3">
-            {preview.description}
-          </p>
+          <p className="mt-2 text-sm text-neutral-600">{preview.description}</p>
         ) : null}
 
         <div className="mt-6 flex items-center justify-between rounded-xl bg-customer-purple/5 px-4 py-3">

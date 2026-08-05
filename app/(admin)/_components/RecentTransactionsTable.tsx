@@ -15,6 +15,14 @@ type RecentTransactionsTableProps = {
 export default function RecentTransactionsTable({
   rows,
 }: RecentTransactionsTableProps) {
+  function formatCurrency(value: number) {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "NGN",
+      currencyDisplay: "narrowSymbol",
+      maximumFractionDigits: 0,
+    }).format(value);
+  }
   return (
     <section className="mt-8 overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-sm">
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-2 border-b border-neutral-100 px-4 py-3 md:px-6 md:py-5">
@@ -70,7 +78,7 @@ export default function RecentTransactionsTable({
                     {row.courseTitle}
                   </td>
                   <td className="px-6 py-4 font-semibold text-customer-purple">
-                    {formatLedgerAmount(row.amount_paid)}
+                    {formatCurrency(Number(row.amount_paid))}
                   </td>
                   <td className="px-6 py-4">
                     <LedgerStatusBadge status={row.status} />

@@ -11,7 +11,9 @@ type QuizBuilderPageProps = {
   params: Promise<{ quizId: string }>;
 };
 
-export default async function QuizBuilderPage({ params }: QuizBuilderPageProps) {
+export default async function QuizBuilderPage({
+  params,
+}: QuizBuilderPageProps) {
   const { quizId } = await params;
   const isNew = quizId === "new";
 
@@ -25,7 +27,7 @@ export default async function QuizBuilderPage({ params }: QuizBuilderPageProps) 
   }
 
   return (
-    <div className="mx-auto w-full max-w-3xl">
+    <div className="">
       <div className="mb-4">
         <Link
           href="/admin/quizzes"

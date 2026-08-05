@@ -41,6 +41,16 @@ export default async function PaymentTransactionsPage({
     safePage * PAGE_SIZE,
   );
 
+  function formatCurrency(value: number) {
+    if (value <= 0) return "—";
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "NGN",
+      currencyDisplay: "narrowSymbol",
+      maximumFractionDigits: 0,
+    }).format(value);
+  }
+
   return (
     <div className="mx-auto w-full max-w-6xl">
       <Header
@@ -64,7 +74,7 @@ export default async function PaymentTransactionsPage({
             Total Collected
           </p>
           <p className="mt-1 text-2xl font-bold text-customer-charcoal">
-            {formatTxAmount(totalRevenue)}
+            {formatCurrency(totalRevenue)}
           </p>
         </div>
         <div className="rounded-xl border border-neutral-200 bg-white px-5 py-4 shadow-sm">
@@ -72,7 +82,7 @@ export default async function PaymentTransactionsPage({
             Total Refunded
           </p>
           <p className="mt-1 text-2xl font-bold text-amber-600">
-            {formatTxAmount(totalRefunded) || "—"}
+            {formatCurrency(totalRefunded) || "—"}
           </p>
         </div>
       </div>
@@ -135,7 +145,7 @@ export default async function PaymentTransactionsPage({
                       </span>
                     </td>
                     <td className="px-4 py-4 font-semibold text-customer-purple sm:px-6">
-                      {formatTxAmount(tx.amount)}
+                      {formatCurrency(tx.amount)}
                     </td>
                     <td className="px-4 py-4 sm:px-6">
                       <span

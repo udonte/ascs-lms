@@ -12,7 +12,8 @@ import Header from "@/app/_components/Header";
 function formatCurrency(value: number) {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "USD",
+    currency: "NGN",
+    currencyDisplay: "narrowSymbol",
     maximumFractionDigits: 0,
   }).format(value);
 }
