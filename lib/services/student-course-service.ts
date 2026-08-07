@@ -243,11 +243,13 @@ export const StudentCourseService = {
       .order("order_index", { ascending: true });
 
     const syllabus = (siblingLessons ?? []) as SyllabusLesson[];
+    const courseLessonIds = syllabus.map((l) => l.id);
 
     const { data: progressRecords } = await supabase
       .from("user_progress")
       .select("lesson_id")
-      .eq("user_id", user.id);
+      .eq("user_id", user.id)
+      .in("lesson_id", courseLessonIds);
 
     const completedLessonIds =
       progressRecords?.map((record) => record.lesson_id) ?? [];
@@ -294,16 +296,16 @@ export const StudentCourseService = {
     const orderedSyllabus = (syllabus ?? []) as SyllabusLesson[];
     if (orderedSyllabus.length === 0) return null;
 
+    const courseLessonIds = orderedSyllabus.map((lesson) => lesson.id);
+
     const { data: progressRecords } = await supabase
       .from("user_progress")
       .select("lesson_id")
-      .eq("user_id", user.id);
+      .eq("user_id", user.id)
+      .in("lesson_id", courseLessonIds);
 
-    const courseLessonIds = new Set(orderedSyllabus.map((lesson) => lesson.id));
     const completedLessonIds =
-      progressRecords
-        ?.map((record) => record.lesson_id)
-        .filter((lessonId) => courseLessonIds.has(lessonId)) ?? [];
+      progressRecords?.map((record) => record.lesson_id) ?? [];
 
     const completedSet = new Set(completedLessonIds);
 
@@ -455,11 +457,13 @@ export const StudentCourseService = {
       .eq("course_id", courseId)
       .order("order_index", { ascending: true });
     const syllabus = (siblingLessons ?? []) as SyllabusLesson[];
+    const courseLessonIds = syllabus.map((l) => l.id);
 
     const { data: progressRecords } = await supabase
       .from("user_progress")
       .select("lesson_id")
-      .eq("user_id", user.id);
+      .eq("user_id", user.id)
+      .in("lesson_id", courseLessonIds);
     const completedLessonIds =
       progressRecords?.map((record) => record.lesson_id) ?? [];
     const completedSet = new Set(completedLessonIds);

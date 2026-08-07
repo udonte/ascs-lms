@@ -1,8 +1,9 @@
 import { AnalyticsService } from "@/lib/services/admin/analytics/analytics-service";
 import { LedgerService } from "@/lib/services/admin/students/ledger-services";
-import { VerifyCertificateModal } from "../_components/VerifyCertificateModal";
 import StatCard from "../_components/StatCard";
 import RecentTransactionsTable from "../_components/RecentTransactionsTable";
+import EnrollmentTrendChart from "../_components/EnrollmentTrendChart";
+import CourseCompletionRates from "../_components/CourseCompletionRates";
 import { LuUsers } from "react-icons/lu";
 import { HiOutlineCreditCard } from "react-icons/hi";
 import { BiTrendingUp } from "react-icons/bi";
@@ -19,10 +20,11 @@ function formatCurrency(value: number) {
 }
 
 export default async function AdminPerformancePage() {
-  const [stats, recentTransactions] = await Promise.all([
-    AnalyticsService.getPerformanceStats(),
-    LedgerService.getRecentTransactions(),
-  ]);
+  const [{ stats, enrollmentTrend, courseCompletionRates }, recentTransactions] =
+    await Promise.all([
+      AnalyticsService.getAllInsights(),
+      LedgerService.getRecentTransactions(),
+    ]);
 
   return (
     <div>
@@ -31,6 +33,7 @@ export default async function AdminPerformancePage() {
         description="A snapshot of key performance metrics for the ASCS LMS."
       />
       <section className="rounded-lg border border-neutral-200 bg-white p-3 lg:p-6">
+        {/* ── Stat Cards ───────────────────────────────────────────── */}
         <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
           <StatCard
             label="Total Revenue"
@@ -55,7 +58,13 @@ export default async function AdminPerformancePage() {
           />
         </div>
 
+        {/* ── Recent Transactions ───────────────────────────────────── */}
         <RecentTransactionsTable rows={recentTransactions} />
+        {/* ── Trend + Completion ────────────────────────────────────── */}
+        <div className="mt-8 grid gap-2 md:gap-4 lg:grid-cols-2">
+          <EnrollmentTrendChart data={enrollmentTrend} />
+          <CourseCompletionRates courses={courseCompletionRates} />
+        </div>
       </section>
     </div>
   );
