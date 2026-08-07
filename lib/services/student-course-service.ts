@@ -46,18 +46,26 @@ export type CourseResumeContext = {
   needsContractAgreement: boolean;
 };
 
+// Full question type — used ONLY server-side for grading
 export type CourseQuizQuestion = {
   id: string;
   questionText: string;
   options: string[];
-  correctOptionIndex: number;
+  correctOptionIndex: number; // NEVER sent to client
+};
+
+// Sanitized type — safe to serialize to client (no answer key)
+export type SanitizedQuizQuestion = {
+  id: string;
+  questionText: string;
+  options: string[];
 };
 
 export type CourseQuiz = {
   courseId: string;
   title: string;
   passingScore: number;
-  questions: CourseQuizQuestion[];
+  questions: SanitizedQuizQuestion[]; // answer key stripped
 };
 
 export type QuizAttempt = {
@@ -366,11 +374,23 @@ export const StudentCourseService = {
       ? (data.questions as CourseQuizQuestion[])
       : [];
 
+    // HIGH-05 SECURITY FIX: Strip correctOptionIndex before sending to client.
+    // The answer key must never be serialized into the React payload —
+    // it would be visible in browser DevTools network tab.
+    // Grading happens server-side in submitQuizScore() which re-fetches
+    // the full questions from DB using the admin client.
+    const sanitizedQuestions: SanitizedQuizQuestion[] = questions.map((q) => ({
+      id: q.id,
+      questionText: q.questionText,
+      options: q.options,
+      // correctOptionIndex intentionally omitted
+    }));
+
     return {
       courseId: data.course_id,
       title: (data.title ?? "Final Assessment").trim(),
       passingScore: data.passing_score ?? 70,
-      questions,
+      questions: sanitizedQuestions,
     };
   },
 
@@ -496,7 +516,11 @@ export const StudentCourseService = {
       throw new Error("Complete all lessons to unlock the final assessment.");
     }
 
-    const { data: quiz, error: quizError } = await supabase
+    // HIGH-05 SECURITY FIX: Use admin client to fetch quiz with answer key.
+    // The student client never receives correctOptionIndex (stripped in getCourseQuiz),
+    // so we must re-fetch server-side with elevated privileges for grading.
+    const adminForGrading = createAdminClient();
+    const { data: quiz, error: quizError } = await adminForGrading
       .from("quizzes")
       .select("course_id, title, passing_score, questions")
       .eq("course_id", courseId)
@@ -525,7 +549,10 @@ export const StudentCourseService = {
     const passingScore = quiz.passing_score ?? 70;
     const passed = score >= passingScore;
 
-    const { error } = await supabase.from("quiz_attempts").insert({
+    // Use admin client since student write RLS on quiz_attempts is revoked
+    // (security hardening — students can only SELECT their own attempts)
+    const adminClient = createAdminClient();
+    const { error } = await adminClient.from("quiz_attempts").insert({
       user_id: user.id,
       course_id: courseId,
       score,
@@ -571,8 +598,12 @@ export const StudentCourseService = {
 
     if (!lesson) throw new Error("Lesson not found.");
 
+    // Use admin client since student write RLS on user_progress is revoked
+    // (security hardening — students can only SELECT their own progress)
+    const adminForWrite = createAdminClient();
+
     // 1. Mark this lesson complete in user_progress
-    const { error } = await supabase.from("user_progress").upsert(
+    const { error } = await adminForWrite.from("user_progress").upsert(
       {
         user_id: user.id,
         lesson_id: lessonId,

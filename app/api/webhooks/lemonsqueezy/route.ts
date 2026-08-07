@@ -80,6 +80,26 @@ export async function POST(request: Request) {
 
       // 5. Fulfill enrollment (upsert — idempotent if webhook fires twice)
       try {
+        // CRITICAL-02 FIX: Validate payment amount against catalog price.
+        const { data: course } = await adminClient
+          .from("courses")
+          .select("price")
+          .eq("id", courseId)
+          .maybeSingle();
+
+        if (course && Number(course.price) > 0) {
+          // Lemon Squeezy typically processes in USD or base currency matching the course price.
+          if (amountTotal < Number(course.price)) {
+            console.error(
+              `⚠️ Underpayment attempt detected! Received $${amountTotal} for course priced at $${course.price}.`,
+            );
+            return NextResponse.json(
+              { error: "Insufficient payment amount" },
+              { status: 400 },
+            );
+          }
+        }
+
         await fulfillPaidEnrollment(
           {
             userId,

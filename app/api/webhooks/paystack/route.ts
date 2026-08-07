@@ -77,6 +77,37 @@ export async function POST(request: Request) {
 
       const adminClient = createAdminClient();
 
+      // CRITICAL-02 FIX: Validate payment amount against catalog price.
+      // Prevents underpayment attacks where attacker initiates a ₦1 payment
+      // with a real course_id in metadata to unlock premium content.
+      const { data: course } = await adminClient
+        .from("courses")
+        .select("price")
+        .eq("id", courseId)
+        .maybeSingle();
+
+      if (course && Number(course.price) > 0) {
+        // Use a conservative floor rate to account for exchange rate fluctuation.
+        // This ensures we don't reject legitimate payments due to rate changes.
+        // Minimum rate: 1 USD = 1400 NGN (very conservative floor)
+        const EXCHANGE_RATE_FLOOR = Number(
+          process.env.EXCHANGE_RATE_FLOOR ?? 1400,
+        );
+        const minExpectedKobo = Math.floor(
+          Number(course.price) * EXCHANGE_RATE_FLOOR * 100,
+        );
+
+        if (transactionData.amount < minExpectedKobo) {
+          console.error(
+            `⚠️ Underpayment attempt detected! Received ${transactionData.amount} kobo for course priced at $${course.price} (minimum expected: ${minExpectedKobo} kobo).`,
+          );
+          return NextResponse.json(
+            { error: "Insufficient payment amount" },
+            { status: 400 },
+          );
+        }
+      }
+
       // 5. Idempotency check — if this ref was already processed, skip silently.
       //    This handles Paystack retries (same webhook fired 2× due to network issues).
       const { data: existingTx } = await adminClient

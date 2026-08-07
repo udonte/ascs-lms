@@ -346,7 +346,7 @@ export const CheckoutService = {
 
     const student = await getAuthenticatedStudent();
     if (!student) throw new Error("You must be signed in to verify payment.");
-    const { user } = student;
+    const { supabase, user } = student;
 
     const response = await fetch(
       `https://api.paystack.co/transaction/verify/${encodeURIComponent(reference)}`,
@@ -381,6 +381,28 @@ export const CheckoutService = {
     }
 
     const amountPaid = payload.data.amount / 100;
+
+    // CRITICAL-02 FIX: Validate payment amount against catalog price.
+    const { data: course } = await supabase
+      .from("courses")
+      .select("price")
+      .eq("id", resolvedCourseId)
+      .maybeSingle();
+
+    if (course && Number(course.price) > 0) {
+      const EXCHANGE_RATE_FLOOR = Number(
+        process.env.EXCHANGE_RATE_FLOOR ?? 1400,
+      );
+      const minExpectedKobo = Math.floor(
+        Number(course.price) * EXCHANGE_RATE_FLOOR * 100,
+      );
+
+      if (payload.data.amount < minExpectedKobo) {
+        throw new Error(
+          "Insufficient payment amount. Payment does not cover the course price.",
+        );
+      }
+    }
 
     await fulfillPaidEnrollment({
       userId: user.id,

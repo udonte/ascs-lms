@@ -119,6 +119,23 @@ CREATE TABLE public.lemonsqueezy_orders (
   CONSTRAINT lemonsqueezy_orders_pkey PRIMARY KEY (id)
 );
 
+-- Added: paystack transaction audit log
+CREATE TABLE public.paystack_transactions (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  paystack_ref text NOT NULL UNIQUE,
+  user_id uuid NOT NULL REFERENCES public.profiles(id),
+  course_id uuid NOT NULL REFERENCES public.courses(id),
+  amount numeric NOT NULL,
+  status text NOT NULL DEFAULT 'paid'
+    CHECK (status = ANY (ARRAY['paid','refunded','failed'])),
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  CONSTRAINT paystack_transactions_pkey PRIMARY KEY (id)
+);
+
+-- Added: course contract agreement tracking
+ALTER TABLE public.enrollments
+  ADD COLUMN IF NOT EXISTS contract_agreed_at TIMESTAMP WITH TIME ZONE;
+
 
 -- ============================================================
 -- ENABLE ROW LEVEL SECURITY
@@ -134,6 +151,7 @@ ALTER TABLE public.quiz_attempts ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.certificates ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.certificate_sequences ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.lemonsqueezy_orders ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.paystack_transactions ENABLE ROW LEVEL SECURITY;
 
 
 -- ============================================================
@@ -237,15 +255,8 @@ CREATE POLICY "enrollments_student_select_own"
 ON public.enrollments FOR SELECT TO authenticated
 USING (user_id = auth.uid());
 
--- Students can insert their own enrollments (free enrollment)
-CREATE POLICY "enrollments_student_insert_own"
-ON public.enrollments FOR INSERT TO authenticated
-WITH CHECK (user_id = auth.uid());
-
--- Students can update their own enrollments
-CREATE POLICY "enrollments_student_update_own"
-ON public.enrollments FOR UPDATE TO authenticated
-USING (user_id = auth.uid());
+-- CRITICAL-03: Student insert/update access to enrollments is revoked.
+-- All enrollments must be provisioned via admin client through secure Server Actions.
 
 -- Staff can read all enrollments
 CREATE POLICY "enrollments_staff_select_all"
@@ -296,10 +307,9 @@ USING (public.can_manage_course(course_id));
 -- RLS POLICIES — USER PROGRESS
 -- ============================================================
 
-CREATE POLICY "user_progress_student_all"
-ON public.user_progress FOR ALL TO authenticated
-USING (user_id = auth.uid())
-WITH CHECK (user_id = auth.uid());
+CREATE POLICY "user_progress_student_select_own"
+ON public.user_progress FOR SELECT TO authenticated
+USING (user_id = auth.uid());
 
 
 -- ============================================================
@@ -340,10 +350,9 @@ USING (public.can_manage_course(course_id));
 -- RLS POLICIES — QUIZ ATTEMPTS
 -- ============================================================
 
-CREATE POLICY "quiz_attempts_student_all"
-ON public.quiz_attempts FOR ALL TO authenticated
-USING (user_id = auth.uid())
-WITH CHECK (user_id = auth.uid());
+CREATE POLICY "quiz_attempts_student_select_own"
+ON public.quiz_attempts FOR SELECT TO authenticated
+USING (user_id = auth.uid());
 
 CREATE POLICY "quiz_attempts_staff_select"
 ON public.quiz_attempts FOR SELECT TO authenticated
@@ -386,6 +395,10 @@ CREATE POLICY "lemonsqueezy_orders_staff_select"
 ON public.lemonsqueezy_orders FOR SELECT TO authenticated
 USING (public.is_staff());
 
+CREATE POLICY "paystack_transactions_staff_select"
+ON public.paystack_transactions FOR SELECT TO authenticated
+USING (public.is_staff());
+
 
 -- ============================================================
 -- POSTGRES FUNCTION — generate_certificate
@@ -408,6 +421,18 @@ DECLARE
   v_cert_number  text;
   v_existing     text;
 BEGIN
+  -- SECURITY: Verify the student has a completed paid enrollment.
+  -- This prevents certificate forgery even if called directly.
+  IF NOT EXISTS (
+    SELECT 1 FROM public.enrollments
+    WHERE user_id = p_user_id
+      AND course_id = p_course_id
+      AND status = 'paid'
+      AND completed_at IS NOT NULL
+  ) THEN
+    RAISE EXCEPTION 'Unauthorized: Student has not completed course requirements for course %.', p_course_id;
+  END IF;
+
   -- 1. Idempotent: return existing certificate if already issued
   SELECT certificate_number INTO v_existing
   FROM public.certificates
@@ -450,7 +475,7 @@ BEGIN
 END;
 $$;
 
-GRANT EXECUTE ON FUNCTION public.generate_certificate(uuid, uuid) TO authenticated;
+REVOKE EXECUTE ON FUNCTION public.generate_certificate(uuid, uuid) FROM authenticated;
 GRANT EXECUTE ON FUNCTION public.generate_certificate(uuid, uuid) TO service_role;
 
 
@@ -529,3 +554,33 @@ DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
 CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+
+
+-- ============================================================
+-- CRITICAL-01: Prevent role escalation via profile updates
+-- ============================================================
+
+REVOKE UPDATE ON public.profiles FROM authenticated;
+GRANT UPDATE (full_name, email, updated_at) ON public.profiles TO authenticated;
+
+CREATE OR REPLACE FUNCTION public.protect_profile_role()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+BEGIN
+  IF OLD.role IS DISTINCT FROM NEW.role THEN
+    NEW.role := OLD.role;
+  END IF;
+  IF OLD.school_id IS DISTINCT FROM NEW.school_id THEN
+    NEW.school_id := OLD.school_id;
+  END IF;
+  RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS prevent_role_escalation ON public.profiles;
+CREATE TRIGGER prevent_role_escalation
+  BEFORE UPDATE ON public.profiles
+  FOR EACH ROW EXECUTE FUNCTION public.protect_profile_role();

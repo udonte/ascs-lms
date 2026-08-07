@@ -27,9 +27,9 @@ async function assertStaff(supabase: Awaited<ReturnType<typeof createClient>>) {
 
 export function formatTxAmount(amount: number): string {
   if (amount <= 0) return "—";
-  return new Intl.NumberFormat("en-US", {
+  return new Intl.NumberFormat("en-NG", {
     style: "currency",
-    currency: "USD",
+    currency: "NGN",
     maximumFractionDigits: 0,
   }).format(amount);
 }

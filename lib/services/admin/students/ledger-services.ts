@@ -33,9 +33,9 @@ function parseAmount(value: number | string | null | undefined): number {
 export function formatLedgerAmount(amount: number | string | null): string {
   const value = parseAmount(amount);
   if (value <= 0) return "—";
-  return new Intl.NumberFormat("en-US", {
+  return new Intl.NumberFormat("en-NG", {
     style: "currency",
-    currency: "USD",
+    currency: "NGN",
     maximumFractionDigits: 0,
   }).format(value);
 }
@@ -162,8 +162,12 @@ export const LedgerService = {
     }
 
     return (data ?? []).map((row) => {
-      const course = embedOne(row.course as LedgerCourseJoin | LedgerCourseJoin[] | null);
-      const profile = embedOne(row.profile as LedgerProfileJoin | LedgerProfileJoin[] | null);
+      const course = embedOne(
+        row.course as LedgerCourseJoin | LedgerCourseJoin[] | null,
+      );
+      const profile = embedOne(
+        row.profile as LedgerProfileJoin | LedgerProfileJoin[] | null,
+      );
       return {
         id: row.id,
         status: row.status,

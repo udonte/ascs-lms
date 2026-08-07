@@ -137,7 +137,7 @@ export default async function CourseDetailPage({ params }: Props) {
           <div className="pointer-events-none absolute -bottom-32 -left-16 h-80 w-80 rounded-full bg-white/5 blur-3xl" />
 
           <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-center justify-end">
+            <div className="flex items-center mb-4">
               <BackButton label="Go Back" className="" />
             </div>
             <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
@@ -229,7 +229,6 @@ export default async function CourseDetailPage({ params }: Props) {
             <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
               {/* Section label */}
               <div className="mb-3 inline-flex items-center justify-center lg:justify-start  gap-2 rounded-full border border-customer-purple/20 bg-customer-purple/5 px-3 py-1">
-                <HiOutlineLightBulb className="h-3.5 w-3.5 text-customer-purple" />
                 <span className="text-[11px] font-bold uppercase tracking-widest text-customer-purple">
                   About this programme
                 </span>
@@ -331,7 +330,6 @@ export default async function CourseDetailPage({ params }: Props) {
           <section className="border-b border-gray-100 bg-[#F9FAFB] py-8 lg:py-20">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
               <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-customer-teal/20 bg-customer-teal/5 px-3 py-1">
-                <HiOutlineAcademicCap className="h-3.5 w-3.5 text-customer-teal" />
                 <span className="text-[11px] font-bold uppercase tracking-widest text-customer-teal">
                   Skills & competencies
                 </span>
@@ -372,7 +370,6 @@ export default async function CourseDetailPage({ params }: Props) {
                 {/* Left — text */}
                 <div>
                   <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-customer-gold/30 bg-customer-gold/10 px-3 py-1">
-                    <HiOutlineSparkles className="h-3.5 w-3.5 text-customer-gold" />
                     <span className="text-[11px] font-bold uppercase tracking-widest text-customer-gold">
                       Standard of mastery
                     </span>
@@ -419,7 +416,6 @@ export default async function CourseDetailPage({ params }: Props) {
           <div className="pointer-events-none absolute inset-0" aria-hidden />
           <div className="mx-auto max-w-3xl px-4 text-center sm:px-6">
             <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#FFCC00]/30 bg-[#FFCC00]/10 px-4 py-1.5">
-              <FaCertificate className="text-[#FFCC00]" />
               <span className="text-sm font-semibold text-[#FFCC00]">
                 Join 500+ certified professionals
               </span>

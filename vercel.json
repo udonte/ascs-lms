@@ -1,0 +1,8 @@
+{
+  "headers": [
+    {
+      "source": "/verify/:path*",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }]
+    }
+  ]
+}
